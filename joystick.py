@@ -71,14 +71,14 @@ class Joystick:
 
         # Initialize the joysticks
         pygame.joystick.init()
-        self.joystick_active_range = 0.7
+        self.joystick_active_range = 0.8
 
         # Get ready to print
         self.textPrint = TextPrint()
 
         # init midi synth
         fluidsynth.init("GeneralUserGSv1.471.sf2")
-        self.fs_is_playing = False
+        self.fs_is_playing = 0
 
         # midi vars
         self.octave = 4
@@ -95,10 +95,10 @@ class Joystick:
 
                 # Possible joystick actions: JOYAXISMOTION JOYBALLMOTION JOYBUTTONDOWN
                 # JOYBUTTONUP JOYHATMOTION
-                if event.type == pygame.JOYBUTTONDOWN:
-                    print("Joystick button pressed.")
-                if event.type == pygame.JOYBUTTONUP:
-                    print("Joystick button released.")
+                # if event.type == pygame.JOYBUTTONDOWN:
+                #     print("Joystick button pressed.")
+                # if event.type == pygame.JOYBUTTONUP:
+                #     print("Joystick button released.")
 
             # DRAWING STEP
             # First, clear the screen to white. Don't put other drawing commands
@@ -116,7 +116,10 @@ class Joystick:
             for i in range(joystick_count):
                 joystick = pygame.joystick.Joystick(i)
                 joystick.init()
+
+                # reset vars
                 self.compass = ""
+                self.add_accidental = 0
 
                 self.textPrint.print(self.screen, "Joystick {}".format(i))
                 self.textPrint.indent()
@@ -133,16 +136,15 @@ class Joystick:
                 for i in range(buttons):
                     button = joystick.get_button(i)
                     self.textPrint.print(self.screen, "Button {:>2} value: {}".format(i, button))
-                    # reset accidental
-                    self.add_accidental = 0
 
-                    match buttons:
-                        case 4:
-                            self.add_accidental += 1
-                        case 5:
-                            self.add_accidental -= 1
+                    if i == 4 and button == 1:
+                        self.add_accidental = 1
+                    if i == 5 and button == 1:
+                        self.add_accidental = -1
+
+                    # todo implement BACH playing on button 6 & 7
+
                 self.textPrint.unindent()
-
                 # Usually axis run in pairs, up/down for one, and left/right for
                 # the other.
                 axes = joystick.get_numaxes()
@@ -166,12 +168,11 @@ class Joystick:
 
                     # Calculate dynamic joystick for dynamics
                     if i == 1:
-                        round(axis, 2)
+                        axis = round(axis, 2)
                         # NewValue = (((OldValue - OldMin) * (NewMax - NewMin)) / (OldMax - OldMin)) + NewMin
                         self.dynamic = (((axis - -1) * (20 - 120)) / (1 - -1)) + 120
-                        # print(self.dynamic)
 
-                    # Calculate octvave shift
+                    # Calculate octave shift
                     if i == 0:
                         if axis > self.joystick_active_range:
                             self.octave = 5
@@ -179,18 +180,17 @@ class Joystick:
                             self.octave = 3
                         else:
                             self.octave = 4
-                        # print(self.octave)
 
                 self.textPrint.print(self.screen, f"Compass: {self.compass}")
 
                 # make a sound
-                # if self.compass:
                 if self.compass == "":
-                    self.fs_is_playing = False
+                    if self.fs_is_playing != 0:
+                        self.fs_is_playing = 0
+                        self.stop_note(self.fs_is_playing)
+
                     self.textPrint.print(self.screen, f"Note: ")
                 else:
-                    # set monophonic to on
-                    self.fs_is_playing = True
 
                     # get current octave
                     octave = self.octave
@@ -216,17 +216,24 @@ class Joystick:
                             note = 'D'
 
                     # adjust note for enharmonic shift
-                    if self.add_accidental != 0:
-                        match self.add_accidental:
-                            case 1:
-                                note = f"{note}#"
-                            case -1:
-                                note = f"{note}b"
 
-                    self.make_sound(note,
-                                    octave,
-                                    self.dynamic
-                                    )
+                    # print("add acidental == ", self.add_accidental)
+                    # if self.add_accidental == 1:
+                    match self.add_accidental:
+                        case 1:
+                            note = f"{note}#"
+                        case -1:
+                    # elif self.add_accidental == -1:
+                            note = f"{note}b"
+
+                    if self.fs_is_playing == 0:
+
+                        fs_note = f"{note}-{octave}"
+                        print(f"making note {fs_note}")
+                        self.make_sound(fs_note,
+                                        self.dynamic
+                                        )
+                        self.fs_is_playing = fs_note
 
                     self.textPrint.print(self.screen, f"Note: {note}-{octave}")
                 self.textPrint.unindent()
@@ -250,23 +257,20 @@ class Joystick:
             pygame.display.flip()
 
             # Limit to 60 frames per second
-            self.clock.tick(60)
+            self.clock.tick(10)
 
     def make_sound(self,
                    new_note,
-                   octave = 5,
                    dynamic = 70
                    ):
-        # if new_note != playing_note:
-        #     playing_note = new_note
-        # if not self.fs_is_playing:
 
-        # fs_note_to_play = f"{new_note}-{self.octave}"
         fluidsynth.play_Note(Note(new_note,
-                                  octave=octave,
                                   velocity=dynamic
                                   )
                              )
+
+    def stop_note(self, note_to_stop):
+        fluidsynth.stop_Note(Note(note_to_stop))
 
     def terminate(self):
         # Close the window and quit.
