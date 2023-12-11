@@ -19,8 +19,8 @@ class Joystick:
         # init midi synth
         fluidsynth.init("GeneralUserGSv1.471.sf2")
         fluidsynth.set_instrument(1, 74)
-        fluidsynth.control_change(1, 7, 70) #  set volume control (7) to 70
-        fluidsynth.control_change(1, 1, 0)  # set modulation wheel to 0
+        fluidsynth.main_volume(1, 100) #  set volume control (7) to 70
+        fluidsynth.modulation(1, 0)  # set modulation wheel to 0
         self.fs_is_playing = 0
 
         # midi vars
@@ -54,9 +54,10 @@ class Joystick:
                     self.add_accidental = 1
                 elif buttons == 2:  # LT
                     self.add_accidental = -1
-
-                if joystick_left_button == 64:
-                    self.octave = 4
+                #
+                #
+                # if joystick_left_button == 64:
+                #     self.octave = 4
 
                 # decode joystick right (notes) as compass points
                 if 128 <= joystick_right_y < (128 + self.sensitivity):
@@ -75,31 +76,47 @@ class Joystick:
                 if joystick_left_y <= 5 or joystick_left_y >= 250:
                     vol_param = 70
                 elif joystick_left_y >= 128:
-                    print("dynamic up")
                     # NewValue = (((OldValue - OldMin) * (NewMax - NewMin)) / (OldMax - OldMin)) + NewMin
-                    vol_param = (((joystick_left_y - 255) * (120 - 70)) / (128 - 255)) + 70
+                    vol_param = int(((joystick_left_y - 255) * (120 - 70)) / (128 - 255)) + 70
                 elif joystick_left_y < 128:
-                    print("dynamic down")
                     # NewValue = (((OldValue - OldMin) * (NewMax - NewMin)) / (OldMax - OldMin)) + NewMin
-                    vol_param = (((joystick_left_y - 127) * (70 - 20)) / (1 - 127)) + 20
+                    vol_param = int(((joystick_left_y - 127) * (70 - 20)) / (1 - 127)) + 20
 
                 if not self.fs_is_playing:
                     self.dynamic = vol_param
                 else:
-                    fluidsynth.control_change(1, "volume", vol_param)
+                    fluidsynth.main_volume(1, vol_param)
 
-                # todo change this to RB and RT
                 # todo change this to mod wheel CC control fluidsynth.control_change(1, 1, n)
                 # Calculate octave shift
-                if (127 - self.sensitivity) < joystick_left_x <= 127:
+                if buttons == 4:  # LB
                     self.octave += 1
-                elif 128 <= joystick_left_x < (128 + self.sensitivity):
-                    self.octave -= 1
+                elif buttons == 8:  # LT
+                    self.octave += -1
+                elif buttons == 12:
+                    self.octave = 5
 
                 if self.octave < 0:
                     self.octave = 0
                 elif self.octave > 8:
                     self.octave = 8
+
+                # change mod wheel/ expression
+                if joystick_left_x <= 5 or joystick_left_x >= 250:
+                    mod_param = 0
+                elif (127 - self.sensitivity) < joystick_left_x <= 127:
+                #     self.octave += 1
+                # elif 128 <= joystick_left_x < (128 + self.sensitivity):
+                #     self.octave -= 1
+                # elif joystick_left_x >= 128:
+                    # NewValue = (((OldValue - OldMin) * (NewMax - NewMin)) / (OldMax - OldMin)) + NewMin
+                    mod_param = int(((joystick_left_x - 255) * (120 - 70)) / (128 - 255)) + 70
+                elif 128 <= joystick_left_x < (128 + self.sensitivity):
+                    # NewValue = (((OldValue - OldMin) * (NewMax - NewMin)) / (OldMax - OldMin)) + NewMin
+                    mod_param = int(((joystick_left_x - 127) * (70 - 20)) / (1 - 127)) + 20
+                    fluidsynth.control_change(1, 2, mod_param)
+
+                fluidsynth.modulation(1, mod_param)
 
                 # make a sound or not
                 if self.compass == "":
@@ -108,7 +125,7 @@ class Joystick:
                         self.stop_note(self.fs_is_playing)
                         self.fs_is_playing = 0
                     # reset CC volume
-                    fluidsynth.control_change(1, 7, 70)
+                    fluidsynth.main_volume(1, 100)
                 else:
                     # get current octave
                     octave = self.octave
