@@ -7,12 +7,15 @@ from neoscore.common import *
 neoscore.setup()
 staff = Staff(ORIGIN, None, Mm(100))
 Clef(ZERO, staff, 'treble')
-n = Chordrest(staff.unit(2), staff, ["c"], (1, 2))
+n = Notehead(staff.unit(2), staff, "c", Duration(1, 2))
 
 js = Joystick()
 
-joystick_thread = Thread(target=js.mainloop)
-joystick_thread.start()
 
-neoscore.show()
+def refresh_loop(time):
+    js.mainloop()
+    n = Notehead(staff.unit(2), staff, js.neopitch, Duration(1, 2))
+
+neoscore.show(refresh_func=refresh_loop,
+              display_page_geometry=False)
 
