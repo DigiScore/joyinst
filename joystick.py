@@ -1,87 +1,30 @@
-"""
-Sample Python/Pygame Programs
-Simpson College Computer Science
-http://programarcadegames.com/
-http://simpson.edu/computer-science/
-http://programarcadegames.com/python_examples/f.php?file=joystick_calls.py
-Show everything we can pull off the joystick
-"""
-import pygame
+
 from mingus.containers import Note, NoteContainer, Bar, Track
 from mingus.midi import fluidsynth
-
-# Define some colors
-BLACK = (0, 0, 0)
-WHITE = (255, 255, 255)
-
-
-class TextPrint(object):
-    """
-    This is a simple class that will help us print to the screen
-    It has nothing to do with the joysticks, just outputting the
-    information.
-    """
-
-    def __init__(self):
-        """ Constructor """
-        self.reset()
-        self.x_pos = 10
-        self.y_pos = 10
-        self.font = pygame.font.Font(None, 20)
-
-    def print(self, my_screen, text_string):
-        """ Draw text onto the screen. """
-        text_bitmap = self.font.render(text_string, True, BLACK)
-        my_screen.blit(text_bitmap, [self.x_pos, self.y_pos])
-        self.y_pos += self.line_height
-
-    def reset(self):
-        """ Reset text to the top of the screen. """
-        self.x_pos = 10
-        self.y_pos = 10
-        self.line_height = 15
-
-    def indent(self):
-        """ Indent the next line of text """
-        self.x_pos += 10
-
-    def unindent(self):
-        """ Unindent the next line of text """
-        self.x_pos -= 10
+import hid
+from time import sleep
 
 class Joystick:
     def __init__(self):
         self.running = None
         self.compass = ""
 
-    # def init(self):
-        pygame.init()
-
-        # Set the width and height of the screen [width,height]
-        size = [500, 700]
-        self.screen = pygame.display.set_mode(size)
-
-        pygame.display.set_caption("Mach AI Inst")
-
-        # Loop until the user clicks the close button.
         self.running = True
 
-        # Used to manage how fast the screen updates
-        self.clock = pygame.time.Clock()
-
-        # Initialize the joysticks
-        pygame.joystick.init()
-        self.joystick_active_range = 0.8
-
-        # Get ready to print
-        self.textPrint = TextPrint()
+        self.gamepad = hid.device()
+        self.gamepad.open(0x07b5, 0x0312)  # Logic PS controller USB. gamepad.open(0x045e, 0x02fd) = Bluetooth # XBOX One
+        self.gamepad.set_nonblocking(True)
+        self.sensitivity = 15
 
         # init midi synth
         fluidsynth.init("GeneralUserGSv1.471.sf2")
+        fluidsynth.set_instrument(1, 74)
+        fluidsynth.control_change(1, 7, 70) #  set volume control (7) to 70
+        fluidsynth.control_change(1, 1, 0)  # set modulation wheel to 0
         self.fs_is_playing = 0
 
         # midi vars
-        self.octave = 4
+        self.octave = 5
         self.dynamic = 70
         self.add_accidental = 0
 
@@ -89,109 +32,84 @@ class Joystick:
         # -------- Main Program Loop -----------
         while self.running:
             # EVENT PROCESSING STEP
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    done = True
+            report = self.gamepad.read(64)
+            if report:
+                print(report)
 
-                # Possible joystick actions: JOYAXISMOTION JOYBALLMOTION JOYBUTTONDOWN
-                # JOYBUTTONUP JOYHATMOTION
-                # if event.type == pygame.JOYBUTTONDOWN:
-                #     print("Joystick button pressed.")
-                # if event.type == pygame.JOYBUTTONUP:
-                #     print("Joystick button released.")
+                # joystick range = (128 - 255) - 0 - (1 - 127)
+                joystick_left_y = report[1]
+                joystick_left_x = report[0]
+                joystick_left_button = report[5]  # code 64
+                joystick_right_x = report[3]
+                joystick_right_y = report[2]
 
-            # DRAWING STEP
-            # First, clear the screen to white. Don't put other drawing commands
-            # above this, or they will be erased with this command.
-            self.screen.fill(WHITE)
-            self.textPrint.reset()
-
-            # Get count of joysticks
-            joystick_count = pygame.joystick.get_count()
-
-            self.textPrint.print(self.screen, "Number of joysticks: {}".format(joystick_count))
-            self.textPrint.indent()
-
-            # For each joystick:
-            for i in range(joystick_count):
-                joystick = pygame.joystick.Joystick(i)
-                joystick.init()
+                buttons = report[5]  # 1 lb, 2 lt
 
                 # reset vars
                 self.compass = ""
                 self.add_accidental = 0
 
-                self.textPrint.print(self.screen, "Joystick {}".format(i))
-                self.textPrint.indent()
+                # Decode buttons
+                if buttons == 1:  # LB
+                    self.add_accidental = 1
+                elif buttons == 2:  # LT
+                    self.add_accidental = -1
 
-                # Get the name from the OS for the controller/joystick
-                name = joystick.get_name()
-                self.textPrint.print(self.screen, "Joystick name: {}".format(name))
+                if joystick_left_button == 64:
+                    self.octave = 4
 
-                # Calc # or b using buttons 4 & 5
-                buttons = joystick.get_numbuttons()
-                self.textPrint.print(self.screen, "Number of buttons: {}".format(buttons))
-                self.textPrint.indent()
+                # decode joystick right (notes) as compass points
+                if 128 <= joystick_right_y < (128 + self.sensitivity):
+                    self.compass += "N"
+                elif (127 - self.sensitivity) < joystick_right_y <= 127:
+                    self.compass += "S"
 
-                for i in range(buttons):
-                    button = joystick.get_button(i)
-                    self.textPrint.print(self.screen, "Button {:>2} value: {}".format(i, button))
+                if 128 <= joystick_right_x < (128 + self.sensitivity):
+                    self.compass += "W"
+                elif (127 - self.sensitivity) < joystick_right_x <= 127:
+                    self.compass += "E"
 
-                    if i == 4 and button == 1:
-                        self.add_accidental = 1
-                    if i == 5 and button == 1:
-                        self.add_accidental = -1
+                print(self.compass)
 
-                    # todo implement BACH playing on button 6 & 7
+                # Calculate dynamic joystick for dynamics
+                if joystick_left_y <= 5 or joystick_left_y >= 250:
+                    vol_param = 70
+                elif joystick_left_y >= 128:
+                    print("dynamic up")
+                    # NewValue = (((OldValue - OldMin) * (NewMax - NewMin)) / (OldMax - OldMin)) + NewMin
+                    vol_param = (((joystick_left_y - 255) * (120 - 70)) / (128 - 255)) + 70
+                elif joystick_left_y < 128:
+                    print("dynamic down")
+                    # NewValue = (((OldValue - OldMin) * (NewMax - NewMin)) / (OldMax - OldMin)) + NewMin
+                    vol_param = (((joystick_left_y - 127) * (70 - 20)) / (1 - 127)) + 20
 
-                self.textPrint.unindent()
-                # Usually axis run in pairs, up/down for one, and left/right for
-                # the other.
-                axes = joystick.get_numaxes()
-                self.textPrint.print(self.screen, "Number of axes: {}".format(axes))
-                self.textPrint.indent()
-
-                for i in range(axes):
-                    axis = joystick.get_axis(i)
-                    self.textPrint.print(self.screen, "Axis {} value: {:>6.3f}".format(i, axis))
-
-                    # Calculate note joystick position for notes
-                    if i == 2 and axis < -self.joystick_active_range:
-                        self.compass += "N"
-                    elif i == 2 and axis >= self.joystick_active_range:
-                        self.compass += "S"
-
-                    if i == 3 and axis < -self.joystick_active_range:
-                        self.compass += "W"
-                    elif i == 3 and axis >= self.joystick_active_range:
-                        self.compass += "E"
-
-                    # Calculate dynamic joystick for dynamics
-                    if i == 1:
-                        axis = round(axis, 2)
-                        # NewValue = (((OldValue - OldMin) * (NewMax - NewMin)) / (OldMax - OldMin)) + NewMin
-                        self.dynamic = (((axis - -1) * (20 - 120)) / (1 - -1)) + 120
-
-                    # Calculate octave shift
-                    if i == 0:
-                        if axis > self.joystick_active_range:
-                            self.octave = 5
-                        elif axis < -self.joystick_active_range:
-                            self.octave = 3
-                        else:
-                            self.octave = 4
-
-                self.textPrint.print(self.screen, f"Compass: {self.compass}")
-
-                # make a sound
-                if self.compass == "":
-                    if self.fs_is_playing != 0:
-                        self.fs_is_playing = 0
-                        self.stop_note(self.fs_is_playing)
-
-                    self.textPrint.print(self.screen, f"Note: ")
+                if not self.fs_is_playing:
+                    self.dynamic = vol_param
                 else:
+                    fluidsynth.control_change(1, "volume", vol_param)
 
+                # todo change this to RB and RT
+                # todo change this to mod wheel CC control fluidsynth.control_change(1, 1, n)
+                # Calculate octave shift
+                if (127 - self.sensitivity) < joystick_left_x <= 127:
+                    self.octave += 1
+                elif 128 <= joystick_left_x < (128 + self.sensitivity):
+                    self.octave -= 1
+
+                if self.octave < 0:
+                    self.octave = 0
+                elif self.octave > 8:
+                    self.octave = 8
+
+                # make a sound or not
+                if self.compass == "":
+                    # send a stop to the FS player
+                    if self.fs_is_playing != 0:
+                        self.stop_note(self.fs_is_playing)
+                        self.fs_is_playing = 0
+                    # reset CC volume
+                    fluidsynth.control_change(1, 7, 70)
+                else:
                     # get current octave
                     octave = self.octave
 
@@ -216,52 +134,39 @@ class Joystick:
                             note = 'D'
 
                     # adjust note for enharmonic shift
-
-                    # print("add acidental == ", self.add_accidental)
-                    # if self.add_accidental == 1:
                     match self.add_accidental:
                         case 1:
                             note = f"{note}#"
                         case -1:
-                    # elif self.add_accidental == -1:
                             note = f"{note}b"
 
-                    if self.fs_is_playing == 0:
+                    # make fs style note str
+                    fs_note = f"{note}-{octave}"
+                    print(f"making note {fs_note}")
 
-                        fs_note = f"{note}-{octave}"
-                        print(f"making note {fs_note}")
+                    # if not playing - make a note
+                    if self.fs_is_playing == 0:
                         self.make_sound(fs_note,
                                         self.dynamic
                                         )
                         self.fs_is_playing = fs_note
 
-                    self.textPrint.print(self.screen, f"Note: {note}-{octave}")
-                self.textPrint.unindent()
+                    # if already playing and new note called, change it
+                    elif fs_note != self.fs_is_playing:
+                        # stop note
+                        self.stop_note(self.fs_is_playing)
+                        # play new note
+                        self.make_sound(fs_note,
+                                        self.dynamic
+                                        )
+                        self.fs_is_playing = fs_note
 
-                # Hat switch. All or nothing for direction, not like joysticks.
-                # Value comes back in an array.
-                hats = joystick.get_numhats()
-                self.textPrint.print(self.screen, "Number of hats: {}".format(hats))
-                self.textPrint.indent()
-
-                for i in range(hats):
-                    hat = joystick.get_hat(i)
-                    self.textPrint.print(self.screen, "Hat {} value: {}".format(i, str(hat)))
-                self.textPrint.unindent()
-
-                self.textPrint.unindent()
-
-            # ALL CODE TO DRAW SHOULD GO ABOVE THIS COMMENT
-
-            # Go ahead and update the screen with what we've drawn.
-            pygame.display.flip()
-
-            # Limit to 60 frames per second
-            self.clock.tick(10)
+            # Limit to n frames per second
+            sleep(0.1)
 
     def make_sound(self,
                    new_note,
-                   dynamic = 70
+                   dynamic,
                    ):
 
         fluidsynth.play_Note(Note(new_note,
@@ -272,9 +177,8 @@ class Joystick:
     def stop_note(self, note_to_stop):
         fluidsynth.stop_Note(Note(note_to_stop))
 
-    def terminate(self):
-        # Close the window and quit.
-        pygame.quit()
+    # def terminate(self):
+    #     fluids
 
 if __name__ == "__main__":
     js = Joystick()

@@ -2,27 +2,17 @@ from joystick import Joystick
 from time import sleep
 from threading import Thread
 
-from mingus.core import scales, meter, chords, progressions
-from mingus.containers import Note, NoteContainer, Bar, Track
-from mingus.midi import fluidsynth
-from random import randint, random, choice
-from mingus.containers.instrument import Instrument, Piano, Guitar
+from neoscore.common import *
 
-fluidsynth.init("GeneralUserGSv1.471.sf2")
-# sleep(2)
+neoscore.setup()
+staff = Staff(ORIGIN, None, Mm(100))
+Clef(ZERO, staff, 'treble')
+n = Chordrest(staff.unit(2), staff, ["c"], (1, 2))
 
 js = Joystick()
 
-js.mainloop()
+joystick_thread = Thread(target=js.mainloop)
+joystick_thread.start()
 
-# joy_thread = Thread(target=js.mainloop)
-# joy_thread.start()
+neoscore.show()
 
-fluidsynth.play_Note(Note("C-5"))
-
-
-while True:
-    if js.compass == "N":
-        fluidsynth.play_Note(Note("C-5"))
-
-    sleep(0.1)
