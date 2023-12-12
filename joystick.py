@@ -29,7 +29,7 @@ class Joystick:
         self.add_accidental = 0
 
         # neoscore vars
-        self.neopitch = 'c'
+        self.neopitch = None
 
     def mainloop(self):
         # -------- Main Program Loop -----------
@@ -37,7 +37,7 @@ class Joystick:
             # EVENT PROCESSING STEP
         report = self.gamepad.read(64)
         if report:
-            print(report)
+            # print(report)
 
             # joystick range = (128 - 255) - 0 - (1 - 127)
             joystick_left_y = report[1]
@@ -73,7 +73,7 @@ class Joystick:
             elif (127 - self.sensitivity) < joystick_right_x <= 127:
                 self.compass += "E"
 
-            print(self.compass)
+            # print(self.compass)
 
             # Calculate dynamic joystick for dynamics
             if joystick_left_y <= 5 or joystick_left_y >= 250:
@@ -109,13 +109,13 @@ class Joystick:
                 fluidsynth.modulation(1, 0)
                 fluidsynth.control_change(1, 2, 0)
             elif (127 - self.sensitivity) < joystick_left_x <= 127:
-                print('modulation')
+                # print('modulation')
                 # NewValue = (((OldValue - OldMin) * (NewMax - NewMin)) / (OldMax - OldMin)) + NewMin
                 mod_param = int(((joystick_left_x - 255) * (120 - 70)) / (128 - 255)) + 70
                 fluidsynth.modulation(1, mod_param)
 
             elif 128 <= joystick_left_x < (128 + self.sensitivity):
-                print('after touch')
+                # print('after touch')
                 # NewValue = (((OldValue - OldMin) * (NewMax - NewMin)) / (OldMax - OldMin)) + NewMin
                 mod_param = int(((joystick_left_x - 127) * (70 - 20)) / (1 - 127)) + 20
                 fluidsynth.control_change(1, 2, mod_param)
@@ -128,7 +128,7 @@ class Joystick:
                     self.fs_is_playing = 0
                 # reset CC volume
                 fluidsynth.main_volume(1, 100)
-                self.neopitch = 'c'
+                self.neopitch = None
             else:
                 # get current octave
                 octave = self.octave
@@ -162,7 +162,7 @@ class Joystick:
 
                 # make fs style note str
                 fs_note = f"{note}-{octave}"
-                print(f"making note {fs_note}")
+                # print(f"making note {fs_note}")
 
                 # if not playing - make a note
                 if self.fs_is_playing == 0:
