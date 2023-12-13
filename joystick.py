@@ -2,15 +2,10 @@
 from mingus.containers import Note, NoteContainer, Bar, Track
 from mingus.midi import fluidsynth
 import hid
-from time import sleep
 
 class Joystick:
     def __init__(self):
-        self.running = None
-        self.compass = ""
-
-        self.running = True
-
+        # Instantiate the game device
         self.gamepad = hid.device()
         self.gamepad.open(0x07b5, 0x0312)  # Logic PS controller USB. gamepad.open(0x045e, 0x02fd) = Bluetooth # XBOX One
         self.gamepad.set_nonblocking(True)
@@ -24,6 +19,7 @@ class Joystick:
         self.fs_is_playing = 0
 
         # midi vars
+        self.compass = ""
         self.octave = 5
         self.dynamic = 70
         self.add_accidental = 0
@@ -33,8 +29,6 @@ class Joystick:
 
     def mainloop(self):
         # -------- Main Program Loop -----------
-        # while self.running:
-            # EVENT PROCESSING STEP
         report = self.gamepad.read(64)
         if report:
             # print(report)
@@ -57,10 +51,6 @@ class Joystick:
                 self.add_accidental = 1
             elif buttons == 2:  # LT
                 self.add_accidental = -1
-            #
-            #
-            # if joystick_left_button == 64:
-            #     self.octave = 4
 
             # decode joystick right (notes) as compass points
             if 128 <= joystick_right_y < (128 + self.sensitivity):
@@ -189,10 +179,6 @@ class Joystick:
                 else:
                     self.neopitch = note[0].lower()
 
-                    # check octave in range and add octave indicator
-                    # if octave out of range then make it middle C octave
-                # if 2 <= octave <= 6:
-
                 # add higher octave indicators "'"
                 if octave > 4:
                     ticks = octave - 4
@@ -205,9 +191,6 @@ class Joystick:
                         self.neopitch += ","
                     elif octave == 2:
                         self.neopitch += ",,"
-
-            # Limit to n frames per second
-            # sleep(0.1)
 
     def make_sound(self,
                    new_note,
