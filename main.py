@@ -1,10 +1,29 @@
 from joystick import Joystick
 from time import sleep
 from threading import Thread
+from enum import Enum
 
 from neoscore.common import *
 
-# class enum(ENUM)
+class Arrow(Enum):
+    N = 'arrowWhiteUp'
+    NW = 'arrowWhiteUpLeft'
+    NE = 'arrowWhiteUpRight'
+    W = 'arrowWhiteLeft'
+    E = 'arrowWhiteRight'
+    SW = 'arrowWhiteDownLeft'
+    SE = 'arrowWhiteDownRight'
+    S = 'arrowWhiteDown'
+
+class Colour(Enum):
+    c = 'red'
+    d = 'orange'
+    e = 'yellow'
+    f = 'light_green'
+    g = 'dark_green'
+    a = 'purple'
+    b = 'pink'
+
 """
 Arrow notes COLOURS
 https://digitlearning.co.uk/what-are-arrownotes/
@@ -47,8 +66,13 @@ def build_bar(note):
     global n
     if n:
         n.remove()
+    # compass = js.compass
+    # colour = Colour.compass.value
     n = Chordrest(live_staff.unit(10), live_staff, [js.neopitch], Duration(1, 2))
-    # notelist.append(n)
+    MusicText((Mm(150), Mm(10)), live_staff, "arrowWhiteUp",
+              alignment_x=AlignmentX.CENTER, alignment_y=AlignmentY.CENTER,
+              # colour=colour
+              )
 
 def refresh_loop(time):
     js.mainloop()

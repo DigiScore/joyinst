@@ -14,7 +14,7 @@ class Joystick:
         self.gamepad = hid.device()
         self.gamepad.open(0x07b5, 0x0312)  # Logic PS controller USB. gamepad.open(0x045e, 0x02fd) = Bluetooth # XBOX One
         self.gamepad.set_nonblocking(True)
-        self.sensitivity = 10
+        self.sensitivity = 20
 
         # init midi synth
         fluidsynth.init("GeneralUserGSv1.471.sf2")
