@@ -14,7 +14,7 @@ class Joystick:
         self.gamepad = hid.device()
         self.gamepad.open(0x07b5, 0x0312)  # Logic PS controller USB. gamepad.open(0x045e, 0x02fd) = Bluetooth # XBOX One
         self.gamepad.set_nonblocking(True)
-        self.sensitivity = 15
+        self.sensitivity = 10
 
         # init midi synth
         fluidsynth.init("GeneralUserGSv1.471.sf2")
@@ -128,7 +128,7 @@ class Joystick:
                     self.fs_is_playing = 0
                 # reset CC volume
                 fluidsynth.main_volume(1, 100)
-                self.neopitch = None
+                self.neopitch = ""
             else:
                 # get current octave
                 octave = self.octave
@@ -191,20 +191,20 @@ class Joystick:
 
                     # check octave in range and add octave indicator
                     # if octave out of range then make it middle C octave
-                if 2 <= self.octave <= 6:
+                # if 2 <= octave <= 6:
 
-                    # add higher octave indicators "'"
-                    if self.octave > 4:
-                        ticks = self.octave - 4
-                        for tick in range(ticks):
-                            self.neopitch += "'"
+                # add higher octave indicators "'"
+                if octave > 4:
+                    ticks = octave - 4
+                    for tick in range(ticks):
+                        self.neopitch += "'"
 
-                    # add lower octave indicators ","
-                    elif self.octave < 4:
-                        if self.octave == 3:
-                            self.neopitch += ","
-                        elif self.octave == 2:
-                            self.neopitch += ",,"
+                # add lower octave indicators ","
+                elif octave < 4:
+                    if octave == 3:
+                        self.neopitch += ","
+                    elif octave == 2:
+                        self.neopitch += ",,"
 
             # Limit to n frames per second
             # sleep(0.1)
