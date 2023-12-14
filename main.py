@@ -69,12 +69,15 @@ class Solfa(Enum):
 # todo - transpositions!!! this is in C only. Tonic & position & arrows
 #  needs to be related to parent key.
 
+
 neoscore.setup()
 live_staff = Staff(ORIGIN, None, Mm(100), line_spacing=Mm(5))
 simon_staff = Staff((ZERO, Mm(40)), None, Mm(100), line_spacing=Mm(5))
 Clef(ZERO, live_staff, 'treble_8va')
 Clef(ZERO, simon_staff, 'treble_8va')
 notelist = []
+
+
 js = Joystick()
 n = Chordrest(live_staff.unit(10), live_staff, [], (1,1))
 sn = Chordrest(simon_staff.unit(10), simon_staff, [], (1,1))
