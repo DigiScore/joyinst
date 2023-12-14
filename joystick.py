@@ -2,6 +2,11 @@
 from mingus.containers import Note, NoteContainer, Bar, Track
 from mingus.midi import fluidsynth
 import hid
+from configparser import ConfigParser
+
+config_object = ConfigParser()
+config_object.read('config.ini')
+
 
 class Joystick:
     def __init__(self):
@@ -12,10 +17,21 @@ class Joystick:
         self.sensitivity = 20
 
         # init midi synth
+        """
+        GM insts
+        24 = nyatiti
+        74 = recorder
+        108 = kalimba
+        110 = orutu fiddle
+        """
+
         fluidsynth.init("GeneralUserGSv1.471.sf2")
-        fluidsynth.set_instrument(1, 74)
+        instrument = config_object['MIDI'].getint('instrument')
+        fluidsynth.set_instrument(1, instrument)
         fluidsynth.main_volume(1, 100) #  set volume control (7) to 70
         fluidsynth.modulation(1, 0)  # set modulation wheel to 0
+        if instrument == 74 or instrument == 110:
+            fluidsynth.control_change(1, 5, 100)
         self.fs_is_playing = 0
 
         # midi vars
@@ -108,7 +124,7 @@ class Joystick:
                 # print('after touch')
                 # NewValue = (((OldValue - OldMin) * (NewMax - NewMin)) / (OldMax - OldMin)) + NewMin
                 mod_param = int(((joystick_left_x - 127) * (70 - 20)) / (1 - 127)) + 20
-                fluidsynth.control_change(1, 2, mod_param)
+                fluidsynth.control_change(1, 68, mod_param)
 
             # make a sound or not
             if self.compass == "":

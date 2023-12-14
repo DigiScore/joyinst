@@ -49,6 +49,22 @@ class Colour(Enum):
     a = 'purple'
     b = 'pink'
 
+class Solfa(Enum):
+    """
+    Sol Fa translation of compass points
+    to do, re, mi, fa, sol, la, ti, do.
+    Flats and sharps COULD be represented by 'a' and 'e'
+    or simply 'b' and '#'
+    """
+    N = 'do'
+    NW = 're'
+    NE = 'mi'
+    W = 'fa'
+    E = 'sol'
+    SW = 'la'
+    SE = 'ti'
+    S = 'do'
+
 
 # todo - transpositions!!! this is in C only. Tonic & position & arrows
 #  needs to be related to parent key.
@@ -75,7 +91,7 @@ def build_bar(note):
               # colour=colour
               )
 
-def refresh_loop():
+def refresh_loop(time):
     js.mainloop()
     if js.neopitch:
         build_bar(js.neopitch)
