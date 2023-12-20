@@ -12,7 +12,7 @@ class Joystick:
     def __init__(self):
         # Instantiate the game device
         self.gamepad = hid.device()
-        self.gamepad.open(0x07b5, 0x0312)  # Logic PS controller USB. gamepad.open(0x045e, 0x02fd) = Bluetooth # XBOX One
+        self.gamepad.open(0x2563, 0x0575)  # PC/PS3/Android. gamepad.open(0x045e, 0x02fd) = Bluetooth # XBOX One
         self.gamepad.set_nonblocking(True)
         self.sensitivity = 20
 
@@ -49,13 +49,25 @@ class Joystick:
         if report:
             # print(report)
 
+            ####
+            #  wired USB PS2
+            ####
             # joystick range = (128 - 255) - 0 - (1 - 127)
             joystick_left_y = report[1]
             joystick_left_x = report[0]
             joystick_left_button = report[5]  # code 64
             joystick_right_x = report[3]
             joystick_right_y = report[2]
+            buttons = report[5]  # 1 lb, 2 lt
 
+            ####
+            # wireless PC/PS3/Android
+            ####
+            joystick_left_y = report[4]
+            joystick_left_x = report[3]
+            joystick_left_button = report[5]  # code 64
+            joystick_right_x = report[5]
+            joystick_right_y = report[0]
             buttons = report[5]  # 1 lb, 2 lt
 
             # reset vars
@@ -63,9 +75,9 @@ class Joystick:
             self.add_accidental = 0
 
             # Decode buttons
-            if buttons == 1:  # LB
+            if buttons == 16:  # LB
                 self.add_accidental = 1
-            elif buttons == 2:  # LT
+            elif buttons == 64:  # LT
                 self.add_accidental = -1
 
             # decode joystick right (notes) as compass points
@@ -98,11 +110,11 @@ class Joystick:
 
             # todo change this to mod wheel CC control fluidsynth.control_change(1, 1, n)
             # Calculate octave shift
-            if buttons == 4:  # LB
+            if buttons == 32:  # LB
                 self.octave += 1
-            elif buttons == 8:  # LT
+            elif buttons == 128:  # LT
                 self.octave += -1
-            elif buttons == 12:
+            elif buttons == 160:
                 self.octave = 5
 
             if self.octave < 0:
