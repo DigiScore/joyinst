@@ -40,6 +40,12 @@ class Joystick:
         self.dynamic = 70
         self.add_accidental = 0
 
+        # release vars
+        self.rb_val = 0
+        self.rt_val = 0
+        self.rb_release = False
+        self.rt_release = False
+
         # neoscore vars
         self.neopitch = None
 
@@ -50,17 +56,6 @@ class Joystick:
             # print(report)
 
             ####
-            #  wired USB PS2
-            ####
-            # joystick range = (128 - 255) - 0 - (1 - 127)
-            # joystick_left_y = report[1]
-            # joystick_left_x = report[0]
-            # joystick_left_button = report[5]  # code 64
-            # joystick_right_x = report[3]
-            # joystick_right_y = report[2]
-            # buttons = report[5]  # 1 lb, 2 lt
-
-            ####
             # wireless PC/PS3/Android
             # joystick range = (0 - 127) - 128 - (129 - 255)
             ####
@@ -69,6 +64,10 @@ class Joystick:
             joystick_left_button = report[5]  # code 64
             joystick_right_x = report[5]
             joystick_right_y = report[6]
+            lb = report[15]
+            lt = report[17]
+            rb = report[16]
+            rt = report[18]
 
             buttons = report[0]  # 1 lb, 2 lt
 
@@ -76,10 +75,25 @@ class Joystick:
             self.compass = ""
             self.add_accidental = 0
 
+            # check release of rb and rt
+            if rb < self.rb_val:
+                self.rb_release = True
+                self.rb_val = rb
+            else:
+                self.rb_val = rb
+                self.rb_release = False
+
+            if rt < self.rt_val:
+                self.rt_release = True
+                self.rt_val = rt
+            else:
+                self.rt_val = rt
+                self.rt_release = False
+
             # Decode buttons
-            if buttons == 16:  # LB
+            if lb >= 32:  # LB
                 self.add_accidental = 1
-            elif buttons == 64:  # LT
+            elif lt >= 32:  # LT
                 self.add_accidental = -1
 
             # decode joystick right (notes) as compass points
@@ -112,12 +126,12 @@ class Joystick:
 
             # todo change this to mod wheel CC control fluidsynth.control_change(1, 1, n)
             # Calculate octave shift
-            if buttons == 32:  # LB
-                self.octave += 1
-            elif buttons == 128:  # LT
-                self.octave += -1
-            elif buttons == 160:
+            if self.rb_release and self.rt_release:
                 self.octave = 5
+            elif self.rb_release:  # RB
+                self.octave += 1
+            elif self.rt_release:  # RT
+                self.octave += -1
 
             if self.octave < 0:
                 self.octave = 0

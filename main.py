@@ -94,7 +94,6 @@ def build_bar(note):
               )
 
 def refresh_loop(time):
-    print(time)
     js.mainloop()
     if js.neopitch:
         build_bar(js.neopitch)
