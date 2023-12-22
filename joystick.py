@@ -53,22 +53,24 @@ class Joystick:
             #  wired USB PS2
             ####
             # joystick range = (128 - 255) - 0 - (1 - 127)
-            joystick_left_y = report[1]
-            joystick_left_x = report[0]
-            joystick_left_button = report[5]  # code 64
-            joystick_right_x = report[3]
-            joystick_right_y = report[2]
-            buttons = report[5]  # 1 lb, 2 lt
+            # joystick_left_y = report[1]
+            # joystick_left_x = report[0]
+            # joystick_left_button = report[5]  # code 64
+            # joystick_right_x = report[3]
+            # joystick_right_y = report[2]
+            # buttons = report[5]  # 1 lb, 2 lt
 
             ####
             # wireless PC/PS3/Android
+            # joystick range = (0 - 127) - 128 - (129 - 255)
             ####
             joystick_left_y = report[4]
             joystick_left_x = report[3]
             joystick_left_button = report[5]  # code 64
             joystick_right_x = report[5]
-            joystick_right_y = report[0]
-            buttons = report[5]  # 1 lb, 2 lt
+            joystick_right_y = report[6]
+
+            buttons = report[0]  # 1 lb, 2 lt
 
             # reset vars
             self.compass = ""
@@ -81,25 +83,25 @@ class Joystick:
                 self.add_accidental = -1
 
             # decode joystick right (notes) as compass points
-            if 128 <= joystick_right_y < (128 + self.sensitivity):
+            if 0 <= joystick_right_y < (0 + self.sensitivity):
                 self.compass += "N"
-            elif (127 - self.sensitivity) < joystick_right_y <= 127:
+            elif (255 - self.sensitivity) < joystick_right_y <= 255:
                 self.compass += "S"
 
-            if 128 <= joystick_right_x < (128 + self.sensitivity):
+            if 0 <= joystick_right_x < (0 + self.sensitivity):
                 self.compass += "W"
-            elif (127 - self.sensitivity) < joystick_right_x <= 127:
+            elif (255 - self.sensitivity) < joystick_right_x <= 255:
                 self.compass += "E"
 
             # print(self.compass)
 
             # Calculate dynamic joystick for dynamics
-            if joystick_left_y <= 5 or joystick_left_y >= 250:
+            if 120 <= joystick_left_y <= 132:
                 vol_param = 70
-            elif joystick_left_y >= 128:
+            elif joystick_left_y >= 132:
                 # NewValue = (((OldValue - OldMin) * (NewMax - NewMin)) / (OldMax - OldMin)) + NewMin
                 vol_param = int(((joystick_left_y - 255) * (120 - 70)) / (128 - 255)) + 70
-            elif joystick_left_y < 128:
+            elif joystick_left_y < 120:
                 # NewValue = (((OldValue - OldMin) * (NewMax - NewMin)) / (OldMax - OldMin)) + NewMin
                 vol_param = int(((joystick_left_y - 127) * (70 - 20)) / (1 - 127)) + 20
 
@@ -123,16 +125,16 @@ class Joystick:
                 self.octave = 8
 
             # change mod wheel/ expression
-            if joystick_left_x <= 5 or joystick_left_x >= 250:
+            if 120 <= joystick_left_x <= 132:
                 fluidsynth.modulation(1, 0)
-                fluidsynth.control_change(1, 2, 0)
-            elif (127 - self.sensitivity) < joystick_left_x <= 127:
+                # fluidsynth.control_change(1, 2, 0)
+            elif joystick_left_x > 132:
                 # print('modulation')
                 # NewValue = (((OldValue - OldMin) * (NewMax - NewMin)) / (OldMax - OldMin)) + NewMin
                 mod_param = int(((joystick_left_x - 255) * (120 - 70)) / (128 - 255)) + 70
                 fluidsynth.modulation(1, mod_param)
 
-            elif 128 <= joystick_left_x < (128 + self.sensitivity):
+            elif joystick_left_x < 120:
                 # print('after touch')
                 # NewValue = (((OldValue - OldMin) * (NewMax - NewMin)) / (OldMax - OldMin)) + NewMin
                 mod_param = int(((joystick_left_x - 127) * (70 - 20)) / (1 - 127)) + 20

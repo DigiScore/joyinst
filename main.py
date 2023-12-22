@@ -1,5 +1,5 @@
 from joystick import Joystick
-from time import sleep
+from time import sleep, time
 from threading import Thread
 from enum import Enum
 
@@ -77,7 +77,6 @@ Clef(ZERO, live_staff, 'treble_8va')
 Clef(ZERO, simon_staff, 'treble_8va')
 notelist = []
 
-
 js = Joystick()
 n = Chordrest(live_staff.unit(10), live_staff, [], (1,1))
 sn = Chordrest(simon_staff.unit(10), simon_staff, [], (1,1))
@@ -95,6 +94,7 @@ def build_bar(note):
               )
 
 def refresh_loop(time):
+    print(time)
     js.mainloop()
     if js.neopitch:
         build_bar(js.neopitch)
