@@ -18,14 +18,14 @@ class Arrow(Enum):
     SE U+EB6B arrowWhiteDownRight
     S U+EB6C arrowWhiteDown
     """
-    N = 'arrowWhiteUp'
-    NW = 'arrowWhiteUpLeft'
-    NE = 'arrowWhiteUpRight'
-    W = 'arrowWhiteLeft'
-    E = 'arrowWhiteRight'
-    SW = 'arrowWhiteDownLeft'
-    SE = 'arrowWhiteDownRight'
-    S = 'arrowWhiteDown'
+    N = 'arrowBlackUp'
+    NW = 'arrowBlackUpLeft'
+    NE = 'arrowBlackUpRight'
+    W = 'arrowBlackLeft'
+    E = 'arrowBlackRight'
+    SW = 'arrowBlackDownLeft'
+    SE = 'arrowBlackDownRight'
+    S = 'arrowBlackDown'
 
 class Colour(Enum):
     """
@@ -41,13 +41,14 @@ class Colour(Enum):
     b = pink SE
     c = red N or S
     """
-    c = 'red'
-    d = 'orange'
-    e = 'yellow'
-    f = 'light_green'
-    g = 'dark_green'
-    a = 'purple'
-    b = 'pink'
+    N = '#FF0000'
+    NW = '#ffa500'
+    NE = '#FFFF00'
+    W = '#00FF00'
+    E = '#006400'
+    SW = '#800080'
+    SE = '#FF00FF'
+    S = '#FF0000'
 
 class Solfa(Enum):
     """
@@ -72,25 +73,52 @@ class Solfa(Enum):
 
 neoscore.setup()
 live_staff = Staff(ORIGIN, None, Mm(100), line_spacing=Mm(5))
-simon_staff = Staff((ZERO, Mm(40)), None, Mm(100), line_spacing=Mm(5))
+game_staff = Staff((ZERO, Mm(100)), None, Mm(100), line_spacing=Mm(5))
 Clef(ZERO, live_staff, 'treble_8va')
-Clef(ZERO, simon_staff, 'treble_8va')
+Clef(ZERO, game_staff, 'treble_8va')
+my_arrow = MusicText((Mm(150), Mm(10)), live_staff, "coda",
+              alignment_x=AlignmentX.CENTER, alignment_y=AlignmentY.CENTER,
+              )
+game_arrow = MusicText((Mm(150), Mm(10)), game_staff, "coda",
+              alignment_x=AlignmentX.CENTER, alignment_y=AlignmentY.CENTER,
+              )
+my_solfa = Text((Mm(160), Mm(10)), live_staff, "-",
+              alignment_x=AlignmentX.CENTER, alignment_y=AlignmentY.CENTER,
+              )
+game_solfa = Text((Mm(160), Mm(10)), game_staff, "-",
+              alignment_x=AlignmentX.CENTER, alignment_y=AlignmentY.CENTER,
+              )
 notelist = []
 
 js = Joystick()
 n = Chordrest(live_staff.unit(10), live_staff, [], (1,1))
-sn = Chordrest(simon_staff.unit(10), simon_staff, [], (1,1))
+sn = Chordrest(game_staff.unit(10), game_staff, [], (1,1))
 
 def build_bar(note):
-    global n
+    global n, my_arrow, my_solfa
     if n:
         n.remove()
+        my_arrow.remove()
+        my_solfa.remove()
     # compass = js.compass
     # colour = Colour(compass).value
+    # make note
     n = Chordrest(live_staff.unit(10), live_staff, [js.neopitch], Duration(1, 2))
-    MusicText((Mm(150), Mm(10)), live_staff, "arrowWhiteUp",
+
+    # make arrow
+    compass = js.compass
+    arrow_direction = Arrow[compass].value
+    arrow_colour = Colour[compass].value
+    colour_brush = Brush(color=arrow_colour)
+    my_arrow = MusicText((Mm(150), Mm(10)), live_staff, arrow_direction,
               alignment_x=AlignmentX.CENTER, alignment_y=AlignmentY.CENTER,
-              # colour=colour
+                         brush=colour_brush
+              )
+
+    # make solfa
+    solfa = Solfa[compass].value
+    my_solfa = Text((Mm(160), Mm(10)), live_staff, solfa,
+              alignment_x=AlignmentX.CENTER, alignment_y=AlignmentY.CENTER,
               )
 
 def refresh_loop(time):
