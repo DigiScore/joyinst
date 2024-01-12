@@ -9,6 +9,7 @@ readme = "README.md"
 python = "^3.10"
 mingus = "^0.6.1"
 hid = "^1.0.5"
+pygame = "^2.5.2"
 
 
 [build-system]

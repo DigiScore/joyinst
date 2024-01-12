@@ -1,4 +1,3 @@
-
 from mingus.containers import Note, NoteContainer, Bar, Track
 from mingus.midi import fluidsynth
 import hid
@@ -11,7 +10,7 @@ config_object.read('config.ini')
 class Joystick:
     def __init__(self):
         # Instantiate the game device
-        self.gamepad = hid.device()
+        self.gamepad = hid.Device('/dev/hidraw0')
         self.gamepad.open(0x2563, 0x0575)  # PC/PS3/Android. gamepad.open(0x045e, 0x02fd) = Bluetooth # XBOX One
         self.gamepad.set_nonblocking(True)
         self.sensitivity = 20
@@ -28,7 +27,7 @@ class Joystick:
         fluidsynth.init("GeneralUserGSv1.471.sf2")
         instrument = config_object['MIDI'].getint('instrument')
         fluidsynth.set_instrument(1, instrument)
-        fluidsynth.main_volume(1, 100) #  set volume control (7) to 70
+        fluidsynth.main_volume(1, 100)  # set volume control (7) to 70
         fluidsynth.modulation(1, 0)  # set modulation wheel to 0
         if instrument == 74 or instrument == 110:
             fluidsynth.control_change(1, 5, 100)
@@ -179,7 +178,7 @@ class Joystick:
                         note = 'B'
                     case 'S':
                         note = 'C'
-                        octave = self.octave+1
+                        octave = self.octave + 1
                     case 'SW':
                         note = 'A'
                     case 'W':
@@ -251,6 +250,7 @@ class Joystick:
 
     # def terminate(self):
     #     fluids
+
 
 if __name__ == "__main__":
     js = Joystick()

@@ -5,6 +5,7 @@ from enum import Enum
 
 from neoscore.common import *
 
+
 class Arrow(Enum):
     """
     Smufl Arrows
@@ -26,6 +27,7 @@ class Arrow(Enum):
     SW = 'arrowBlackDownLeft'
     SE = 'arrowBlackDownRight'
     S = 'arrowBlackDown'
+
 
 class Colour(Enum):
     """
@@ -49,6 +51,7 @@ class Colour(Enum):
     SW = '#800080'
     SE = '#FF00FF'
     S = '#FF0000'
+
 
 class Solfa(Enum):
     """
@@ -77,22 +80,23 @@ game_staff = Staff((ZERO, Mm(100)), None, Mm(100), line_spacing=Mm(5))
 Clef(ZERO, live_staff, 'treble_8va')
 Clef(ZERO, game_staff, 'treble_8va')
 my_arrow = MusicText((Mm(150), Mm(10)), live_staff, "coda",
-              alignment_x=AlignmentX.CENTER, alignment_y=AlignmentY.CENTER,
-              )
+                     alignment_x=AlignmentX.CENTER, alignment_y=AlignmentY.CENTER,
+                     )
 game_arrow = MusicText((Mm(150), Mm(10)), game_staff, "coda",
-              alignment_x=AlignmentX.CENTER, alignment_y=AlignmentY.CENTER,
-              )
+                       alignment_x=AlignmentX.CENTER, alignment_y=AlignmentY.CENTER,
+                       )
 my_solfa = Text((Mm(160), Mm(10)), live_staff, "-",
-              alignment_x=AlignmentX.CENTER, alignment_y=AlignmentY.CENTER,
-              )
+                alignment_x=AlignmentX.CENTER, alignment_y=AlignmentY.CENTER,
+                )
 game_solfa = Text((Mm(160), Mm(10)), game_staff, "-",
-              alignment_x=AlignmentX.CENTER, alignment_y=AlignmentY.CENTER,
-              )
+                  alignment_x=AlignmentX.CENTER, alignment_y=AlignmentY.CENTER,
+                  )
 notelist = []
 
 js = Joystick()
-n = Chordrest(live_staff.unit(10), live_staff, [], (1,1))
-sn = Chordrest(game_staff.unit(10), game_staff, [], (1,1))
+n = Chordrest(live_staff.unit(10), live_staff, [], (1, 1))
+sn = Chordrest(game_staff.unit(10), game_staff, [], (1, 1))
+
 
 def build_bar(note):
     global n, my_arrow, my_solfa
@@ -111,23 +115,24 @@ def build_bar(note):
     arrow_colour = Colour[compass].value
     colour_brush = Brush(color=arrow_colour)
     my_arrow = MusicText((Mm(150), Mm(10)), live_staff, arrow_direction,
-              alignment_x=AlignmentX.CENTER, alignment_y=AlignmentY.CENTER,
+                         alignment_x=AlignmentX.CENTER, alignment_y=AlignmentY.CENTER,
                          brush=colour_brush
-              )
+                         )
 
     # make solfa
     solfa = Solfa[compass].value
     my_solfa = Text((Mm(160), Mm(10)), live_staff, solfa,
-              alignment_x=AlignmentX.CENTER, alignment_y=AlignmentY.CENTER,
-              )
+                    alignment_x=AlignmentX.CENTER, alignment_y=AlignmentY.CENTER,
+                    )
+
 
 def refresh_loop(time):
     js.mainloop()
     if js.neopitch:
         build_bar(js.neopitch)
 
+
 neoscore.show(refresh_func=refresh_loop,
               display_page_geometry=False,
               auto_viewport_interaction_enabled=False
               )
-
