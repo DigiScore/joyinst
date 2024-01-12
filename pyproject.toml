@@ -1,0 +1,14 @@
+[tool.poetry]
+name = "machainst"
+version = "0.1.0"
+description = ""
+authors = ["Craig Vear <craig.vear@nottingham.ac.uk>, Fabrizio Poltronieri <fabrizio@fabriziopoltronieri.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
