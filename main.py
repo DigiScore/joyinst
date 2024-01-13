@@ -1,9 +1,46 @@
 from joystick import Joystick
-from time import sleep, time
-from threading import Thread
 from enum import Enum
+import pygame
 
-from neoscore.common import *
+# Define some colors
+BLACK = (0, 0, 0)
+WHITE = (255, 255, 255)
+
+
+class TextPrint(object):
+    """
+    This is a simple class that will help us print to the screen
+    It has nothing to do with the joysticks, just outputting the
+    information.
+    """
+
+    def __init__(self):
+        """ Constructor """
+        self.reset()
+        self.x_pos = 10
+        self.y_pos = 10
+        self.font = pygame.font.Font(None, 20)
+
+    def print(self, my_screen, text_string):
+        """ Draw text onto the screen. """
+        text_bitmap = self.font.render(text_string, True, BLACK)
+        my_screen.blit(text_bitmap, [self.x_pos, self.y_pos])
+        self.y_pos += self.line_height
+
+    def reset(self):
+        """ Reset text to the top of the screen. """
+        self.x_pos = 10
+        self.y_pos = 10
+        self.line_height = 15
+
+    def indent(self):
+        """ Indent the next line of text """
+        self.x_pos += 10
+
+    def unindent(self):
+        """ Unindent the next line of text """
+        self.x_pos -= 10
+
 
 class Arrow(Enum):
     """
@@ -69,65 +106,56 @@ class Solfa(Enum):
 
 # todo - transpositions!!! this is in C only. Tonic & position & arrows
 #  needs to be related to parent key.
+pygame.init()
 
+# Set the width and height of the screen [width,height]
+size = [500, 700]
+screen = pygame.display.set_mode(size)
+pygame.display.set_caption("MachAInst - basic output")
 
-neoscore.setup()
-live_staff = Staff(ORIGIN, None, Mm(100), line_spacing=Mm(5))
-game_staff = Staff((ZERO, Mm(100)), None, Mm(100), line_spacing=Mm(5))
-Clef(ZERO, live_staff, 'treble_8va')
-Clef(ZERO, game_staff, 'treble_8va')
-my_arrow = MusicText((Mm(150), Mm(10)), live_staff, "coda",
-              alignment_x=AlignmentX.CENTER, alignment_y=AlignmentY.CENTER,
-              )
-game_arrow = MusicText((Mm(150), Mm(10)), game_staff, "coda",
-              alignment_x=AlignmentX.CENTER, alignment_y=AlignmentY.CENTER,
-              )
-my_solfa = Text((Mm(160), Mm(10)), live_staff, "-",
-              alignment_x=AlignmentX.CENTER, alignment_y=AlignmentY.CENTER,
-              )
-game_solfa = Text((Mm(160), Mm(10)), game_staff, "-",
-              alignment_x=AlignmentX.CENTER, alignment_y=AlignmentY.CENTER,
-              )
-notelist = []
+# Used to manage how fast the screen updates
+clock = pygame.time.Clock()
 
+# init the joystick inst
 js = Joystick()
-n = Chordrest(live_staff.unit(10), live_staff, [], (1,1))
-sn = Chordrest(game_staff.unit(10), game_staff, [], (1,1))
 
-def build_bar(note):
-    global n, my_arrow, my_solfa
-    if n:
-        n.remove()
-        my_arrow.remove()
-        my_solfa.remove()
-    # compass = js.compass
-    # colour = Colour(compass).value
-    # make note
-    n = Chordrest(live_staff.unit(10), live_staff, [js.neopitch], Duration(1, 2))
+def mainloop():
+    # Get ready to print
+    textPrint = TextPrint()
 
-    # make arrow
-    compass = js.compass
-    arrow_direction = Arrow[compass].value
-    arrow_colour = Colour[compass].value
-    colour_brush = Brush(color=arrow_colour)
-    my_arrow = MusicText((Mm(150), Mm(10)), live_staff, arrow_direction,
-              alignment_x=AlignmentX.CENTER, alignment_y=AlignmentY.CENTER,
-                         brush=colour_brush
-              )
+    while True:
+        js.get_data()
 
-    # make solfa
-    solfa = Solfa[compass].value
-    my_solfa = Text((Mm(160), Mm(10)), live_staff, solfa,
-              alignment_x=AlignmentX.CENTER, alignment_y=AlignmentY.CENTER,
-              )
+        # DRAWING STEP
+        # First, clear the screen to white. Don't put other drawing commands
+        # above this, or they will be erased with this command.
+        screen.fill(WHITE)
+        textPrint.reset()
 
-def refresh_loop(time):
-    js.mainloop()
-    if js.neopitch:
-        build_bar(js.neopitch)
+        if js.neopitch:
+            # make arrow
+            compass = js.compass
+            arrow_direction = Arrow[compass].value
+            arrow_colour = Colour[compass].value
 
-neoscore.show(refresh_func=refresh_loop,
-              display_page_geometry=False,
-              auto_viewport_interaction_enabled=False
-              )
+            # make solfa
+            solfa = Solfa[compass].value
 
+            textPrint.print(screen, "Compass {}".format(compass))
+            textPrint.print(screen, "arrow_direction {}".format(arrow_direction))
+            textPrint.print(screen, "arrow_colour {}".format(arrow_colour))
+            textPrint.print(screen, "note {}".format(js.neopitch))
+            textPrint.print(screen, "solfa {}".format(solfa))
+
+            print(f"compass = {compass}; arrow_direction = {arrow_direction};"
+                  f"arrow_colour = {arrow_colour}; "
+                  f"note = {js.neopitch}; solfa = {solfa}")
+
+        # Go ahead and update the screen with what we've drawn.
+        pygame.display.flip()
+        # Limit to 60 frames per second
+        clock.tick(60)
+
+
+if __name__ == "__main__":
+    mainloop()

@@ -49,7 +49,7 @@ class Joystick:
         # neoscore vars
         self.neopitch = None
 
-    def mainloop(self):
+    def get_data(self):
         # -------- Main Program Loop -----------
         report = self.gamepad.read(64)
         if report:
