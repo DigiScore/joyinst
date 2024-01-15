@@ -94,6 +94,7 @@ class Solfa(Enum):
     Flats and sharps COULD be represented by 'a' and 'e'
     or simply 'b' and '#'
     """
+    # todo - flats and sharps
     N = 'do'
     NW = 're'
     NE = 'mi'
@@ -119,20 +120,51 @@ clock = pygame.time.Clock()
 # init the joystick inst
 js = Joystick()
 
+# Initialize the joysticks
+pygame.joystick.init()
+
 def mainloop():
     # Get ready to print
     textPrint = TextPrint()
 
-    while True:
-        js.get_data()
+    # init vars
+    done = False
+    button_down = False # might be useful later on
+
+    while not done:
+        # EVENT PROCESSING STEP
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                done = True
+
+            # Possible joystick actions: JOYAXISMOTION JOYBALLMOTION JOYBUTTONDOWN
+            # JOYBUTTONUP JOYHATMOTION
+            if event.type == pygame.JOYBUTTONDOWN:
+                button_down = True
+                print("Joystick button pressed.")
+            if event.type == pygame.JOYBUTTONUP:
+                print("Joystick button released.")
+                button_down = False
 
         # DRAWING STEP
         # First, clear the screen to white. Don't put other drawing commands
-        # above this, or they will be erased with this command.
         screen.fill(WHITE)
         textPrint.reset()
 
-        if js.neopitch:
+        # Get the joystick data
+        joystick = pygame.joystick.Joystick(0)
+        joystick.init()
+
+        # Parse data with Joystick class
+        js.get_data(joystick)
+
+        textPrint.print(screen, "Compass")
+        textPrint.print(screen, "arrow_direction")
+        textPrint.print(screen, "arrow_colour")
+        textPrint.print(screen, "note ")
+        textPrint.print(screen, "solfa ")
+
+        if js.compass:
             # make arrow
             compass = js.compass
             arrow_direction = Arrow[compass].value
@@ -141,15 +173,19 @@ def mainloop():
             # make solfa
             solfa = Solfa[compass].value
 
-            textPrint.print(screen, "Compass {}".format(compass))
-            textPrint.print(screen, "arrow_direction {}".format(arrow_direction))
-            textPrint.print(screen, "arrow_colour {}".format(arrow_colour))
-            textPrint.print(screen, "note {}".format(js.neopitch))
-            textPrint.print(screen, "solfa {}".format(solfa))
+            # print to screen
+            screen.fill(WHITE)
+            textPrint.reset()
 
-            print(f"compass = {compass}; arrow_direction = {arrow_direction};"
-                  f"arrow_colour = {arrow_colour}; "
-                  f"note = {js.neopitch}; solfa = {solfa}")
+            textPrint.print(screen, "Compass    {}".format(compass))
+            textPrint.print(screen, "arrow_direction    {}".format(arrow_direction))
+            textPrint.print(screen, "arrow_colour   {}".format(arrow_colour))
+            textPrint.print(screen, "note   {}".format(js.neopitch))
+            textPrint.print(screen, "solfa  {}".format(solfa))
+
+            # print(f"compass = {compass}; arrow_direction = {arrow_direction};"
+            #       f"arrow_colour = {arrow_colour}; "
+            #       f"note = {js.neopitch}; solfa = {solfa}")
 
         # Go ahead and update the screen with what we've drawn.
         pygame.display.flip()
