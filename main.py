@@ -117,7 +117,7 @@ class UI(Joystick):
         pygame.init()
 
         # Set the width and height of the screen [width,height]
-        size = [500, 700]
+        size = [500, 750]
         self.screen = pygame.display.set_mode(size)
         pygame.display.set_caption("MachAInst - basic output")
 
@@ -129,7 +129,7 @@ class UI(Joystick):
 
         # make dropdown menu
         self.dropdown = Dropdown(
-            self.screen, 120, 200, 100, 50, name='Select Instrument',
+            self.screen, 120, 120, 150, 50, name='Select Instrument',
             choices=[
                 "Vocals/FX's",
                 'Hmmm',
