@@ -1,6 +1,8 @@
 from joystick import Joystick
 from enum import Enum
 import pygame
+import pygame_widgets
+from pygame_widgets.dropdown import Dropdown
 
 # Define some colors
 BLACK = (0, 0, 0)
@@ -105,93 +107,130 @@ class Solfa(Enum):
     S = 'do'
 
 
-# todo - transpositions!!! this is in C only. Tonic & position & arrows
-#  needs to be related to parent key.
-pygame.init()
+class UI(Joystick):
+    """Main class for running UI. Inherits the joystick and instrument objects"""
+    # todo - transpositions!!! this is in C only. Tonic & position & arrows
+    #  needs to be related to parent key.
 
-# Set the width and height of the screen [width,height]
-size = [500, 700]
-screen = pygame.display.set_mode(size)
-pygame.display.set_caption("MachAInst - basic output")
+    def __init__(self):
+        super().__init__()
+        pygame.init()
 
-# Used to manage how fast the screen updates
-clock = pygame.time.Clock()
+        # Set the width and height of the screen [width,height]
+        size = [500, 700]
+        self.screen = pygame.display.set_mode(size)
+        pygame.display.set_caption("MachAInst - basic output")
 
-# init the joystick inst
-js = Joystick()
+        # Used to manage how fast the screen updates
+        self.clock = pygame.time.Clock()
 
-# Initialize the joysticks
-pygame.joystick.init()
+        # # init the joystick inst
+        # self.js = Joystick()
 
-def mainloop():
-    # Get ready to print
-    textPrint = TextPrint()
+        # Initialize the joysticks
+        pygame.joystick.init()
 
-    # init vars
-    done = False
-    button_down = False # might be useful later on
+        # make dropdown menu
+        self.dropdown = Dropdown(
+            self.screen, 120, 200, 100, 50, name='Select Instrument',
+            choices=[
+                "Vocals/FX's",
+                'Hmmm',
+                'Moog',
+                'Hi Pad slide A',
+                'Tom slider C&A',
+                'Lo Pad slide A',
+                'Shofars',
+                'Kalimba',
+                'Flute w warble',
+                'Flute w blow',
+                'Bass',
+            ],
+            borderRadius=3,
+            colour=pygame.Color('green'),
+            values=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
+            direction='down',
+            textHAlign='left'
+        )
 
-    while not done:
-        # EVENT PROCESSING STEP
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                done = True
+    def mainloop(self):
+        # Get ready to print
+        textPrint = TextPrint()
 
-            # Possible joystick actions: JOYAXISMOTION JOYBALLMOTION JOYBUTTONDOWN
-            # JOYBUTTONUP JOYHATMOTION
-            if event.type == pygame.JOYBUTTONDOWN:
-                button_down = True
-                print("Joystick button pressed.")
-            if event.type == pygame.JOYBUTTONUP:
-                print("Joystick button released.")
-                button_down = False
+        # init vars
+        done = False
+        button_down = False # might be useful later on
 
-        # DRAWING STEP
-        # First, clear the screen to white. Don't put other drawing commands
-        screen.fill(WHITE)
-        textPrint.reset()
+        while not done:
+            # EVENT PROCESSING STEP
+            events = pygame.event.get()
+            for event in events:
+                if event.type == pygame.QUIT:
+                    done = True
 
-        # Get the joystick data
-        joystick = pygame.joystick.Joystick(0)
-        joystick.init()
+                # Possible joystick actions: JOYAXISMOTION JOYBALLMOTION JOYBUTTONDOWN
+                # JOYBUTTONUP JOYHATMOTION
+                if event.type == pygame.JOYBUTTONDOWN:
+                    button_down = True
+                    print("Joystick button pressed.")
+                if event.type == pygame.JOYBUTTONUP:
+                    print("Joystick button released.")
+                    button_down = False
 
-        # Parse data with Joystick class
-        js.get_data(joystick)
+            # # Get instrument choice
+            # inst = self.dropdown.getSelected()
+            # if inst != self.instrument:
+            #     self.instrument = inst
+            #     self.fs.program_select(1, self.sfid, 0, inst)
 
-        textPrint.print(screen, "Compass")
-        textPrint.print(screen, "arrow_direction")
-        textPrint.print(screen, "arrow_colour")
-        textPrint.print(screen, "note ")
-        textPrint.print(screen, "solfa ")
-
-        if js.compass:
-            # make arrow
-            compass = js.compass
-            arrow_direction = Arrow[compass].value
-            arrow_colour = Colour[compass].value
-
-            # make solfa
-            solfa = Solfa[compass].value
-
-            # print to screen
-            screen.fill(WHITE)
+            # DRAWING STEP
+            # First, clear the screen to white. Don't put other drawing commands
+            self.screen.fill(WHITE)
             textPrint.reset()
 
-            textPrint.print(screen, "Compass    {}".format(compass))
-            textPrint.print(screen, "arrow_direction    {}".format(arrow_direction))
-            textPrint.print(screen, "arrow_colour   {}".format(arrow_colour))
-            textPrint.print(screen, "note   {}".format(js.neopitch))
-            textPrint.print(screen, "solfa  {}".format(solfa))
+            # Get the joystick data
+            joystick = pygame.joystick.Joystick(0)
+            joystick.init()
 
-            # print(f"compass = {compass}; arrow_direction = {arrow_direction};"
-            #       f"arrow_colour = {arrow_colour}; "
-            #       f"note = {js.neopitch}; solfa = {solfa}")
+            # Parse data with Joystick class
+            self.get_data(joystick)
 
-        # Go ahead and update the screen with what we've drawn.
-        pygame.display.flip()
-        # Limit to 60 frames per second
-        clock.tick(60)
+            textPrint.print(self.screen, "Compass")
+            textPrint.print(self.screen, "arrow_direction")
+            textPrint.print(self.screen, "arrow_colour")
+            textPrint.print(self.screen, "note ")
+            textPrint.print(self.screen, "solfa ")
+
+            if self.compass:
+                # make arrow
+                compass = self.compass
+                arrow_direction = Arrow[compass].value
+                arrow_colour = Colour[compass].value
+
+                # make solfa
+                solfa = Solfa[compass].value
+
+                # print to screen
+                self.screen.fill(WHITE)
+                textPrint.reset()
+
+                textPrint.print(self.screen, "Compass    {}".format(compass))
+                textPrint.print(self.screen, "arrow_direction    {}".format(arrow_direction))
+                textPrint.print(self.screen, "arrow_colour   {}".format(arrow_colour))
+                textPrint.print(self.screen, "note   {}".format(self.neopitch))
+                textPrint.print(self.screen, "solfa  {}".format(solfa))
+
+                # print(f"compass = {compass}; arrow_direction = {arrow_direction};"
+                #       f"arrow_colour = {arrow_colour}; "
+                #       f"note = {js.neopitch}; solfa = {solfa}")
+
+            # Go ahead and update the screen with what we've drawn.
+            pygame_widgets.update(events)
+            pygame.display.update()
+            # Limit to 60 frames per second
+            self.clock.tick(60)
 
 
 if __name__ == "__main__":
-    mainloop()
+    ui = UI()
+    ui.mainloop()

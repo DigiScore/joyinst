@@ -1,9 +1,9 @@
 from mingus.containers import Note, NoteContainer, Bar, Track
-from mingus.midi import fluidsynth
+from mingus.midi import pyfluidsynth as fs
 from configparser import ConfigParser
 
 config_object = ConfigParser()
-config_object.read('config.ini')
+config_object.read('config.ini') 
 
 
 class Joystick:
@@ -23,15 +23,37 @@ class Joystick:
         74 = recorder
         108 = kalimba
         110 = orutu fiddle
+        
+        africa.sf2
+        Bank	Preset	Name
+        0	1	Vocals/FX's
+        0	2	Hmmm
+        0	3	Moog
+        0	4	Hi Pad slide A
+        0	5	Tom slider C&A
+        0	6	Lo Pad slide A
+        0	7	Shofars
+        0	8	Kalimba
+        0	9	FIute w warble
+        0	10	FIute w blow
+        0	11	Bass
         """
 
-        fluidsynth.init("GeneralUserGSv1.471.sf2")
-        instrument = config_object['MIDI'].getint('instrument')
-        fluidsynth.set_instrument(1, instrument)
-        fluidsynth.main_volume(1, 100) #  set volume control (7) to 70
-        fluidsynth.modulation(1, 0)  # set modulation wheel to 0
-        if instrument == 74 or instrument == 110:
-            fluidsynth.control_change(1, 5, 100)
+        sf2 = "africa.sf2"
+        self.fs = fs.Synth()
+        self.sfid = self.fs.sfload(sf2)
+        self.fs.start()
+
+        # self.sf = fluidsynth.init("africa.sf2")
+        self.instrument = config_object['MIDI'].getint('instrument')
+        self.fs.program_select(1, self.sfid, 0, self.instrument)
+
+
+        # self.sf.set_instrument(1, self.instrument)
+        # self.sf.main_volume(1, 100) #  set volume control (7) to 70
+        # self.sf.modulation(1, 0)  # set modulation wheel to 0
+        # if self.instrument == 74 or self.instrument == 110:
+        #     self.sf.control_change(1, 5, 100)
         self.fs_is_playing = 0
 
         # midi vars
@@ -147,7 +169,7 @@ class Joystick:
                 self.stop_note(self.fs_is_playing)
                 self.fs_is_playing = 0
             # reset CC volume
-            fluidsynth.main_volume(1, 100)
+            self.fs.cc(1, 7, 100)
             self.neopitch = ""
         else:
             # get current octave
@@ -228,15 +250,15 @@ class Joystick:
                    dynamic,
                    ):
 
-        fluidsynth.play_Note(Note(new_note,
-                                  velocity=dynamic
-                                  )
-                             )
+        # self.fs.(Note(new_note,
+        #                           velocity=dynamic
+        #                           )
+        #                      )
+        self.fs.noteon(1, key=new_note, vel=dynamic)
 
     def stop_note(self, note_to_stop):
-        fluidsynth.stop_Note(Note(note_to_stop))
-
+        # self.sf.stop_Note(Note(note_to_stop))
+        self.fs.noteoff(1, key=note_to_stop)
 
 if __name__ == "__main__":
     js = Joystick()
-    js.mainloop()
