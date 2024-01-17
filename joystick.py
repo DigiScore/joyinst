@@ -39,6 +39,7 @@ class Joystick:
         0	11	Bass
         """
 
+        # Download https://www.polyphone-soundfonts.com/documents/file/470-africa-sf2/latest/download?f7af2bbf653590fa8046b3fc31797913=1&return=aHR0cHMlM0ElMkYlMkZ3d3cucG9seXBob25lLXNvdW5kZm9udHMuY29tJTJGZG9jdW1lbnRzJTJGMjctaW5zdHJ1bWVudC1zZXRzJTJGMzQ2LWFmcmljYQ==
         sf2 = "africa.sf2"
         self.fs = fs.Synth()
         self.sfid = self.fs.sfload(sf2)
@@ -48,12 +49,6 @@ class Joystick:
         self.instrument = config_object['MIDI'].getint('instrument')
         self.fs.program_select(1, self.sfid, 0, self.instrument)
 
-
-        # self.sf.set_instrument(1, self.instrument)
-        # self.sf.main_volume(1, 100) #  set volume control (7) to 70
-        # self.sf.modulation(1, 0)  # set modulation wheel to 0
-        # if self.instrument == 74 or self.instrument == 110:
-        #     self.sf.control_change(1, 5, 100)
         self.fs_is_playing = 0
 
         # midi vars
@@ -129,8 +124,7 @@ class Joystick:
             if i == 1:
                 round(axis, 2)
                 # NewValue = (((OldValue - OldMin) * (NewMax - NewMin)) / (OldMax - OldMin)) + NewMin
-                self.dynamic = (((axis - -1) * (20 - 120)) / (1 - -1)) + 120
-                # print(self.dynamic)
+                self.dynamic = int((((axis - -1) * (20 - 120)) / (1 - -1)) + 120)
 
             # check release of rb and rt
             if rb < self.rb_val:
@@ -159,8 +153,6 @@ class Joystick:
                 self.octave = 0
             elif self.octave > 8:
                 self.octave = 8
-
-            # print(f" rb = {rb}, self.rb_val = {self.rb_val}; octave = {self.octave}")
 
         # make a sound or not
         if self.compass == "":
@@ -205,7 +197,6 @@ class Joystick:
 
             # make fs style note str
             fs_note = f"{note}-{octave}"
-            # print(f"making note {fs_note}")
 
             # if not playing - make a note
             if self.fs_is_playing == 0:
@@ -254,11 +245,11 @@ class Joystick:
         #                           velocity=dynamic
         #                           )
         #                      )
-        self.fs.noteon(1, key=new_note, vel=dynamic)
+        self.fs.noteon(1, key=int(Note(new_note)), vel=dynamic)
 
     def stop_note(self, note_to_stop):
         # self.sf.stop_Note(Note(note_to_stop))
-        self.fs.noteoff(1, key=note_to_stop)
+        self.fs.noteoff(1, key=int(Note(note_to_stop)))
 
 if __name__ == "__main__":
     js = Joystick()

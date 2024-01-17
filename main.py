@@ -124,9 +124,6 @@ class UI(Joystick):
         # Used to manage how fast the screen updates
         self.clock = pygame.time.Clock()
 
-        # # init the joystick inst
-        # self.js = Joystick()
-
         # Initialize the joysticks
         pygame.joystick.init()
 
@@ -152,6 +149,7 @@ class UI(Joystick):
             direction='down',
             textHAlign='left'
         )
+        self.inst = self.instrument
 
     def mainloop(self):
         # Get ready to print
@@ -177,11 +175,10 @@ class UI(Joystick):
                     print("Joystick button released.")
                     button_down = False
 
-            # # Get instrument choice
-            # inst = self.dropdown.getSelected()
-            # if inst != self.instrument:
-            #     self.instrument = inst
-            #     self.fs.program_select(1, self.sfid, 0, inst)
+            # Get instrument choice
+            if self.dropdown.getSelected():
+                self.inst = self.dropdown.getSelected()
+                self.fs.program_select(1, self.sfid, 0, self.inst)
 
             # DRAWING STEP
             # First, clear the screen to white. Don't put other drawing commands
