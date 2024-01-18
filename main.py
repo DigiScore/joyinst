@@ -3,11 +3,11 @@ from enum import Enum
 import pygame
 import pygame_widgets
 from pygame_widgets.dropdown import Dropdown
+import os
 
 # Define some colors
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
-
 
 class TextPrint(object):
     """
@@ -116,8 +116,11 @@ class UI(Joystick):
         super().__init__()
         pygame.init()
 
-        # Set the width and height of the screen [width,height]
-        size = [500, 750]
+        # Set the width and depth of the screen [width,depth]
+        self.WIDTH = 500
+        self.DEPTH = 750
+        size = [self.WIDTH, self.DEPTH]
+
         self.screen = pygame.display.set_mode(size)
         pygame.display.set_caption("MachAInst - basic output")
 
@@ -127,7 +130,7 @@ class UI(Joystick):
         # Initialize the joysticks
         pygame.joystick.init()
 
-        # make dropdown menu
+        # make dropdown menu for instrument choice
         self.dropdown = Dropdown(
             self.screen, 120, 120, 150, 50, name='Select Instrument',
             choices=[
@@ -150,6 +153,10 @@ class UI(Joystick):
             textHAlign='left'
         )
         self.inst = self.instrument
+
+        self.path_to_generated_images = "media/generated_notes/"
+
+
 
     def mainloop(self):
         # Get ready to print
@@ -219,9 +226,15 @@ class UI(Joystick):
                 textPrint.print(self.screen, "note   {}".format(self.neopitch))
                 textPrint.print(self.screen, "solfa  {}".format(solfa))
 
-                # print(f"compass = {compass}; arrow_direction = {arrow_direction};"
-                #       f"arrow_colour = {arrow_colour}; "
-                #       f"note = {js.neopitch}; solfa = {solfa}")
+                # put note image on screen
+                # note_to_show = self.note_to_show
+                # NOTE = pygame.image.load(os.path.join(self.path_to_generated_images, note_to_show))
+                # self.note_to_show(NOTE)
+
+            else:
+                # put empty stave on screen
+                NOTE = pygame.image.load('media/empty_staves/empty_treble.png').convert_alpha()
+                self.show_note(NOTE)
 
             # Go ahead and update the screen with what we've drawn.
             pygame_widgets.update(events)
@@ -229,6 +242,12 @@ class UI(Joystick):
             # Limit to 60 frames per second
             self.clock.tick(60)
 
+    def show_note(self, note):
+        note = pygame.transform.scale(note, (200, 100))
+        # Create a rect with the size of the image.
+        rect = note.get_rect()
+        rect.center = (self.WIDTH / 2, self.DEPTH / 2)
+        self.screen.blit(note, rect)
 
 if __name__ == "__main__":
     ui = UI()

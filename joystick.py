@@ -1,17 +1,20 @@
 from mingus.containers import Note, NoteContainer, Bar, Track
 from mingus.midi import pyfluidsynth as fs
 from configparser import ConfigParser
+from notation import Notation
+
 
 config_object = ConfigParser()
 config_object.read('config.ini') 
 
 
-class Joystick:
+class Joystick(Notation):
     """
     Manages the data from the joystick controls.
     Calculates the note values and makes a sound.
     """
     def __init__(self):
+        super().__init__()
         # Instantiate the vars
         self.sensitivity = 20
         self.joystick_active_range = 0.9
