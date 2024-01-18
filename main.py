@@ -152,10 +152,9 @@ class UI(Joystick):
             direction='down',
             textHAlign='left'
         )
+        # setup inst & notation vars
         self.inst = self.instrument
-
         self.path_to_generated_images = "media/generated_notes/"
-
 
 
     def mainloop(self):
@@ -181,8 +180,8 @@ class UI(Joystick):
                 if event.type == pygame.JOYBUTTONUP:
                     print("Joystick button released.")
                     button_down = False
-                if event.type == pygame.JOYAXISMOTION:
-                    print("Joystick axis motion.")
+                # if event.type == pygame.JOYAXISMOTION:
+                #     print("Joystick axis motion.")
 
             # Get instrument choice
             if self.dropdown.getSelected():
@@ -227,14 +226,14 @@ class UI(Joystick):
                 textPrint.print(self.screen, "solfa  {}".format(solfa))
 
                 # put note image on screen
-                # note_to_show = self.note_to_show
-                # NOTE = pygame.image.load(os.path.join(self.path_to_generated_images, note_to_show))
-                # self.note_to_show(NOTE)
+                note_to_show = self.note_to_show
+                path_to_new_image = self.path_to_generated_images + note_to_show
+                self.show_note(path_to_new_image)
 
             else:
                 # put empty stave on screen
-                NOTE = pygame.image.load('media/empty_staves/empty_treble.png').convert_alpha()
-                self.show_note(NOTE)
+                path_to_new_image = 'media/empty_staves/empty_treble.png'
+                self.show_note(path_to_new_image)
 
             # Go ahead and update the screen with what we've drawn.
             pygame_widgets.update(events)
@@ -242,12 +241,15 @@ class UI(Joystick):
             # Limit to 60 frames per second
             self.clock.tick(60)
 
-    def show_note(self, note):
+    def show_note(self, path_to_new_image):
+        # print(path_to_new_image)
+        note = pygame.image.load(path_to_new_image).convert_alpha()
         note = pygame.transform.scale(note, (200, 100))
         # Create a rect with the size of the image.
         rect = note.get_rect()
         rect.center = (self.WIDTH / 2, self.DEPTH / 2)
         self.screen.blit(note, rect)
+
 
 if __name__ == "__main__":
     ui = UI()

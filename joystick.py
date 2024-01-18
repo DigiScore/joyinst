@@ -239,19 +239,16 @@ class Joystick(Notation):
                 elif octave == 2:
                     self.neopitch += ",,"
 
+            # make into neoscore png for display
+            self.make_notation([self.neopitch])
+
     def make_sound(self,
                    new_note,
                    dynamic,
                    ):
-
-        # self.fs.(Note(new_note,
-        #                           velocity=dynamic
-        #                           )
-        #                      )
         self.fs.noteon(1, key=int(Note(new_note)), vel=dynamic)
 
     def stop_note(self, note_to_stop):
-        # self.sf.stop_Note(Note(note_to_stop))
         self.fs.noteoff(1, key=int(Note(note_to_stop)))
 
 if __name__ == "__main__":
