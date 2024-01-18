@@ -14,7 +14,7 @@ class Joystick:
     def __init__(self):
         # Instantiate the vars
         self.sensitivity = 20
-        self.joystick_active_range = 0.8
+        self.joystick_active_range = 0.9
 
         # init midi synth
         """

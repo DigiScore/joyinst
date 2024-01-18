@@ -174,6 +174,8 @@ class UI(Joystick):
                 if event.type == pygame.JOYBUTTONUP:
                     print("Joystick button released.")
                     button_down = False
+                if event.type == pygame.JOYAXISMOTION:
+                    print("Joystick axis motion.")
 
             # Get instrument choice
             if self.dropdown.getSelected():
