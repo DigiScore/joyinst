@@ -7,6 +7,40 @@ from notation import Notation
 config_object = ConfigParser()
 config_object.read('config.ini') 
 
+"""
+Currently running with africa.sf2:
+
+https://www.polyphone-soundfonts.com/documents/27-instrument-sets/346-africa
+
+ Herb Jimmerson  22 February 2017
+Bank	Preset	Name
+0	1	Vocals/FX's
+0	2	Hmmm
+0	3	Moog
+0	4	Hi Pad slide A
+0	5	Tom slider C&A
+0	6	Lo Pad slide A
+0	7	Shofars
+0	8	Kalimba
+0	9	FIute w warble
+0	10	FIute w blow
+0	11	Bass
+Details
+LicenseJust give credit
+
+
+GIVE CREDIT
+License on Creative Commons
+
+The author allows a personal and commercial use of the soundfont along with derivative works whose distribution is
+also allowed with no restrictions. The only condition is to give appropriate credit to the initial author by mentioning
+its name (good practices for attribution are described here). This license is recommended for an optimal use and
+distribution of a soundfont.
+"""
+
+
+
+
 
 class Joystick(Notation):
     """
@@ -172,22 +206,22 @@ class Joystick(Notation):
 
             # match compass to notes
             match self.compass:
-                case 'N':
+                case 'S':
                     note = 'C'
-                case 'NE':
+                case 'SE':
                     note = 'E'
                 case 'E':
                     note = 'G'
-                case 'SE':
+                case 'NE':
                     note = 'B'
-                case 'S':
+                case 'N':
                     note = 'C'
                     octave = self.octave+1
-                case 'SW':
+                case 'NW':
                     note = 'A'
                 case 'W':
                     note = 'F'
-                case 'NW':
+                case 'SW':
                     note = 'D'
 
             # print(note)
