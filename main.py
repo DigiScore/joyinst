@@ -244,7 +244,7 @@ class UI(Joystick):
     def show_note(self, path_to_new_image):
         # print(path_to_new_image)
         note = pygame.image.load(path_to_new_image).convert_alpha()
-        note = pygame.transform.scale(note, (200, 100))
+        note = pygame.transform.scale_by(note, 0.5)
         # Create a rect with the size of the image.
         rect = note.get_rect()
         rect.center = (self.WIDTH / 2, self.DEPTH / 2)
