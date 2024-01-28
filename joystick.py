@@ -274,7 +274,11 @@ class Joystick(Notation):
                     self.neopitch += ",,"
 
             # make into neoscore png for display
-            self.make_notation([self.neopitch])
+            self.make_notation([self.neopitch],
+                               self.compass,
+                               arrow_help=True,
+                               name_help=True
+                               )
 
     def make_sound(self,
                    new_note,

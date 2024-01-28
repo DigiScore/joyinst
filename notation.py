@@ -3,7 +3,6 @@ from enum import Enum
 import os
 
 
-
 class Arrow(Enum):
     """
     Smufl Arrows
@@ -77,8 +76,8 @@ class Notation:
         # note to print
         self.note_to_show = None
 
-        # make a blank note
-        self.n1 = None
+        # # make a blank note
+        # self.n1 = None
 
         # save path
         self.save_path = "media/generated_notes/"
@@ -86,25 +85,73 @@ class Notation:
         # compile a list of generated png's to optimise any duplications
         self.notelist = os.listdir(self.save_path)
 
-    def make_notation(self, notes: list):
+    def make_notation(self, notes: list,
+                      compass: str,
+                      arrow_help: bool = True,
+                      name_help: bool = True
+                      ):
+        """
+        Makes a new neoscore note on stave with option help indications of arrow and name
+
+        :param notes: list of notes to put on stave
+        :param compass: compass direction for mapping to arrow glyph and colour
+
+        :return:
+        """
+
+        # setup an empty list for removal later
+        list_of_objects = []
+
         # iterate through note list
         for i, note in enumerate(notes):
+            # move position along for each note
+            pos_offset_x = i * 10
+
             note_filename = note + ".png"
             if note_filename in self.notelist:
                 self.note_to_show = note_filename
             else:
+                # make a new note name to build extra help factors
+                note_filename = note
+                if arrow_help:
+                    note_filename += "_arrow"
+                if name_help:
+                    note_filename += "_name"
+
                 # make a new note and save
                 empty_staff = Staff(ORIGIN, None, Mm(50), line_spacing=Mm(5))
                 Clef(ZERO, empty_staff, 'treble')
 
-                self.n1 = Chordrest(Mm(10),
+                n = Chordrest(Mm(10 + (pos_offset_x + 10)),
                                empty_staff,
                                [note],
                                Duration(1, 2))
                 # add to existing note list
-                self.notelist.append(note_filename)
+                list_of_objects.append(n)
+
+                if arrow_help:
+                    arrow_direction = Arrow[compass].value
+                    arrow_colour = Colour[compass].value
+                    colour_brush = Brush(color=arrow_colour)
+                    help_arrow = MusicText((Mm(15), Mm(-15)), n, arrow_direction,
+                                         alignment_x=AlignmentX.CENTER, alignment_y=AlignmentY.CENTER,
+                                         brush=colour_brush,
+                                           scale=2
+                                         )
+                    list_of_objects.append(help_arrow)
+                    note_filename = note_filename + "_arrow"
+
+                if name_help:
+                    help_text = Text((Mm(-15), Mm(-15)), n, note,
+                         alignment_x=AlignmentX.CENTER,
+                         alignment_y=AlignmentY.CENTER,
+                                     scale=5
+                         )
+                    list_of_objects.append(help_text)
+                    note_filename = note_filename + "_name"
 
                 # render new image
+                note_filename = note_filename + ".png"
                 save_dest = self.save_path + note_filename
                 neoscore.render_image(rect=None,
                                       dest=save_dest,
@@ -115,7 +162,11 @@ class Notation:
                 print(f"Saving new image to {save_dest}")
                 # hand name back to mainloop
                 self.note_to_show = note_filename
-                self.n1.remove()
+
+                # delete them all
+                for o in list_of_objects:
+                    print(o)
+                    o.remove()
 
 
 if __name__ == "__main__":
