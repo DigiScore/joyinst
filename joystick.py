@@ -207,22 +207,22 @@ class Joystick(Notation):
             # match compass to notes
             match self.compass:
                 case 'S':
-                    note = 'C'
+                    note = 'c'
                 case 'SE':
-                    note = 'E'
+                    note = 'e'
                 case 'E':
-                    note = 'G'
+                    note = 'g'
                 case 'NE':
-                    note = 'B'
+                    note = 'b'
                 case 'N':
-                    note = 'C'
+                    note = 'c'
                     octave = self.octave+1
                 case 'NW':
-                    note = 'A'
+                    note = 'a'
                 case 'W':
-                    note = 'F'
+                    note = 'f'
                 case 'SW':
-                    note = 'D'
+                    note = 'd'
 
             # print(note)
             # adjust note for enharmonic shift

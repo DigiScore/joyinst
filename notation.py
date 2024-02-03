@@ -27,26 +27,28 @@ class Arrow(Enum):
 
 class Colour(Enum):
     """
-    Arrow notes COLOURS
+    Inspired by Arrow notes concept
     https://digitlearning.co.uk/what-are-arrownotes/
+    follows the rainbow from South (lower notes) -> North (higher)
 
     c = red N or S
-    d = orange NW
+    b = violet SE
+    a = indigo SW
+    g = blue E
+    f = green W
     e = yellow NE
-    f = light green W
-    g = dark green E
-    a = purple SW
-    b = pink SE
+    d = orange NW
     c = red N or S
+
     """
-    N = '#FF0000'
-    NW = '#ffa500'
-    NE = '#FFFF00'
-    W = '#00FF00'
-    E = '#006400'
-    SW = '#800080'
-    SE = '#FF00FF'
-    S = '#FF0000'
+    N = '#e81416'
+    NE = '#70369d'
+    NW = '#4b369d'
+    W = '#487de7.'
+    E = '#79c314'
+    SE = '#faeb36'
+    SW = '#ffa500'
+    S = '#e81416'
 
 class Solfa(Enum):
     """

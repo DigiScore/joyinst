@@ -1,9 +1,12 @@
-from joystick import Joystick
+# import python libraries
 from enum import Enum
 import pygame
 import pygame_widgets
 from pygame_widgets.dropdown import Dropdown
-import os
+
+# import project modules
+from joystick import Joystick
+from game import Game
 
 # Define some colors
 BLACK = (0, 0, 0)
@@ -68,26 +71,28 @@ class Arrow(Enum):
 
 class Colour(Enum):
     """
-    Arrow notes COLOURS
+    Inspired by Arrow notes concept
     https://digitlearning.co.uk/what-are-arrownotes/
+    follows the rainbow from South (lower notes) -> North (higher)
 
     c = red N or S
-    d = orange NW
+    b = violet SE
+    a = indigo SW
+    g = blue E
+    f = green W
     e = yellow NE
-    f = light green W
-    g = dark green E
-    a = purple SW
-    b = pink SE
+    d = orange NW
     c = red N or S
+
     """
-    N = '#FF0000'
-    NW = '#ffa500'
-    NE = '#FFFF00'
-    W = '#00FF00'
-    E = '#006400'
-    SW = '#800080'
-    SE = '#FF00FF'
-    S = '#FF0000'
+    N = '#e81416'
+    NE = '#70369d'
+    NW = '#4b369d'
+    W = '#487de7.'
+    E = '#79c314'
+    SE = '#faeb36'
+    SW = '#ffa500'
+    S = '#e81416'
 
 class Solfa(Enum):
     """
@@ -107,12 +112,14 @@ class Solfa(Enum):
     S = 'do'
 
 
-class UI(Joystick):
+class UI(Joystick, Game):
     """Main class for running UI. Inherits the joystick and instrument objects"""
     # todo - transpositions!!! this is in C only. Tonic & position & arrows
     #  needs to be related to parent key.
 
-    def __init__(self):
+    def __init__(self,
+                 playing_game: bool = True
+                 ):
         super().__init__()
         pygame.init()
 
@@ -120,6 +127,9 @@ class UI(Joystick):
         self.WIDTH = 500
         self.DEPTH = 750
         size = [self.WIDTH, self.DEPTH]
+
+        # set game params
+        self.playing_game = playing_game
 
         self.screen = pygame.display.set_mode(size)
         pygame.display.set_caption("MachAInst - basic output")
@@ -193,53 +203,76 @@ class UI(Joystick):
             self.screen.fill(WHITE)
             textPrint.reset()
 
-            # Get the joystick data
-            joystick = pygame.joystick.Joystick(0)
-            joystick.init()
+            # Get count of joysticks
+            joystick_count = pygame.joystick.get_count()
 
-            # Parse data with Joystick class
-            self.get_data(joystick)
+            # todo - this is a hack, to get around issue with Logitech gamepad
+            # For each joystick:
+            for i in range(joystick_count):
+                joystick = pygame.joystick.Joystick(i)
+                joystick.init()
+                # # Get the joystick data
+                # joystick = pygame.joystick.Joystick(0)
+                # joystick.init()
 
-            textPrint.print(self.screen, "Compass")
-            textPrint.print(self.screen, "arrow_direction")
-            textPrint.print(self.screen, "arrow_colour")
-            textPrint.print(self.screen, "note ")
-            textPrint.print(self.screen, "solfa ")
+                # Parse data with Joystick class
+                self.get_data(joystick)
 
-            if self.compass:
-                # make arrow
-                compass = self.compass
-                arrow_direction = Arrow[compass].value
-                arrow_colour = Colour[compass].value
+                textPrint.print(self.screen, "Compass")
+                textPrint.print(self.screen, "arrow_direction")
+                textPrint.print(self.screen, "arrow_colour")
+                textPrint.print(self.screen, "note ")
+                textPrint.print(self.screen, "solfa ")
 
-                # make solfa
-                solfa = Solfa[compass].value
+                if self.compass:
+                    # make arrow
+                    compass = self.compass
+                    arrow_direction = Arrow[compass].value
+                    arrow_colour = Colour[compass].value
 
-                # print to screen
-                self.screen.fill(WHITE)
-                textPrint.reset()
+                    # make solfa
+                    solfa = Solfa[compass].value
 
-                textPrint.print(self.screen, "Compass    {}".format(compass))
-                textPrint.print(self.screen, "arrow_direction    {}".format(arrow_direction))
-                textPrint.print(self.screen, "arrow_colour   {}".format(arrow_colour))
-                textPrint.print(self.screen, "note   {}".format(self.neopitch))
-                textPrint.print(self.screen, "solfa  {}".format(solfa))
+                    # print to screen
+                    self.screen.fill(WHITE)
+                    textPrint.reset()
 
-                # put note image on screen
-                note_to_show = self.note_to_show
-                path_to_new_image = self.path_to_generated_images + note_to_show
-                self.show_note(path_to_new_image)
+                    textPrint.print(self.screen, "Compass    {}".format(compass))
+                    textPrint.print(self.screen, "arrow_direction    {}".format(arrow_direction))
+                    textPrint.print(self.screen, "arrow_colour   {}".format(arrow_colour))
+                    textPrint.print(self.screen, "note   {}".format(self.neopitch))
+                    textPrint.print(self.screen, "solfa  {}".format(solfa))
 
-            else:
-                # put empty stave on screen
-                path_to_new_image = 'media/empty_staves/empty_treble.png'
-                self.show_note(path_to_new_image)
+                    # put note image on screen
+                    note_to_show = self.note_to_show
+                    path_to_new_image = self.path_to_generated_images + note_to_show
+                    self.show_note(path_to_new_image)
 
-            # Go ahead and update the screen with what we've drawn.
-            pygame_widgets.update(events)
-            pygame.display.update()
-            # Limit to 60 frames per second
-            self.clock.tick(60)
+                    if self.playing_game:
+                        # todo - this is a verbose sequence - we can optimise later
+                        # check if current note matches
+                        self.check_notes_match(note_to_show)
+                        game_note_path =
+
+
+                        self.show_game_note(game_note_path)
+
+                    else:
+                        # put empty stave on screen
+                        path_to_new_image = 'media/empty_staves/empty_treble.png'
+                        self.show_game_note(path_to_new_image)
+
+                else:
+                    # put empty stave on screen
+                    path_to_new_image = 'media/empty_staves/empty_treble.png'
+                    self.show_note(path_to_new_image)
+
+
+                # Go ahead and update the screen with what we've drawn.
+                pygame_widgets.update(events)
+                pygame.display.update()
+                # Limit to 60 frames per second
+                self.clock.tick(60)
 
     def show_note(self, path_to_new_image):
         # print(path_to_new_image)
@@ -250,7 +283,16 @@ class UI(Joystick):
         rect.center = (self.WIDTH / 2, self.DEPTH / 2)
         self.screen.blit(note, rect)
 
+    def show_game_note(self, path_to_new_image):
+        # print(path_to_new_image)
+        note = pygame.image.load(path_to_new_image).convert_alpha()
+        note = pygame.transform.scale_by(note, 0.5)
+        # Create a rect with the size of the image.
+        rect = note.get_rect()
+        rect.center = (self.WIDTH / 2, (self.DEPTH / 2) + 50)
+        self.screen.blit(note, rect)
+
 
 if __name__ == "__main__":
-    ui = UI()
+    ui = UI(playing_game=True)
     ui.mainloop()
