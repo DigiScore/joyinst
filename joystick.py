@@ -90,7 +90,7 @@ class Joystick(Notation):
 
         # midi vars
         self.compass = ""
-        self.octave = 5
+        self.octave = 4
         self.dynamic = 70
         self.add_accidental = 0
 
@@ -253,13 +253,13 @@ class Joystick(Notation):
 
         # Calculate octave shift
         if self.rb_release and self.rt_release:
-            self.octave = 5
+            self.octave = 4
         elif self.rb_release:  # RB
             self.octave += 1
         elif self.rt_release:  # RT
             self.octave += -1
 
-        if self.octave < 0:
+        if self.octave <= 0:
             self.octave = 0
         elif self.octave > 8:
             self.octave = 8

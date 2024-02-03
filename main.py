@@ -186,9 +186,9 @@ class UI(Joystick, Game):
                 # JOYBUTTONUP JOYHATMOTION
                 if event.type == pygame.JOYBUTTONDOWN:
                     button_down = True
-                    print("Joystick button pressed.")
+                    # print("Joystick button pressed.")
                 if event.type == pygame.JOYBUTTONUP:
-                    print("Joystick button released.")
+                    # print("Joystick button released.")
                     button_down = False
                 # if event.type == pygame.JOYAXISMOTION:
                 #     print("Joystick axis motion.")

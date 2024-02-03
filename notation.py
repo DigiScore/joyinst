@@ -142,7 +142,7 @@ class Notation:
                     arrow_direction = Arrow[compass].value
                     arrow_colour = Colour[compass].value
                     colour_brush = Brush(color=arrow_colour)
-                    help_arrow = MusicText((Mm(15), Mm(-15)), n, arrow_direction,
+                    help_arrow = MusicText((Mm(20), Mm(-20)), n, arrow_direction,
                                          alignment_x=AlignmentX.CENTER, alignment_y=AlignmentY.CENTER,
                                          brush=colour_brush,
                                            scale=2
@@ -151,13 +151,16 @@ class Notation:
                     # note_filename = note_filename # + "_arrow"
 
                 if name_help:
-                    help_text = Text((Mm(-15), Mm(-15)), n, note,
+                    help_text = Text((Mm(-20), Mm(-15)), n, note,
                          alignment_x=AlignmentX.CENTER,
                          alignment_y=AlignmentY.CENTER,
-                                     scale=5
+                                     scale=4
                          )
                     list_of_objects.append(help_text)
                     # note_filename = note_filename # + "_name"
+
+                # add new image to note list
+                self.notelist.append(note_filename)
 
                 # render new image
                 # note_filename = note_filename + ".png"
