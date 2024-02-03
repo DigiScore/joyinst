@@ -129,7 +129,7 @@ class Notation:
 
                 # make a new note and save
                 empty_staff = Staff(ORIGIN, None, Mm(200), line_spacing=Mm(5))
-                Clef(ZERO, empty_staff, 'treble')
+                Clef(Mm(60), empty_staff, 'treble')
 
                 n = Chordrest(Mm(100 + (pos_offset_x + 10)),
                                empty_staff,
@@ -177,7 +177,7 @@ class Notation:
 
                 # delete them all
                 for o in list_of_objects:
-                    print(o)
+                    # print(o)
                     o.remove()
 
 

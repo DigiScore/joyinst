@@ -293,7 +293,7 @@ class Joystick(Notation):
                     note = f"{note}b"
 
             # make fs style note str
-            fs_note = f"{note}-{octave}"
+            fs_note = f"{note}-{octave + 1}"
 
             # if not playing - make a note
             if self.fs_is_playing == 0:

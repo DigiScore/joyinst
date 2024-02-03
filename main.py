@@ -310,5 +310,5 @@ class UI(Joystick, Game):
 
 
 if __name__ == "__main__":
-    ui = UI(playing_game=True)
+    ui = UI(playing_game=False)
     ui.mainloop()
