@@ -88,8 +88,8 @@ class Colour(Enum):
     N = '#e81416'
     NE = '#70369d'
     NW = '#4b369d'
-    W = '#487de7.'
-    E = '#79c314'
+    W = '#79c314'
+    E = '#487de7'
     SE = '#faeb36'
     SW = '#ffa500'
     S = '#e81416'
@@ -124,7 +124,7 @@ class UI(Joystick, Game):
         pygame.init()
 
         # Set the width and depth of the screen [width,depth]
-        self.WIDTH = 500
+        self.WIDTH = 1000
         self.DEPTH = 750
         size = [self.WIDTH, self.DEPTH]
 
@@ -132,7 +132,7 @@ class UI(Joystick, Game):
         self.playing_game = playing_game
 
         self.screen = pygame.display.set_mode(size)
-        pygame.display.set_caption("MachAInst - basic output")
+        pygame.display.set_caption("MachAInst")
 
         # Used to manage how fast the screen updates
         self.clock = pygame.time.Clock()
@@ -157,7 +157,7 @@ class UI(Joystick, Game):
                 'Bass',
             ],
             borderRadius=3,
-            colour=pygame.Color('green'),
+            colour=pygame.Color('snow'),
             values=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
             direction='down',
             textHAlign='left'
@@ -260,10 +260,10 @@ class UI(Joystick, Game):
 
                         self.show_game_note(game_note_path)
 
-                    else:
-                        # put empty stave on screen
-                        path_to_new_image = 'media/empty_staves/empty_treble.png'
-                        self.show_game_note(path_to_new_image)
+                    # else:
+                    #     # put empty stave on screen
+                    #     path_to_new_image = 'media/empty_staves/empty_treble.png'
+                    #     self.show_game_note(path_to_new_image)
 
                 else:
                     # put empty stave on screen
@@ -292,10 +292,10 @@ class UI(Joystick, Game):
         note = pygame.transform.scale_by(note, 0.5)
         # Create a rect with the size of the image.
         rect = note.get_rect()
-        rect.center = (self.WIDTH / 2, (self.DEPTH / 2) + 50)
+        rect.center = (self.WIDTH / 2, (self.DEPTH / 2) + 200)
         self.screen.blit(note, rect)
 
 
 if __name__ == "__main__":
-    ui = UI(playing_game=True)
+    ui = UI(playing_game=False)
     ui.mainloop()

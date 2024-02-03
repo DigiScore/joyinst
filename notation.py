@@ -44,8 +44,8 @@ class Colour(Enum):
     N = '#e81416'
     NE = '#70369d'
     NW = '#4b369d'
-    W = '#487de7.'
-    E = '#79c314'
+    W = '#79c314'
+    E = '#487de7'
     SE = '#faeb36'
     SW = '#ffa500'
     S = '#e81416'
@@ -109,16 +109,23 @@ class Notation:
             # move position along for each note
             pos_offset_x = i * 10
 
-            note_filename = note + ".png"
+            # make a new note name to build extra help factors
+            note_filename = note
+            if arrow_help:
+                note_filename += "_arrow"
+            if name_help:
+                note_filename += "_name"
+            note_filename += ".png"
+
             if note_filename in self.notelist:
                 self.note_to_show = note_filename
             else:
                 # make a new note name to build extra help factors
-                note_filename = note
-                if arrow_help:
-                    note_filename += "_arrow"
-                if name_help:
-                    note_filename += "_name"
+                # note_filename = note
+                # if arrow_help:
+                #     note_filename += "_arrow"
+                # if name_help:
+                #     note_filename += "_name"
 
                 # make a new note and save
                 empty_staff = Staff(ORIGIN, None, Mm(50), line_spacing=Mm(5))
@@ -141,7 +148,7 @@ class Notation:
                                            scale=2
                                          )
                     list_of_objects.append(help_arrow)
-                    note_filename = note_filename + "_arrow"
+                    # note_filename = note_filename # + "_arrow"
 
                 if name_help:
                     help_text = Text((Mm(-15), Mm(-15)), n, note,
@@ -150,10 +157,10 @@ class Notation:
                                      scale=5
                          )
                     list_of_objects.append(help_text)
-                    note_filename = note_filename + "_name"
+                    # note_filename = note_filename # + "_name"
 
                 # render new image
-                note_filename = note_filename + ".png"
+                # note_filename = note_filename + ".png"
                 save_dest = self.save_path + note_filename
                 neoscore.render_image(rect=None,
                                       dest=save_dest,

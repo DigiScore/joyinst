@@ -59,6 +59,7 @@ class Game(Notation):
 
         # make the note glyph
         self.make_notation([self.current_game_note],
+                           compass,
                            self.arrow_help,
                            self.name_help
                            )

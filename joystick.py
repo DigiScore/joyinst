@@ -119,80 +119,150 @@ class Joystick(Notation):
         self.add_accidental = 0
         rb = 0
         rt = 0
+        # reset dictionaries
+        axis_dict = {"0": 0.0,
+                     "1": 0.0,
+                     "2": 0.0,
+                     "3": 0.0,
+                     "4": 0.0,
+                     "5": 0.0,
+                     }
+        button_dict = {"0": 0,
+                       "1": 0,
+                       "2": 0,
+                       "3": 0,
+                       "4": 0,
+                       "5": 0,
+                       "6": 0,
+                       "7": 0,
+                       "8": 0,
+                       "9": 0,
+                       }
 
-        # Get the name from the OS for the controller/joystick
-        name = joystick.get_name()
-
-        # Calc # or b using buttons 4 & 5
+        # grab events from joystick
         buttons = joystick.get_numbuttons()
         for i in range(buttons):
             button = joystick.get_button(i)
-
-            # Accidental b or #
-            if i == 4 and button == 1:
-                self.add_accidental = 1
-            if i == 5 and button == 1:
-                self.add_accidental = -1
-
-            # Calculate octave shift
-            if i == 6 and button == 1:
-                # self.octave += 1
-                rb = 1
-            elif i == 7 and button == 1:
-                # self.octave -= 1
-                rt = 1
+            if button == 1:
+                button_dict.update({str(i): button})
 
         # Usually axis run in pairs, up/down for one, and left/right for
         # the other.
         axes = joystick.get_numaxes()
-
         for i in range(axes):
             axis = joystick.get_axis(i)
+            axis_dict.update({str(i): axis})
 
-            # Calculate note joystick position for notes
-            if i == 2 and axis < -self.joystick_active_range:
-                self.compass += "N"
-            elif i == 2 and axis >= self.joystick_active_range:
-                self.compass += "S"
+        # Accidental b or #
+        sharp = button_dict.get("4")
+        flat = axis_dict.get("2")
+        if sharp >= 0.9:
+            self.add_accidental = 1
+        elif flat >= 0.9:
+            self.add_accidental = -1
 
-            if i == 3 and axis < -self.joystick_active_range:
-                self.compass += "W"
-            elif i == 3 and axis >= self.joystick_active_range:
-                self.compass += "E"
+        # Calculate octave shift
+        octave_up = button_dict.get("5")
+        octave_down = axis_dict.get("5")
+        if octave_up >= 0.9:
+            # self.octave += 1
+            rb = 1
+        elif octave_down >= 0.9:
+            # self.octave -= 1
+            rt = 1
 
-            # todo - Calculate dynamic joystick for dynamics
-            if i == 1:
-                round(axis, 2)
-                # NewValue = (((OldValue - OldMin) * (NewMax - NewMin)) / (OldMax - OldMin)) + NewMin
-                self.dynamic = int((((axis - -1) * (20 - 120)) / (1 - -1)) + 120)
+        # if i == 4 and button == 1:
+        #     self.add_accidental = 1
+        # if i == 5 and button == 1:
+        #     self.add_accidental = -1
+        #
+        # # Calculate octave shift
+        # if i == 5 and button == 1:
+        #     # self.octave += 1
+        #     rb = 1
+        # # elif i == 7 and button == 1:
+        # #     # self.octave -= 1
+        # #     rt = 1
 
-            # check release of rb and rt
-            if rb < self.rb_val:
-                self.rb_release = True
-                self.rb_val = rb
-            else:
-                self.rb_val = rb
-                self.rb_release = False
+        # Calculate note joystick position for notes
+        if axis_dict["4"] < -self.joystick_active_range:
+            self.compass = "N"
+        elif axis_dict["4"] >= self.joystick_active_range:
+            self.compass = "S"
+        elif axis_dict["3"] < -self.joystick_active_range:
+            self.compass = "W"
+        elif axis_dict["3"] >= self.joystick_active_range:
+            self.compass = "E"
 
-            if rt < self.rt_val:
-                self.rt_release = True
-                self.rt_val = rt
-            else:
-                self.rt_val = rt
-                self.rt_release = False
+        elif axis_dict["4"] < -0.5 and axis_dict["3"] > 0.5:
+            self.compass = "NE"
+        elif axis_dict["4"] < -0.5 and axis_dict["3"] < -0.5:
+            self.compass = "NW"
+        elif axis_dict["4"] > 0.5 and axis_dict["3"] > 0.5:
+            self.compass = "SE"
+        elif axis_dict["4"] > 0.5 and axis_dict["3"] < -0.5:
+            self.compass = "SW"
 
-            # Calculate octave shift
-            if self.rb_release and self.rt_release:
-                self.octave = 5
-            elif self.rb_release:  # RB
-                self.octave += 1
-            elif self.rt_release:  # RT
-                self.octave += -1
+        # if i == 4 and axis < -self.joystick_active_range:
+        #     self.compass += "N"
+        # elif i == 4 and axis >= self.joystick_active_range:
+        #     self.compass += "S"
+        #
+        # if i == 3 and axis < -self.joystick_active_range:
+        #     self.compass += "W"
+        # elif i == 3 and axis >= self.joystick_active_range:
+        #     self.compass += "E"
+        #
+        #     # Logitech Rt and LT are axis
+        #     # flat LT
+        #     if i == 2 and axis == 1:
+        #         self.add_accidental = -1
+        #     # lower th octave
+        #     if i == 5 and axis == 1:
+        #     # # self.octave -= 1
+        #         rt = 1
 
-            if self.octave < 0:
-                self.octave = 0
-            elif self.octave > 8:
-                self.octave = 8
+
+        # todo - Calculate dynamic joystick for dynamics
+        dyn_axis_value = axis_dict["1"]
+        if dyn_axis_value > 0.1:
+            round(dyn_axis_value, 2)
+            # NewValue = (((OldValue - OldMin) * (NewMax - NewMin)) / (OldMax - OldMin)) + NewMin
+            self.dynamic = int((((dyn_axis_value - -1) * (20 - 120)) / (1 - -1)) + 120)
+
+        texture_axis_value = axis_dict["0"]
+        if texture_axis_value > 0.1:
+            round(texture_axis_value, 2)
+            # NewValue = (((OldValue - OldMin) * (NewMax - NewMin)) / (OldMax - OldMin)) + NewMin
+            self.dynamic = int((((texture_axis_value - -1) * (20 - 120)) / (1 - -1)) + 120)
+
+        # check release of rb and rt
+        if rb < self.rb_val:
+            self.rb_release = True
+            self.rb_val = rb
+        else:
+            self.rb_val = rb
+            self.rb_release = False
+
+        if rt < self.rt_val:
+            self.rt_release = True
+            self.rt_val = rt
+        else:
+            self.rt_val = rt
+            self.rt_release = False
+
+        # Calculate octave shift
+        if self.rb_release and self.rt_release:
+            self.octave = 5
+        elif self.rb_release:  # RB
+            self.octave += 1
+        elif self.rt_release:  # RT
+            self.octave += -1
+
+        if self.octave < 0:
+            self.octave = 0
+        elif self.octave > 8:
+            self.octave = 8
 
         # make a sound or not
         if self.compass == "":
@@ -210,22 +280,22 @@ class Joystick(Notation):
             # match compass to notes
             match self.compass:
                 case 'S':
-                    note = 'c'
+                    note = 'C'
                 case 'SE':
-                    note = 'e'
+                    note = 'E'
                 case 'E':
-                    note = 'g'
+                    note = 'G'
                 case 'NE':
-                    note = 'b'
+                    note = 'B'
                 case 'N':
-                    note = 'c'
+                    note = 'C'
                     octave = self.octave+1
                 case 'NW':
-                    note = 'a'
+                    note = 'A'
                 case 'W':
-                    note = 'f'
+                    note = 'F'
                 case 'SW':
-                    note = 'd'
+                    note = 'D'
 
             # print(note)
             # adjust note for enharmonic shift
@@ -257,9 +327,9 @@ class Joystick(Notation):
 
             # make into neoscore note value
             if note[-1] == "#":
-                self.neopitch = f"{note[0].lower()}s"
+                self.neopitch = f"{note[0].lower()}#"
             elif note[-1] == "b":
-                self.neopitch = f"{note[0].lower()}f"
+                self.neopitch = f"{note[0].lower()}b"
             else:
                 self.neopitch = note[0].lower()
 
@@ -287,7 +357,7 @@ class Joystick(Notation):
                    new_note,
                    dynamic,
                    ):
-        self.fs.noteon(1, key=int(Note(new_note.upper())), vel=dynamic)
+        self.fs.noteon(1, key=int(Note(new_note)), vel=dynamic)
 
     def stop_note(self, note_to_stop):
         self.fs.noteoff(1, key=int(Note(note_to_stop)))
