@@ -103,7 +103,10 @@ class Joystick(Notation):
         # neoscore vars
         self.neopitch = None
 
-    def get_data(self, joystick):
+    def get_data(self, joystick,
+                 arrow_help,
+                 name_help
+                 ):
         """
         Parses the data from the joystick object.
         calculates the note values. Makes a sound
@@ -276,15 +279,15 @@ class Joystick(Notation):
             # make into neoscore png for display
             self.make_notation([self.neopitch],
                                self.compass,
-                               arrow_help=True,
-                               name_help=True
+                               arrow_help=arrow_help,
+                               name_help=name_help
                                )
 
     def make_sound(self,
                    new_note,
                    dynamic,
                    ):
-        self.fs.noteon(1, key=int(Note(new_note)), vel=dynamic)
+        self.fs.noteon(1, key=int(Note(new_note.upper())), vel=dynamic)
 
     def stop_note(self, note_to_stop):
         self.fs.noteoff(1, key=int(Note(note_to_stop)))

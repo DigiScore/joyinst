@@ -1,6 +1,7 @@
 from random import choice
+from notation import Notation
 
-class Game:
+class Game(Notation):
     """
     Class that runs the mecahnics for the learning game.
     If is_game is True, then it will check the realtime input of notes against the game note.
@@ -18,6 +19,8 @@ class Game:
     ]
 
     def __init__(self):
+        super().__init__()
+
         # keeps track of the number of tries per test
         self.tries = 0
 
@@ -38,15 +41,29 @@ class Game:
         self.current_game_note = 0
         self.current_level_list = self.learning_dict.get(self.learning_seq[self.level])
         print(self.current_level_list)
+        self.melody_position = 0
 
-    def get_random_note(self):
+    def _get_random_note(self, compass):
         """
-        randomly gets a note from current level list
+        randomly gets a note from current level list if level, otherwise
+        sequence through the melody test
         :return:
         """
-        self.current_game_note = choice(self.current_level_list)
+        # check if its a level or test:
+        learning_key = self.learning_seq[self.level][0]
+        if learning_key == "l":
+            self.current_game_note = choice(self.current_level_list)
 
-    def check_notes_match(self, played_note):
+        else:
+            self.current_game_note = self.current_level_list[self.melody_position]
+
+        # make the note glyph
+        self.make_notation([self.current_game_note],
+                           self.arrow_help,
+                           self.name_help
+                           )
+
+    def check_notes_match(self, played_note, compass):
         """
         check current played note against game note
         :param live_note:
@@ -54,7 +71,7 @@ class Game:
         """
         if played_note == self.current_game_note:
             self.sub_level += 1
-            self.get_random_note()
+            self._get_random_note(compass)
 
         else:
             self.sub_level -= 1
@@ -62,13 +79,13 @@ class Game:
         if self.sub_level < 0:
             self.sub_level = 0
             self.lives -= 1
-            self.get_random_note()
+            self._get_random_note(compass)
 
         if self.sub_level > 2:
             self.level += 1
             self.sub_level = 0
             self.current_level_list = self.learning_dict.get(self.learning_seq[self.level])
-           self.get_random_note()
+            self._get_random_note(compass)
 
         if self.lives == 0:
             print("Game Over. Lives back up to 3")
@@ -77,7 +94,7 @@ class Game:
 
     def check_helpers(self):
         """
-        Checks the sub level progress in a level and adjusts on screen helpers
+        Checks the sub-level progress in a level and adjusts on screen helpers
         :return:
         """
         match self.sub_level:
@@ -90,10 +107,6 @@ class Game:
             case 2:
                 self.arrow_help = False
                 self.name_help = False
-
-
-
-
 
 
 class Test:

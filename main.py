@@ -216,7 +216,10 @@ class UI(Joystick, Game):
                 # joystick.init()
 
                 # Parse data with Joystick class
-                self.get_data(joystick)
+                self.get_data(joystick,
+                              self.arrow_help,
+                              self.name_help
+                              )
 
                 textPrint.print(self.screen, "Compass")
                 textPrint.print(self.screen, "arrow_direction")
@@ -251,9 +254,9 @@ class UI(Joystick, Game):
                     if self.playing_game:
                         # todo - this is a verbose sequence - we can optimise later
                         # check if current note matches
-                        self.check_notes_match(note_to_show)
-                        game_note_path =
-
+                        self.check_notes_match(self.neopitch, self.compass)
+                        self.check_helpers()
+                        game_note_path = self.path_to_generated_images + note_to_show
 
                         self.show_game_note(game_note_path)
 
