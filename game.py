@@ -1,5 +1,6 @@
 from random import choice
 from notation import Notation
+from threading import Thread
 
 class Game(Notation):
     """
@@ -33,6 +34,9 @@ class Game(Notation):
         # sub-level associated with helpers on screen
         self.sub_level = 0
 
+        #
+        self.waiting_for_guess = True
+
         # define notation helpers
         self.arrow_help = True
         self.name_help = True
@@ -43,7 +47,10 @@ class Game(Notation):
         print(self.current_level_list)
         self.melody_position = 0
 
-    def _get_random_note(self, compass):
+        # get the first note
+        self.get_random_note()
+
+    def get_random_note(self):
         """
         randomly gets a note from current level list if level, otherwise
         sequence through the melody test
@@ -57,8 +64,11 @@ class Game(Notation):
         else:
             self.current_game_note = self.current_level_list[self.melody_position]
 
+        return self.current_game_note
+
+    def make_game_note_notation(self, current_game_note, compass):
         # make the note glyph
-        self.make_notation([self.current_game_note],
+        self.make_notation([current_game_note],
                            compass,
                            self.arrow_help,
                            self.name_help
@@ -71,22 +81,23 @@ class Game(Notation):
         :return:
         """
         if played_note == self.current_game_note:
-            self.sub_level += 1
-            self._get_random_note(compass)
+            return True
 
+    def update_game_states(self, check):
+        if check:
+            self.sub_level += 1
         else:
             self.sub_level -= 1
 
         if self.sub_level < 0:
             self.sub_level = 0
             self.lives -= 1
-            self._get_random_note(compass)
+            # self._get_random_note()
 
         if self.sub_level > 2:
             self.level += 1
             self.sub_level = 0
             self.current_level_list = self.learning_dict.get(self.learning_seq[self.level])
-            self._get_random_note(compass)
 
         if self.lives == 0:
             print("Game Over. Lives back up to 3")

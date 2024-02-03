@@ -52,6 +52,11 @@ class Joystick(Notation):
         # Instantiate the vars
         self.sensitivity = 20
         self.joystick_active_range = 0.9
+        self.A_button = 0
+        self.B_button = 0
+        self.X_button = 0
+        self.Y_button = 0
+
 
         # init midi synth
         """
@@ -119,6 +124,11 @@ class Joystick(Notation):
         self.add_accidental = 0
         rb = 0
         rt = 0
+        self.A_button = 0
+        self.B_button = 0
+        self.X_button = 0
+        self.Y_button = 0
+
         # reset dictionaries
         axis_dict = {"0": 0.0,
                      "1": 0.0,
@@ -171,19 +181,6 @@ class Joystick(Notation):
             # self.octave -= 1
             rt = 1
 
-        # if i == 4 and button == 1:
-        #     self.add_accidental = 1
-        # if i == 5 and button == 1:
-        #     self.add_accidental = -1
-        #
-        # # Calculate octave shift
-        # if i == 5 and button == 1:
-        #     # self.octave += 1
-        #     rb = 1
-        # # elif i == 7 and button == 1:
-        # #     # self.octave -= 1
-        # #     rt = 1
-
         # Calculate note joystick position for notes
         if axis_dict["4"] < -self.joystick_active_range:
             self.compass = "N"
@@ -203,25 +200,15 @@ class Joystick(Notation):
         elif axis_dict["4"] > 0.5 and axis_dict["3"] < -0.5:
             self.compass = "SW"
 
-        # if i == 4 and axis < -self.joystick_active_range:
-        #     self.compass += "N"
-        # elif i == 4 and axis >= self.joystick_active_range:
-        #     self.compass += "S"
-        #
-        # if i == 3 and axis < -self.joystick_active_range:
-        #     self.compass += "W"
-        # elif i == 3 and axis >= self.joystick_active_range:
-        #     self.compass += "E"
-        #
-        #     # Logitech Rt and LT are axis
-        #     # flat LT
-        #     if i == 2 and axis == 1:
-        #         self.add_accidental = -1
-        #     # lower th octave
-        #     if i == 5 and axis == 1:
-        #     # # self.octave -= 1
-        #         rt = 1
-
+        # PS buttons
+        if button_dict["0"] == 1.0:
+            self.A_button = True
+        if button_dict["1"] == 1.0:
+            self.B_button = True
+        if button_dict["2"] == 1.0:
+            self.X_button = True
+        if button_dict["3"] == 1.0:
+            self.Y_button = True
 
         # todo - Calculate dynamic joystick for dynamics
         dyn_axis_value = axis_dict["1"]

@@ -128,10 +128,10 @@ class Notation:
                 #     note_filename += "_name"
 
                 # make a new note and save
-                empty_staff = Staff(ORIGIN, None, Mm(50), line_spacing=Mm(5))
+                empty_staff = Staff(ORIGIN, None, Mm(200), line_spacing=Mm(5))
                 Clef(ZERO, empty_staff, 'treble')
 
-                n = Chordrest(Mm(10 + (pos_offset_x + 10)),
+                n = Chordrest(Mm(100 + (pos_offset_x + 10)),
                                empty_staff,
                                [note],
                                Duration(1, 2))

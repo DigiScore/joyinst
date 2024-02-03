@@ -130,6 +130,7 @@ class UI(Joystick, Game):
 
         # set game params
         self.playing_game = playing_game
+        self.game_note_path = 0
 
         self.screen = pygame.display.set_mode(size)
         pygame.display.set_caption("MachAInst")
@@ -252,18 +253,7 @@ class UI(Joystick, Game):
                     self.show_note(path_to_new_image)
 
                     if self.playing_game:
-                        # todo - this is a verbose sequence - we can optimise later
-                        # check if current note matches
-                        self.check_notes_match(self.neopitch, self.compass)
-                        self.check_helpers()
-                        game_note_path = self.path_to_generated_images + note_to_show
-
-                        self.show_game_note(game_note_path)
-
-                    # else:
-                    #     # put empty stave on screen
-                    #     path_to_new_image = 'media/empty_staves/empty_treble.png'
-                    #     self.show_game_note(path_to_new_image)
+                        self.game_loop()
 
                 else:
                     # put empty stave on screen
@@ -277,25 +267,48 @@ class UI(Joystick, Game):
                 # Limit to 60 frames per second
                 self.clock.tick(60)
 
+    def game_loop(self):
+        # todo - this is a verbose sequence - we can optimise later
+        # check if current note matches. Lock so as not to repeat comparisons
+        if self.waiting_for_guess:
+            self.waiting_for_guess = not self.waiting_for_guess
+
+            check = self.check_notes_match(self.neopitch, self.compass)
+            self.update_game_states(check)
+            self.check_helpers()
+
+            # if correct guess
+            if check:
+                if self.X_button:
+                    new_note = self.get_random_note()
+                    note_to_show = self.make_game_note_notation(new_note, self.compass)
+                    self.game_note_path = self.path_to_generated_images + note_to_show
+                    self.show_game_note(self.game_note_path)
+
+            # false guess
+            else:
+                # show current note
+                self.show_game_note(self.game_note_path)
+
     def show_note(self, path_to_new_image):
         # print(path_to_new_image)
         note = pygame.image.load(path_to_new_image).convert_alpha()
-        note = pygame.transform.scale_by(note, 0.5)
+        note = pygame.transform.scale_by(note, 0.3)
         # Create a rect with the size of the image.
         rect = note.get_rect()
-        rect.center = (self.WIDTH / 2, self.DEPTH / 2)
+        rect.center = (self.WIDTH / 2, (self.DEPTH / 2) - 100)
         self.screen.blit(note, rect)
 
     def show_game_note(self, path_to_new_image):
         # print(path_to_new_image)
         note = pygame.image.load(path_to_new_image).convert_alpha()
-        note = pygame.transform.scale_by(note, 0.5)
+        note = pygame.transform.scale_by(note, 0.3)
         # Create a rect with the size of the image.
         rect = note.get_rect()
-        rect.center = (self.WIDTH / 2, (self.DEPTH / 2) + 200)
+        rect.center = (self.WIDTH / 2, (self.DEPTH / 2) + 100)
         self.screen.blit(note, rect)
 
 
 if __name__ == "__main__":
-    ui = UI(playing_game=False)
+    ui = UI(playing_game=True)
     ui.mainloop()
