@@ -326,10 +326,10 @@ class UI(Joystick, Game):
     def first_game_note(self):
         # put first game image on screen
         # get a new note from current list
-        new_note = self.get_random_note()
-        print(new_note)
-        note_to_show = self.make_game_note_notation(new_note)
-        print(note_to_show)
+        self._game_new_note = self.get_random_note()
+        print(self._game_new_note)
+        note_to_show = self.make_game_note_notation(self._game_new_note)
+        # print(note_to_show)
         game_note_path = self.path_to_generated_images + note_to_show
         return game_note_path
         # self.show_game_note(self.game_note_path)
@@ -366,16 +366,17 @@ class UI(Joystick, Game):
             print("Picking new note")
             sleep(0.5)
             # get a new note from current list
-            new_note = self.get_random_note()
-            note_to_show = self.make_game_note_notation(new_note)
+            self._game_new_note = self.get_random_note()
+            note_to_show = self.make_game_note_notation(self._game_new_note)
             self.game_note_path = self.path_to_generated_images + note_to_show
 
         # false guess
         else:
             print("RETRY")
             sleep(0.5)
-            # show same note
-            self.game_note_path = previous_game_note_path
+            # show same note with adjusted helps?
+            note_to_show = self.make_game_note_notation(self._game_new_note)
+            self.game_note_path = self.path_to_generated_images + note_to_show
 
         self.game_lock = False
 

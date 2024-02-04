@@ -13,7 +13,9 @@ class Game(Notation):
         2 = randomly choosen note from list, name help only
         3 = randomly choosen note from list, no help, note only
 
-    Sub-level's 1-3 has 3 rounds
+    Sub-level's 1-3 has 3 rounds.
+    There are 3 tries per round before life lost
+    3 lives overall
 
     """
 
@@ -61,8 +63,8 @@ class Game(Notation):
         # first note of game
         self.first_note = False
 
-        # keeps track of the number of tries per test
-        self.tries = 0
+        # keeps track of the number of tries per test. 3 tries per test, then loose a live
+        self.tries = 3
 
         # number of lives
         self.lives = 3
@@ -154,7 +156,11 @@ class Game(Notation):
             return True
 
     def update_game_states(self, result):
-        # is sub-level 0?
+        #################
+        #  sub-level 0 - training round
+        #################
+
+        # equence through the whole list. unlimited tries
         if self.sub_level == 0:
             # unlimited goes at sub-level 0
             if result:
@@ -164,29 +170,45 @@ class Game(Notation):
                 if self.melody_position >= self.len_current_level_list:
                     self.sub_level += 1
                     self.melody_position = 0
+            else:
+                print(choice(self.wrong_words), "Have a nother go")
+
+        #################
+        # sub-levels 1,2,3 where tries and lives matter
+        #################
+
         else:
-            # if > sub-level 0 correct match (True)
+            # if correct match (True)
             if result:
                 print(choice(self.correct_words), "next note")
+                # have 3 rounds per sub-level (help indicators)
                 self.sub_level_rounds -=1
 
                 if self.sub_level_rounds <= 0:
                     print(choice(self.correct_words), "on to next sub-level - we've reduced the help")
                     # sub-level goes up
                     self.sub_level += 1
+
+                    # reset rounds and tries
                     self.sub_level_rounds = 3
+                    self.tries = 3
 
             else:
                 print(choice(self.wrong_words), "have another go")
-                # if incorrect then try again
-                if self.sub_level_rounds > 0:
-                    self.lives -= 1
+                # if incorrect then try again, loose a try
+                self.tries -= 1
 
-                else:
+                if self.tries <= 0:
+
+                # if self.sub_level_rounds > 0:
+                #     self.tries -= 1
+                #
+                # else:
                     print(choice(self.wrong_words), "Lets try some easier notes")
 
                     self.sub_level -= 1
                     self.sub_level_rounds = 3
+                    self.tries = 3
 
             # check sub-level status - back to sub-level 1 NOT 0!!!
             if self.sub_level < 1:
@@ -197,15 +219,23 @@ class Game(Notation):
             if self.sub_level > 3:
                 print(choice(self.correct_words), "Whoop Whoop - LEVEL UP")
 
-                self.level += 1
-                # reset for walkthrogh note list
-                self.sub_level = 0
                 # get the next level
                 self.current_level_list = self.learning_dict.get(self.learning_seq[self.level])
+                self.level += 1
+
+                # reset for walkthrogh note list
+                self.sub_level = 0
+                # reset tries and rounds
+                self.sub_level_rounds = 3
+                self.tries = 3
 
             if self.lives == 0:
-                print(choice(self.wrong_words), "Game Over. Have another go.   zLives back up to 3")
+                print(choice(self.wrong_words), "Game Over. Have another go.   Lives back up to 3")
+                # reset every thing
                 self.lives = 3
+                self.tries = 3
+                self.sub_level = 0
+                self.level = 0
 
     def check_helpers(self):
         """
