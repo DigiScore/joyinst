@@ -119,14 +119,8 @@ class Notation:
 
             if note_filename in self.notelist:
                 self.note_to_show = note_filename
-            else:
-                # make a new note name to build extra help factors
-                # note_filename = note
-                # if arrow_help:
-                #     note_filename += "_arrow"
-                # if name_help:
-                #     note_filename += "_name"
 
+            else:
                 # make a new note and save
                 empty_staff = Staff(ORIGIN, None, Mm(200), line_spacing=Mm(5))
                 Clef(Mm(60), empty_staff, 'treble')

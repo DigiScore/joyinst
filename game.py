@@ -34,8 +34,8 @@ class Game(Notation):
         # sub-level associated with helpers on screen
         self.sub_level = 0
 
-        #
-        self.waiting_for_guess = True
+        # locks the game loop while dealing with guess
+        self.game_lock = False
 
         # define notation helpers
         self.arrow_help = True
@@ -49,6 +49,7 @@ class Game(Notation):
 
         # get the first note
         self.get_random_note()
+
 
     def get_random_note(self):
         """
@@ -74,35 +75,40 @@ class Game(Notation):
                            self.name_help
                            )
 
-    def check_notes_match(self, played_note, compass):
+    def check_notes_match(self, played_note):
         """
         check current played note against game note
-        :param live_note:
-        :return:
+        :played_note note guessed by player
+        :compass
+        :return: True if guess matches game note
         """
         if played_note == self.current_game_note:
             return True
 
-    def update_game_states(self, check):
-        if check:
+    def update_game_states(self, result):
+        # if correct match (True)
+        if result:
+            # sub-level goes up
             self.sub_level += 1
         else:
             self.sub_level -= 1
 
+        # check sub-level status
         if self.sub_level < 0:
             self.sub_level = 0
             self.lives -= 1
             # self._get_random_note()
 
+        # check if we are through sub-levels and move to next level
         if self.sub_level > 2:
             self.level += 1
             self.sub_level = 0
+            # get the next level
             self.current_level_list = self.learning_dict.get(self.learning_seq[self.level])
 
         if self.lives == 0:
             print("Game Over. Lives back up to 3")
             self.lives = 3
-
 
     def check_helpers(self):
         """

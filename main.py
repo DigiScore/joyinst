@@ -3,6 +3,8 @@ from enum import Enum
 import pygame
 import pygame_widgets
 from pygame_widgets.dropdown import Dropdown
+from threading import Thread
+from time import sleep
 
 # import project modules
 from joystick import Joystick
@@ -118,7 +120,8 @@ class UI(Joystick, Game):
     #  needs to be related to parent key.
 
     def __init__(self,
-                 playing_game: bool = True
+                 playing_game: bool = True,
+                 smoothing: int = 300
                  ):
         super().__init__()
         pygame.init()
@@ -167,6 +170,10 @@ class UI(Joystick, Game):
         self.inst = self.instrument
         self.path_to_generated_images = "media/generated_notes/"
 
+        # event vars
+        self.last_guess = pygame.time.get_ticks()
+        self.smoothing = smoothing
+
 
     def mainloop(self):
         # Get ready to print
@@ -193,6 +200,7 @@ class UI(Joystick, Game):
                     button_down = False
                 # if event.type == pygame.JOYAXISMOTION:
                 #     print("Joystick axis motion.")
+
 
             # Get instrument choice
             if self.dropdown.getSelected():
@@ -248,18 +256,37 @@ class UI(Joystick, Game):
                     textPrint.print(self.screen, "solfa  {}".format(solfa))
 
                     # put note image on screen
-                    note_to_show = self.note_to_show
-                    path_to_new_image = self.path_to_generated_images + note_to_show
-                    self.show_note(path_to_new_image)
+                    if not self.game_lock:
+                        note_to_show = self.note_to_show
+                        path_to_new_image = self.path_to_generated_images + note_to_show
+                        self.show_note(path_to_new_image)
 
+                    # if there is joystick movement (self.compass), and playing game
                     if self.playing_game:
-                        self.game_loop()
+                        if not self.game_lock:
+                            if joystick.get_axis(3) or joystick.get_axis(4):
+                                now = pygame.time.get_ticks()
+                                if now - self.last_guess >= self.smoothing:
+                                    # reset the smoothing
+                                    self.last_guess = now
+                                    print("guess", self.compass)
+
+                                    # lock the game loop to avoide multiple answers
+                                    self.game_lock = True
+
+                                    # run game loop
+                                    gl_thread = Thread(target=self.game_loop)
+                                    gl_thread.start()
 
                 else:
                     # put empty stave on screen
                     path_to_new_image = 'media/empty_staves/empty_treble.png'
                     self.show_note(path_to_new_image)
 
+                if not self.playing_game:
+                    # if not playing put empty game stave on screen
+                    path_to_new_image = 'media/empty_staves/empty_treble.png'
+                    self.show_game_note(path_to_new_image)
 
                 # Go ahead and update the screen with what we've drawn.
                 pygame_widgets.update(events)
@@ -270,25 +297,41 @@ class UI(Joystick, Game):
     def game_loop(self):
         # todo - this is a verbose sequence - we can optimise later
         # check if current note matches. Lock so as not to repeat comparisons
-        if self.waiting_for_guess:
-            self.waiting_for_guess = not self.waiting_for_guess
+        # self.game_lock = not self.game_lock
 
-            check = self.check_notes_match(self.neopitch, self.compass)
-            self.update_game_states(check)
-            self.check_helpers()
+        result = self.check_notes_match(self.neopitch)
+        print("guess = ", result)
+        sleep (0.5)
 
-            # if correct guess
-            if check:
-                if self.X_button:
-                    new_note = self.get_random_note()
-                    note_to_show = self.make_game_note_notation(new_note, self.compass)
-                    self.game_note_path = self.path_to_generated_images + note_to_show
-                    self.show_game_note(self.game_note_path)
+        # update game status depending on result
+        self.update_game_states(result)
+        print("checking game stats")
+        sleep (0.5)
 
-            # false guess
-            else:
-                # show current note
-                self.show_game_note(self.game_note_path)
+        # update visual helpers on the note
+        self.check_helpers()
+        print("adjusting helpers")
+        sleep (0.5)
+
+        # if correct guess
+        if result:
+            print("Picking new note")
+            sleep(0.5)
+            # if self.X_button:
+            # get a new note from current list
+            new_note = self.get_random_note()
+            note_to_show = self.make_game_note_notation(new_note, self.compass)
+            self.game_note_path = self.path_to_generated_images + note_to_show
+            self.show_game_note(self.game_note_path)
+
+        # false guess
+        else:
+            print("RETRY")
+            sleep(0.5)
+            # show same note
+            self.show_game_note(self.game_note_path)
+
+        self.game_lock = False
 
     def show_note(self, path_to_new_image):
         # print(path_to_new_image)
@@ -305,10 +348,12 @@ class UI(Joystick, Game):
         note = pygame.transform.scale_by(note, 0.3)
         # Create a rect with the size of the image.
         rect = note.get_rect()
-        rect.center = (self.WIDTH / 2, (self.DEPTH / 2) + 100)
+        rect.center = (self.WIDTH / 2, (self.DEPTH / 2) + 150)
         self.screen.blit(note, rect)
 
 
 if __name__ == "__main__":
-    ui = UI(playing_game=False)
+    ui = UI(playing_game=True,
+            smoothing = 500
+            )
     ui.mainloop()
