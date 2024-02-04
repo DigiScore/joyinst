@@ -6,6 +6,14 @@ class Game(Notation):
     """
     Class that runs the mecahnics for the learning game.
     If is_game is True, then it will check the realtime input of notes against the game note.
+    Each level is different set of notes,
+    each level has 4 sub-levels:
+        0 = sequence through each note, unlimited goes and full help
+        1 = randomly choosen note from list, full help
+        2 = randomly choosen note from list, name help only
+        3 = randomly choosen note from list, no help, note only
+
+    Sub-level's 1-3 has 3 rounds
 
     """
 
@@ -50,7 +58,8 @@ class Game(Notation):
         # game params
         self.current_game_note = 0
         self.current_level_list = self.learning_dict.get(self.learning_seq[self.level])
-        print(self.current_level_list)
+        self.len_current_level_list = len(self.current_level_list)
+        print(self.len_current_level_list)
         self.melody_position = 0
 
 
@@ -60,14 +69,23 @@ class Game(Notation):
         sequence through the melody test
         :return:
         """
-        # check if its a level or test:
-        learning_key = self.learning_seq[self.level][0]
-        if learning_key == "l":
-            self.current_game_note = choice(self.current_level_list)
-
-        else:
+        # if sub-level 0 sequence through list
+        if self.sub_level == 0:
             self.current_game_note = self.current_level_list[self.melody_position]
+            # self.melody_position += 1
+            # for any other sub-level:
+        else:
+            # self.melody_position = 0
+            # check if its a level or test:
+            learning_key = self.learning_seq[self.level][0]
+            if learning_key == "l":
+                self.current_game_note = choice(self.current_level_list)
 
+            # todo - melody test (not implemented yet - can simply be sub;level 0 and no follow on sub-levels
+            else:
+                self.current_game_note = self.current_level_list[self.melody_position]
+
+        print(self.current_game_note)
         return self.current_game_note
 
     def make_game_note_notation(self, current_game_note):
@@ -111,36 +129,47 @@ class Game(Notation):
             return True
 
     def update_game_states(self, result):
-        # if correct match (True)
-        if result:
-            self.goes_at_sub_level -=1
+        # is sub-level 0?
+        if self.sub_level == 0:
+            if result:
+                self.melody_position += 1
+                # reached end of level list? Now onto game
+                if self.melody_position >= self.len_current_level_list:
+                    self.sub_level += 1
+                    self.melody_position = 0
+        # unlimited goes at sub-level 0
+        else:
 
-            if self.goes_at_sub_level <= 0:
-                # sub-level goes up
-                self.sub_level += 1
+            # if > sub-level 0 correct match (True)
+            if result:
+                self.goes_at_sub_level -=1
+
+                if self.goes_at_sub_level <= 0:
+                    # sub-level goes up
+                    self.sub_level += 1
+                    self.goes_at_sub_level = 3
+
+                # self.sub_level += 1
+            else:
+                self.sub_level -= 1
                 self.goes_at_sub_level = 3
 
-            # self.sub_level += 1
-        else:
-            self.sub_level -= 1
-            self.goes_at_sub_level = 3
+            # check sub-level status
+            if self.sub_level < 0:
+                self.sub_level = 0
+                self.lives -= 1
+                # self._get_random_note()
 
-        # check sub-level status
-        if self.sub_level < 0:
-            self.sub_level = 0
-            self.lives -= 1
-            # self._get_random_note()
+            # check if we are through sub-levels and move to next level
+            if self.sub_level > 3:
+                self.level += 1
+                self.sub_level = 0
+                # get the next level
+                self.current_level_list = self.learning_dict.get(self.learning_seq[self.level])
 
-        # check if we are through sub-levels and move to next level
-        if self.sub_level > 2:
-            self.level += 1
-            self.sub_level = 0
-            # get the next level
-            self.current_level_list = self.learning_dict.get(self.learning_seq[self.level])
-
-        if self.lives == 0:
-            print("Game Over. Lives back up to 3")
-            self.lives = 3
+            if self.lives == 0:
+                print("Game Over. Lives back up to 3")
+                self.lives = 3
 
     def check_helpers(self):
         """
@@ -152,9 +181,12 @@ class Game(Notation):
                 self.arrow_help = True
                 self.name_help = True
             case 1:
-                self.arrow_help = False
+                self.arrow_help = True
                 self.name_help = True
             case 2:
+                self.arrow_help = False
+                self.name_help = True
+            case 3:
                 self.arrow_help = False
                 self.name_help = False
 

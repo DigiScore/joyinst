@@ -277,7 +277,7 @@ class UI(Joystick, Game):
                     self.show_note(path_to_new_image)
 
                     #############
-                    # GAME CUESS
+                    # GAME GUESS
                     #############
 
                     if self.playing_game:
@@ -343,14 +343,17 @@ class UI(Joystick, Game):
         print("guess result = ", result)
         sleep (0.5)
 
+        # blank the game staff
+        self.game_note_path = 'media/empty_staves/empty_treble.png'
+
         # update game status depending on result
         self.update_game_states(result)
         print("\t\tchecking game stats")
-        # print("\t\tlevel = ", self.level)
-        # print("\t\tsub-level = ", self.sub_level)
-        # print("\t\tgoes at sub level = ", self.goes_at_sub_level)
-        # print("\t\tguesses = ", self.tries)
-        # print("\t\tlives = ", self.lives)
+        print("\t\tlevel = ", self.level)
+        print("\t\tsub-level = ", self.sub_level)
+        print("\t\tgoes at sub level = ", self.goes_at_sub_level)
+        print("\t\tguesses = ", self.tries)
+        print("\t\tlives = ", self.lives)
         sleep (0.5)
 
         # update visual helpers on the note
