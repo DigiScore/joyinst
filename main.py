@@ -337,13 +337,13 @@ class UI(Joystick, Game):
     def game_loop(self):
         # todo - this is a verbose sequence - we can optimise later
         # check if current note matches. Lock so as not to repeat comparisons
-        # self.game_lock = not self.game_lock
 
         result = self.check_notes_match(self.neopitch)
         print("guess result = ", result)
         sleep (0.5)
 
         # blank the game staff
+        previous_game_note_path = self.game_note_path
         self.game_note_path = 'media/empty_staves/empty_treble.png'
 
         # update game status depending on result
@@ -365,24 +365,21 @@ class UI(Joystick, Game):
         if result:
             print("Picking new note")
             sleep(0.5)
-            # if self.X_button:
             # get a new note from current list
             new_note = self.get_random_note()
             note_to_show = self.make_game_note_notation(new_note)
             self.game_note_path = self.path_to_generated_images + note_to_show
-            # self.show_game_note(self.game_note_path)
 
         # false guess
         else:
             print("RETRY")
             sleep(0.5)
             # show same note
-            # self.show_game_note(self.game_note_path)
+            self.game_note_path = previous_game_note_path
 
         self.game_lock = False
 
     def show_note(self, path_to_new_image):
-        # print(path_to_new_image)
         note = pygame.image.load(path_to_new_image).convert_alpha()
         note = pygame.transform.scale_by(note, 0.3)
         # Create a rect with the size of the image.
@@ -391,7 +388,6 @@ class UI(Joystick, Game):
         self.screen.blit(note, rect)
 
     def show_game_note(self, path_to_new_image):
-        # print(path_to_new_image)
         note = pygame.image.load(path_to_new_image).convert_alpha()
         note = pygame.transform.scale_by(note, 0.3)
         # Create a rect with the size of the image.

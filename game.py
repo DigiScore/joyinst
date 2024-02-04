@@ -62,7 +62,6 @@ class Game(Notation):
         print(self.len_current_level_list)
         self.melody_position = 0
 
-
     def get_random_note(self):
         """
         randomly gets a note from current level list if level, otherwise
@@ -131,15 +130,14 @@ class Game(Notation):
     def update_game_states(self, result):
         # is sub-level 0?
         if self.sub_level == 0:
+            # unlimited goes at sub-level 0
             if result:
                 self.melody_position += 1
                 # reached end of level list? Now onto game
                 if self.melody_position >= self.len_current_level_list:
                     self.sub_level += 1
                     self.melody_position = 0
-        # unlimited goes at sub-level 0
         else:
-
             # if > sub-level 0 correct match (True)
             if result:
                 self.goes_at_sub_level -=1
@@ -149,20 +147,19 @@ class Game(Notation):
                     self.sub_level += 1
                     self.goes_at_sub_level = 3
 
-                # self.sub_level += 1
             else:
                 self.sub_level -= 1
                 self.goes_at_sub_level = 3
 
-            # check sub-level status
-            if self.sub_level < 0:
-                self.sub_level = 0
+            # check sub-level status - back to sub-level 1 NOT 0!!!
+            if self.sub_level < 1:
+                self.sub_level = 1
                 self.lives -= 1
-                # self._get_random_note()
 
             # check if we are through sub-levels and move to next level
             if self.sub_level > 3:
                 self.level += 1
+                # reset for walkthrogh note list
                 self.sub_level = 0
                 # get the next level
                 self.current_level_list = self.learning_dict.get(self.learning_seq[self.level])
