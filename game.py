@@ -18,7 +18,7 @@ class Game(Notation):
                      }
 
     learning_seq = [
-        "level_1", "level_2", "level_3", "test_1"
+        "level_1", "level_2", "level_3", "level_4", "level_5" , "level_6"
     ]
 
     def __init__(self):
@@ -84,7 +84,7 @@ class Game(Notation):
             case 'b':
                 compass = 'NE'
             case 'c':
-                compass = 'N'
+                compass = 'S'
             case 'a':
                 compass = 'NW'
             case 'f':

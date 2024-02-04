@@ -301,21 +301,6 @@ class UI(Joystick, Game):
                         self.game_note_path = self.first_game_note()
                         self.first_note = True
 
-                    # if not self.game_lock:
-                    #     if joystick.get_axis(3) or joystick.get_axis(4):
-                    #         now = pygame.time.get_ticks()
-                    #         if now - self.last_guess >= self.smoothing:
-                    #             # reset the smoothing
-                    #             self.last_guess = now
-                    #             print("guessed note = ", self.compass)
-                    #
-                    #             # lock the game loop to avoide multiple answers
-                    #             self.game_lock = True
-                    #
-                    #             # run game loop
-                    #             gl_thread = Thread(target=self.game_loop)
-                    #             gl_thread.start()
-
                 else:
                     # if not playing put empty game stave on screen
                     self.game_note_path = 'media/empty_staves/empty_treble.png'
