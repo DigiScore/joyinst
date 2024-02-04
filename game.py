@@ -22,6 +22,9 @@ class Game(Notation):
     def __init__(self):
         super().__init__()
 
+        # first note of game
+        self.first_note = False
+
         # keeps track of the number of tries per test
         self.tries = 0
 
@@ -64,9 +67,29 @@ class Game(Notation):
 
         return self.current_game_note
 
-    def make_game_note_notation(self, current_game_note, compass):
+    def make_game_note_notation(self, current_game_note):
+
+        # extract only the note name
+        game_note = current_game_note[0]
+        match game_note:
+            case 'c':
+                compass = 'N'
+            case 'e':
+                compass = 'SE'
+            case 'g':
+                compass = 'E'
+            case 'b':
+                compass = 'NE'
+            case 'c':
+                compass = 'N'
+            case 'a':
+                compass = 'NW'
+            case 'f':
+                compass = 'W'
+            case 'd':
+                compass = 'SW'
+
         # make the note glyph
-        print(current_game_note, compass, self.arrow_help, self.name_help)
         note = self.make_notation([current_game_note],
                            compass,
                            self.arrow_help,

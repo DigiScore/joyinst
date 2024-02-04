@@ -183,16 +183,6 @@ class UI(Joystick, Game):
         done = False
         button_down = False # might be useful later on
 
-        # put first game image on screen
-        if self.playing_game:
-            # get a new note from current list
-            new_note = self.get_random_note()
-            print(new_note)
-            note_to_show = self.make_game_note_notation(new_note, self.compass)
-            print(note_to_show)
-            self.game_note_path = self.path_to_generated_images + note_to_show
-            self.show_game_note(self.game_note_path)
-
         while not done:
             # EVENT PROCESSING STEP
             events = pygame.event.get()
@@ -246,6 +236,10 @@ class UI(Joystick, Game):
                 textPrint.print(self.screen, "note ")
                 textPrint.print(self.screen, "solfa ")
 
+                #############
+                # JOYSTICK LOOP
+                #############
+
                 if self.compass:
                     # make arrow
                     compass = self.compass
@@ -266,13 +260,16 @@ class UI(Joystick, Game):
                     textPrint.print(self.screen, "solfa  {}".format(solfa))
 
                     # freeze guess on screen if game_lock
-                    if not self.game_lock:
-                        note_to_show = self.note_to_show
+                    # if not self.game_lock:
+                    note_to_show = self.note_to_show
 
                     path_to_new_image = self.path_to_generated_images + note_to_show
                     self.show_note(path_to_new_image)
 
-                    # if there is joystick movement (self.compass), and playing game
+                    #############
+                    # GAME CUESS
+                    #############
+
                     if self.playing_game:
                         if not self.game_lock:
                             if joystick.get_axis(3) or joystick.get_axis(4):
@@ -294,16 +291,53 @@ class UI(Joystick, Game):
                     path_to_new_image = 'media/empty_staves/empty_treble.png'
                     self.show_note(path_to_new_image)
 
-                if not self.playing_game:
+                #############
+                # GAME IMAGE
+                #############
+
+                # if there is joystick movement (self.compass), and playing game
+                if self.playing_game:
+                    if not self.first_note:
+                        self.game_note_path = self.first_game_note()
+                        self.first_note = True
+
+                    # if not self.game_lock:
+                    #     if joystick.get_axis(3) or joystick.get_axis(4):
+                    #         now = pygame.time.get_ticks()
+                    #         if now - self.last_guess >= self.smoothing:
+                    #             # reset the smoothing
+                    #             self.last_guess = now
+                    #             print("guessed note = ", self.compass)
+                    #
+                    #             # lock the game loop to avoide multiple answers
+                    #             self.game_lock = True
+                    #
+                    #             # run game loop
+                    #             gl_thread = Thread(target=self.game_loop)
+                    #             gl_thread.start()
+
+                else:
                     # if not playing put empty game stave on screen
-                    path_to_new_image = 'media/empty_staves/empty_treble.png'
-                    self.show_game_note(path_to_new_image)
+                    self.game_note_path = 'media/empty_staves/empty_treble.png'
+
+                self.show_game_note(self.game_note_path)
 
                 # Go ahead and update the screen with what we've drawn.
                 pygame_widgets.update(events)
                 pygame.display.update()
                 # Limit to 60 frames per second
                 self.clock.tick(60)
+
+    def first_game_note(self):
+        # put first game image on screen
+        # get a new note from current list
+        new_note = self.get_random_note()
+        print(new_note)
+        note_to_show = self.make_game_note_notation(new_note)
+        print(note_to_show)
+        game_note_path = self.path_to_generated_images + note_to_show
+        return game_note_path
+        # self.show_game_note(self.game_note_path)
 
     def game_loop(self):
         # todo - this is a verbose sequence - we can optimise later
@@ -335,16 +369,16 @@ class UI(Joystick, Game):
             # if self.X_button:
             # get a new note from current list
             new_note = self.get_random_note()
-            note_to_show = self.make_game_note_notation(new_note, self.compass)
+            note_to_show = self.make_game_note_notation(new_note)
             self.game_note_path = self.path_to_generated_images + note_to_show
-            self.show_game_note(self.game_note_path)
+            # self.show_game_note(self.game_note_path)
 
         # false guess
         else:
             print("RETRY")
             sleep(0.5)
             # show same note
-            self.show_game_note(self.game_note_path)
+            # self.show_game_note(self.game_note_path)
 
         self.game_lock = False
 
