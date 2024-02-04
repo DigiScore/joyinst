@@ -146,7 +146,7 @@ class UI(Joystick, Game):
 
         # make dropdown menu for instrument choice
         self.dropdown = Dropdown(
-            self.screen, 120, 120, 150, 50, name='Select Instrument',
+            self.screen, self.WIDTH/2, 50, 150, 50, name='Select Instrument',
             choices=[
                 "Vocals/FX's",
                 'Hmmm',
@@ -233,8 +233,13 @@ class UI(Joystick, Game):
                 textPrint.print(self.screen, "Compass")
                 textPrint.print(self.screen, "arrow_direction")
                 textPrint.print(self.screen, "arrow_colour")
-                textPrint.print(self.screen, "note ")
-                textPrint.print(self.screen, "solfa ")
+                textPrint.print(self.screen, "note")
+                textPrint.print(self.screen, "solfa")
+                textPrint.print(self.screen, "level    {}".format(self.level))
+                textPrint.print(self.screen, "sub-level    {}".format(self.sub_level))
+                textPrint.print(self.screen, "goes at sub level    {}".format(self.goes_at_sub_level))
+                textPrint.print(self.screen, "guesses    {}".format(self.tries))
+                textPrint.print(self.screen, "lives    {}".format(self.lives))
 
                 #############
                 # JOYSTICK LOOP
@@ -258,6 +263,11 @@ class UI(Joystick, Game):
                     textPrint.print(self.screen, "arrow_colour   {}".format(arrow_colour))
                     textPrint.print(self.screen, "note   {}".format(self.neopitch))
                     textPrint.print(self.screen, "solfa  {}".format(solfa))
+                    textPrint.print(self.screen, "level    {}".format(self.level))
+                    textPrint.print(self.screen, "sub-level    {}".format(self.sub_level))
+                    textPrint.print(self.screen, "goes at sub level    {}".format(self.goes_at_sub_level))
+                    textPrint.print(self.screen, "guesses    {}".format(self.tries))
+                    textPrint.print(self.screen, "lives    {}".format(self.lives))
 
                     # freeze guess on screen if game_lock
                     # if not self.game_lock:
@@ -336,11 +346,11 @@ class UI(Joystick, Game):
         # update game status depending on result
         self.update_game_states(result)
         print("\t\tchecking game stats")
-        print("\t\tlevel = ", self.level)
-        print("\t\tsub-level = ", self.sub_level)
-        print("\t\tgoes at sub level = ", self.goes_at_sub_level)
-        print("\t\tguesses = ", self.tries)
-        print("\t\tlives = ", self.lives)
+        # print("\t\tlevel = ", self.level)
+        # print("\t\tsub-level = ", self.sub_level)
+        # print("\t\tgoes at sub level = ", self.goes_at_sub_level)
+        # print("\t\tguesses = ", self.tries)
+        # print("\t\tlives = ", self.lives)
         sleep (0.5)
 
         # update visual helpers on the note
