@@ -12,7 +12,9 @@ class Game(Notation):
     learning_dict = {"level_1": ["c", "c'"],
                      "level_2": ["f", "g"],
                      "level_3": ["c", "f", "g", "c'"],
-                     "test_1": ["c", "g", "c'", "c", "f", "c'"]
+                     "level_4": ["c", "g", "c'", "c", "f", "c'"],
+                     "level_5": ["c", "d", "e"],
+                     "level_6": ["c", "d", "e", "f", "g"],
                      }
 
     learning_seq = [
@@ -36,6 +38,7 @@ class Game(Notation):
 
         # sub-level associated with helpers on screen
         self.sub_level = 0
+        self.goes_at_sub_level = 3
 
         # locks the game loop while dealing with guess
         self.game_lock = False
@@ -110,10 +113,17 @@ class Game(Notation):
     def update_game_states(self, result):
         # if correct match (True)
         if result:
-            # sub-level goes up
-            self.sub_level += 1
+            self.goes_at_sub_level -=1
+
+            if self.goes_at_sub_level <= 0:
+                # sub-level goes up
+                self.sub_level += 1
+                self.goes_at_sub_level = 3
+
+            # self.sub_level += 1
         else:
             self.sub_level -= 1
+            self.goes_at_sub_level = 3
 
         # check sub-level status
         if self.sub_level < 0:

@@ -353,6 +353,7 @@ class UI(Joystick, Game):
         print("\t\tchecking game stats")
         print("\t\tlevel = ", self.level)
         print("\t\tsub-level = ", self.sub_level)
+        print("\t\tgoes at sub level = ", self.goes_at_sub_level)
         print("\t\tguesses = ", self.tries)
         print("\t\tlives = ", self.lives)
         sleep (0.5)
