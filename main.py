@@ -183,6 +183,16 @@ class UI(Joystick, Game):
         done = False
         button_down = False # might be useful later on
 
+        # put first game image on screen
+        if self.playing_game:
+            # get a new note from current list
+            new_note = self.get_random_note()
+            print(new_note)
+            note_to_show = self.make_game_note_notation(new_note, self.compass)
+            print(note_to_show)
+            self.game_note_path = self.path_to_generated_images + note_to_show
+            self.show_game_note(self.game_note_path)
+
         while not done:
             # EVENT PROCESSING STEP
             events = pygame.event.get()
@@ -255,11 +265,12 @@ class UI(Joystick, Game):
                     textPrint.print(self.screen, "note   {}".format(self.neopitch))
                     textPrint.print(self.screen, "solfa  {}".format(solfa))
 
-                    # put note image on screen
+                    # freeze guess on screen if game_lock
                     if not self.game_lock:
                         note_to_show = self.note_to_show
-                        path_to_new_image = self.path_to_generated_images + note_to_show
-                        self.show_note(path_to_new_image)
+
+                    path_to_new_image = self.path_to_generated_images + note_to_show
+                    self.show_note(path_to_new_image)
 
                     # if there is joystick movement (self.compass), and playing game
                     if self.playing_game:
@@ -269,7 +280,7 @@ class UI(Joystick, Game):
                                 if now - self.last_guess >= self.smoothing:
                                     # reset the smoothing
                                     self.last_guess = now
-                                    print("guess", self.compass)
+                                    print("guessed note = ", self.compass)
 
                                     # lock the game loop to avoide multiple answers
                                     self.game_lock = True
@@ -300,12 +311,16 @@ class UI(Joystick, Game):
         # self.game_lock = not self.game_lock
 
         result = self.check_notes_match(self.neopitch)
-        print("guess = ", result)
+        print("guess result = ", result)
         sleep (0.5)
 
         # update game status depending on result
         self.update_game_states(result)
-        print("checking game stats")
+        print("\t\tchecking game stats")
+        print("\t\tlevel = ", self.level)
+        print("\t\tsub-level = ", self.sub_level)
+        print("\t\tguesses = ", self.tries)
+        print("\t\tlives = ", self.lives)
         sleep (0.5)
 
         # update visual helpers on the note

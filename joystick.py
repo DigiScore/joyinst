@@ -94,7 +94,7 @@ class Joystick(Notation):
         self.fs_is_playing = 0
 
         # midi vars
-        self.compass = ""
+        self.compass = "N"
         self.octave = 4
         self.dynamic = 70
         self.add_accidental = 0

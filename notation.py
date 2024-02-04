@@ -91,14 +91,14 @@ class Notation:
                       compass: str,
                       arrow_help: bool = True,
                       name_help: bool = True
-                      ):
+                      ) -> str:
         """
         Makes a new neoscore note on stave with option help indications of arrow and name
 
         :param notes: list of notes to put on stave
         :param compass: compass direction for mapping to arrow glyph and colour
 
-        :return:
+        :return: path to created neoscore glyph
         """
 
         # setup an empty list for removal later
@@ -173,6 +173,8 @@ class Notation:
                 for o in list_of_objects:
                     # print(o)
                     o.remove()
+
+        return note_filename
 
 
 if __name__ == "__main__":

@@ -47,9 +47,6 @@ class Game(Notation):
         print(self.current_level_list)
         self.melody_position = 0
 
-        # get the first note
-        self.get_random_note()
-
 
     def get_random_note(self):
         """
@@ -69,11 +66,13 @@ class Game(Notation):
 
     def make_game_note_notation(self, current_game_note, compass):
         # make the note glyph
-        self.make_notation([current_game_note],
+        print(current_game_note, compass, self.arrow_help, self.name_help)
+        note = self.make_notation([current_game_note],
                            compass,
                            self.arrow_help,
                            self.name_help
                            )
+        return note
 
     def check_notes_match(self, played_note):
         """
