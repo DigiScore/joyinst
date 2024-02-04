@@ -29,6 +29,32 @@ class Game(Notation):
         "level_1", "level_2", "level_3", "level_4", "level_5" , "level_6"
     ]
 
+    correct_words = ["Way to go!",
+                     "Great job",
+                     "Nice going",
+                     "You rock",
+                     "You rule",
+                     "good",
+                     "job",
+                     "kudos",
+                     "phenomenal",
+                     "bravo/brava",
+                     "shout-out",
+                     "nailed it",
+                     "stellar",
+                     "on fire",
+                     "impressive"
+                     ]
+
+    wrong_words = ["Try Again",
+                   "You got this",
+                   "You can do it",
+                   "Nealry",
+                   "C'mon, one more",
+                   "close",
+                   "We believe in you"
+                   ]
+
     def __init__(self):
         super().__init__()
 
@@ -46,7 +72,7 @@ class Game(Notation):
 
         # sub-level associated with helpers on screen
         self.sub_level = 0
-        self.goes_at_sub_level = 3
+        self.sub_level_rounds = 3
 
         # locks the game loop while dealing with guess
         self.game_lock = False
@@ -132,6 +158,7 @@ class Game(Notation):
         if self.sub_level == 0:
             # unlimited goes at sub-level 0
             if result:
+                print(choice(self.correct_words), "CORRECT")
                 self.melody_position += 1
                 # reached end of level list? Now onto game
                 if self.melody_position >= self.len_current_level_list:
@@ -140,24 +167,36 @@ class Game(Notation):
         else:
             # if > sub-level 0 correct match (True)
             if result:
-                self.goes_at_sub_level -=1
+                print(choice(self.correct_words), "next note")
+                self.sub_level_rounds -=1
 
-                if self.goes_at_sub_level <= 0:
+                if self.sub_level_rounds <= 0:
+                    print(choice(self.correct_words), "on to next sub-level - we've reduced the help")
                     # sub-level goes up
                     self.sub_level += 1
-                    self.goes_at_sub_level = 3
+                    self.sub_level_rounds = 3
 
             else:
-                self.sub_level -= 1
-                self.goes_at_sub_level = 3
+                print(choice(self.wrong_words), "have another go")
+                # if incorrect then try again
+                if self.sub_level_rounds > 0:
+                    self.lives -= 1
+
+                else:
+                    print(choice(self.wrong_words), "Lets try some easier notes")
+
+                    self.sub_level -= 1
+                    self.sub_level_rounds = 3
 
             # check sub-level status - back to sub-level 1 NOT 0!!!
             if self.sub_level < 1:
                 self.sub_level = 1
-                self.lives -= 1
+                # self.lives -= 1
 
             # check if we are through sub-levels and move to next level
             if self.sub_level > 3:
+                print(choice(self.correct_words), "Whoop Whoop - LEVEL UP")
+
                 self.level += 1
                 # reset for walkthrogh note list
                 self.sub_level = 0
@@ -165,7 +204,7 @@ class Game(Notation):
                 self.current_level_list = self.learning_dict.get(self.learning_seq[self.level])
 
             if self.lives == 0:
-                print("Game Over. Lives back up to 3")
+                print(choice(self.wrong_words), "Game Over. Have another go.   zLives back up to 3")
                 self.lives = 3
 
     def check_helpers(self):
