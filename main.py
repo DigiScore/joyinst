@@ -71,30 +71,33 @@ class Arrow(Enum):
     SE = 'arrowBlackDownRight'
     S = 'arrowBlackDown'
 
+
 class Colour(Enum):
     """
-    Inspired by Arrow notes concept
+    Inspired by Figure Notes
+    https://figurenotes.org/what-is-figurenotes/
+
+    And Arrow notes concept
     https://digitlearning.co.uk/what-are-arrownotes/
-    follows the rainbow from South (lower notes) -> North (higher)
 
     c = red N or S
-    b = violet SE
-    a = indigo SW
-    g = blue E
-    f = green W
-    e = yellow NE
-    d = orange NW
+    b = green NE
+    a = yellow NW
+    g = black E
+    f = Blue W
+    e = grey SE
+    d = brown SW
     c = red N or S
 
     """
-    N = '#e81416'
-    NE = '#70369d'
-    NW = '#4b369d'
-    W = '#79c314'
-    E = '#487de7'
-    SE = '#faeb36'
-    SW = '#ffa500'
-    S = '#e81416'
+    N = '#ff0000'
+    NE = '#33cc33'
+    NW = '#ffff66'
+    W = '#0099ff'
+    E = '#000000'
+    SE = '#d9d9d9'
+    SW = '#996633'
+    S = '#ff0000'
 
 class Solfa(Enum):
     """

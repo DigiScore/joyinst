@@ -191,13 +191,13 @@ class Joystick(Notation):
         elif axis_dict["3"] >= self.joystick_active_range:
             self.compass = "E"
 
-        elif axis_dict["4"] < -0.5 and axis_dict["3"] > 0.5:
+        elif axis_dict["4"] < -0.5 and axis_dict["3"] > 0.4:
             self.compass = "NE"
-        elif axis_dict["4"] < -0.5 and axis_dict["3"] < -0.5:
+        elif axis_dict["4"] < -0.5 and axis_dict["3"] < -0.4:
             self.compass = "NW"
-        elif axis_dict["4"] > 0.5 and axis_dict["3"] > 0.5:
+        elif axis_dict["4"] > 0.5 and axis_dict["3"] > 0.4:
             self.compass = "SE"
-        elif axis_dict["4"] > 0.5 and axis_dict["3"] < -0.5:
+        elif axis_dict["4"] > 0.5 and axis_dict["3"] < -0.4:
             self.compass = "SW"
 
         # PS buttons
