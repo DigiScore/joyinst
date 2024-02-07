@@ -182,7 +182,7 @@ class UI(Joystick, Game):
 
     def mainloop(self):
         # Get ready to print
-        textPrint = TextPrint()
+        text_print = TextPrint()
 
         # init vars
         done = False
@@ -214,7 +214,7 @@ class UI(Joystick, Game):
             # DRAWING STEP
             # First, clear the screen to white. Don't put other drawing commands
             self.screen.fill(WHITE)
-            textPrint.reset()
+            text_print.reset()
 
             # Get count of joysticks
             joystick_count = pygame.joystick.get_count()
@@ -234,16 +234,16 @@ class UI(Joystick, Game):
                               self.name_help
                               )
 
-                textPrint.print(self.screen, "Compass")
-                textPrint.print(self.screen, "arrow_direction")
-                textPrint.print(self.screen, "arrow_colour")
-                textPrint.print(self.screen, "note")
-                textPrint.print(self.screen, "solfa")
-                textPrint.print(self.screen, "level    {}".format(self.level))
-                textPrint.print(self.screen, "sub-level    {}".format(self.sub_level))
-                textPrint.print(self.screen, "goes at sub level    {}".format(self.sub_level_rounds))
-                textPrint.print(self.screen, "guesses    {}".format(self.tries))
-                textPrint.print(self.screen, "lives    {}".format(self.lives))
+                text_print.print(self.screen, "Compass")
+                text_print.print(self.screen, "arrow_direction")
+                text_print.print(self.screen, "arrow_colour")
+                text_print.print(self.screen, "note")
+                text_print.print(self.screen, "solfa")
+                text_print.print(self.screen, "level    {}".format(self.level))
+                text_print.print(self.screen, "sub-level    {}".format(self.sub_level))
+                text_print.print(self.screen, "goes at sub level    {}".format(self.sub_level_rounds))
+                text_print.print(self.screen, "guesses    {}".format(self.tries))
+                text_print.print(self.screen, "lives    {}".format(self.lives))
 
                 #############
                 # JOYSTICK LOOP
@@ -260,18 +260,18 @@ class UI(Joystick, Game):
 
                     # print to screen
                     self.screen.fill(WHITE)
-                    textPrint.reset()
+                    text_print.reset()
 
-                    textPrint.print(self.screen, "Compass    {}".format(compass))
-                    textPrint.print(self.screen, "arrow_direction    {}".format(arrow_direction))
-                    textPrint.print(self.screen, "arrow_colour   {}".format(arrow_colour))
-                    textPrint.print(self.screen, "note   {}".format(self.neopitch))
-                    textPrint.print(self.screen, "solfa  {}".format(solfa))
-                    textPrint.print(self.screen, "level    {}".format(self.level))
-                    textPrint.print(self.screen, "sub-level    {}".format(self.sub_level))
-                    textPrint.print(self.screen, "goes at sub level    {}".format(self.sub_level_rounds))
-                    textPrint.print(self.screen, "guesses    {}".format(self.tries))
-                    textPrint.print(self.screen, "lives    {}".format(self.lives))
+                    text_print.print(self.screen, "Compass    {}".format(compass))
+                    text_print.print(self.screen, "arrow_direction    {}".format(arrow_direction))
+                    text_print.print(self.screen, "arrow_colour   {}".format(arrow_colour))
+                    text_print.print(self.screen, "note   {}".format(self.neopitch))
+                    text_print.print(self.screen, "solfa  {}".format(solfa))
+                    text_print.print(self.screen, "level    {}".format(self.level))
+                    text_print.print(self.screen, "sub-level    {}".format(self.sub_level))
+                    text_print.print(self.screen, "goes at sub level    {}".format(self.sub_level_rounds))
+                    text_print.print(self.screen, "guesses    {}".format(self.tries))
+                    text_print.print(self.screen, "lives    {}".format(self.lives))
 
                     # freeze guess on screen if game_lock
                     # if not self.game_lock:
