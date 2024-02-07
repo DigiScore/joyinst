@@ -79,7 +79,7 @@ class Joystick(Notation):
         """
 
         # Download https://www.polyphone-soundfonts.com/documents/file/470-africa-sf2/latest/download?f7af2bbf653590fa8046b3fc31797913=1&return=aHR0cHMlM0ElMkYlMkZ3d3cucG9seXBob25lLXNvdW5kZm9udHMuY29tJTJGZG9jdW1lbnRzJTJGMjctaW5zdHJ1bWVudC1zZXRzJTJGMzQ2LWFmcmljYQ==
-        sf2 = "OshunAI/assets/soundfonts/africa.sf2"
+        sf2 = "assets/soundfonts/africa.sf2"
         self.fs = fs.Synth()
         self.sfid = self.fs.sfload(sf2)
         self.fs.start()
