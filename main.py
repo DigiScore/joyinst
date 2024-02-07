@@ -324,7 +324,7 @@ class UI(Joystick, Game):
                 pygame_widgets.update(events)
                 pygame.display.update()
                 # Limit to 60 frames per second
-                self.clock.tick(60)
+                self.clock.tick(10)
 
     def first_game_note(self):
         # put first game image on screen
