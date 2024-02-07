@@ -134,6 +134,7 @@ class UI(Joystick, Game):
 
         # background images
         self.background_dots = pygame.image.load("assets/ui/bg_dots.svg")
+        self.background_character = pygame.image.load("assets/ui/bg_character.png")
 
         # set game params
         self.playing_game = playing_game
@@ -322,6 +323,7 @@ class UI(Joystick, Game):
 
                 # Go ahead and update the screen with what we've drawn.
                 self.screen.blit(self.background_dots, (0, 0))
+                self.screen.blit(self.background_character, (0, 164))
                 pygame_widgets.update(events)
                 pygame.display.update()
                 # Limit to 60 frames per second
