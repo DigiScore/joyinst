@@ -1,6 +1,6 @@
 # import python libraries
 from enum import Enum
-import pygame
+import pygame as pg
 import pygame_widgets
 from pygame_widgets.dropdown import Dropdown
 from threading import Thread
@@ -20,11 +20,10 @@ class TextPrint(object):
     """
 
     def __init__(self):
-        """ Constructor """
         self.reset()
         self.x_pos = 10
         self.y_pos = 10
-        self.font = pygame.font.Font(None, 20)
+        self.font = pg.font.Font(None, 20)
 
     def print(self, my_screen, text_string):
         """ Draw text onto the screen. """
@@ -127,32 +126,32 @@ class UI(Joystick, Game):
                  smoothing: int = 300
                  ):
         super().__init__()
-        pygame.init()
+        pg.init()
 
         # Set the width and depth of the screen [width,depth]
         size = [WindowSize.WIDTH, WindowSize.HEIGHT]
 
         # background images
-        self.background_dots = pygame.image.load("assets/ui/bg_dots.svg")
-        self.background_character = pygame.image.load("assets/ui/bg_character.png")
+        self.background_dots = pg.image.load("assets/ui/bg_dots.svg")
+        self.background_character = pg.image.load("assets/ui/bg_character.png")
 
         # set game params
         self.playing_game = playing_game
         self.game_note_path = 0
 
-        self.screen = pygame.display.set_mode(size)
+        self.screen = pg.display.set_mode(size)
 
-        pygame.display.set_caption("OshunAI")
+        pg.display.set_caption("OshunAI")
 
         # Used to manage how fast the screen updates
-        self.clock = pygame.time.Clock()
+        self.clock = pg.time.Clock()
 
         # Initialize the joysticks
-        pygame.joystick.init()
+        pg.joystick.init()
 
         # make dropdown menu for instrument choice
         self.dropdown = Dropdown(
-            self.screen, int(WindowSize.WIDTH / 2), 50, 150, 50, name='Select Instrument',
+            self.screen, 1126, 76, 150, 50, name='Select Instrument',
             choices=[
                 "Vocals/FX's",
                 'Hmmm',
@@ -167,17 +166,18 @@ class UI(Joystick, Game):
                 'Bass',
             ],
             borderRadius=3,
-            colour=pygame.Color('snow'),
+            colour=pg.Color('snow'),
             values=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
             direction='down',
             textHAlign='left'
         )
+
         # setup inst & notation vars
         self.inst = self.instrument
         self.path_to_generated_images = "media/generated_notes/"
 
         # event vars
-        self.last_guess = pygame.time.get_ticks()
+        self.last_guess = pg.time.get_ticks()
         self.smoothing = smoothing
 
     def mainloop(self):
@@ -190,20 +190,20 @@ class UI(Joystick, Game):
 
         while not done:
             # EVENT PROCESSING STEP
-            events = pygame.event.get()
+            events = pg.event.get()
             for event in events:
-                if event.type == pygame.QUIT:
+                if event.type == pg.QUIT:
                     done = True
 
                 # Possible joystick actions: JOYAXISMOTION JOYBALLMOTION JOYBUTTONDOWN
                 # JOYBUTTONUP JOYHATMOTION
-                if event.type == pygame.JOYBUTTONDOWN:
+                if event.type == pg.JOYBUTTONDOWN:
                     button_down = True
                     # print("Joystick button pressed.")
-                if event.type == pygame.JOYBUTTONUP:
+                if event.type == pg.JOYBUTTONUP:
                     # print("Joystick button released.")
                     button_down = False
-                # if event.type == pygame.JOYAXISMOTION:
+                # if event.type == pg.JOYAXISMOTION:
                 #     print("Joystick axis motion.")
 
             # Get instrument choice
@@ -217,15 +217,15 @@ class UI(Joystick, Game):
             text_print.reset()
 
             # Get count of joysticks
-            joystick_count = pygame.joystick.get_count()
+            joystick_count = pg.joystick.get_count()
 
             # todo - this is a hack, to get around issue with Logitech gamepad
             # For each joystick:
             for i in range(joystick_count):
-                joystick = pygame.joystick.Joystick(i)
+                joystick = pg.joystick.Joystick(i)
                 joystick.init()
                 # # Get the joystick data
-                # joystick = pygame.joystick.Joystick(0)
+                # joystick = pg.joystick.Joystick(0)
                 # joystick.init()
 
                 # Parse data with Joystick class
@@ -259,7 +259,7 @@ class UI(Joystick, Game):
                     solfa = Solfa[compass].value
 
                     # print to screen
-                    self.screen.fill(WHITE_COLOR)
+                    self.screen.fill(Colors.BACKGROUND.value)
                     text_print.reset()
 
                     text_print.print(self.screen, "Compass    {}".format(compass))
@@ -287,7 +287,7 @@ class UI(Joystick, Game):
                     if self.playing_game:
                         if not self.game_lock:
                             if joystick.get_axis(3) or joystick.get_axis(4):
-                                now = pygame.time.get_ticks()
+                                now = pg.time.get_ticks()
                                 if now - self.last_guess >= self.smoothing:
                                     # reset the smoothing
                                     self.last_guess = now
@@ -325,7 +325,7 @@ class UI(Joystick, Game):
                 self.screen.blit(self.background_dots, (0, 0))
                 self.screen.blit(self.background_character, (0, 164))
                 pygame_widgets.update(events)
-                pygame.display.update()
+                pg.display.update()
                 # Limit to 60 frames per second
                 self.clock.tick(60)
 
@@ -387,16 +387,16 @@ class UI(Joystick, Game):
         self.game_lock = False
 
     def show_note(self, path_to_new_image):
-        note = pygame.image.load(path_to_new_image).convert_alpha()
-        note = pygame.transform.scale_by(note, 0.3)
+        note = pg.image.load(path_to_new_image).convert_alpha()
+        note = pg.transform.scale_by(note, 0.3)
         # Create a rect with the size of the image.
         rect = note.get_rect()
         rect.center = (WindowSize.WIDTH / 2, (WindowSize.HEIGHT / 2) - 100)
         self.screen.blit(note, rect)
 
     def show_game_note(self, path_to_new_image):
-        note = pygame.image.load(path_to_new_image).convert_alpha()
-        note = pygame.transform.scale_by(note, 0.3)
+        note = pg.image.load(path_to_new_image).convert_alpha()
+        note = pg.transform.scale_by(note, 0.3)
         # Create a rect with the size of the image.
         rect = note.get_rect()
         rect.center = (WindowSize.WIDTH / 2, (WindowSize.HEIGHT / 2) + 150)
