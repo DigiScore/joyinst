@@ -132,9 +132,10 @@ class UI(Joystick, Game):
         # Set the width and depth of the screen [width,depth]
         size = [WindowSize.WIDTH, WindowSize.HEIGHT]
 
-        # background images
-        self.background_dots = pg.image.load("assets/ui/images/bg_dots.svg")
-        self.background_character = pg.image.load("assets/ui/images/bg_character.png")
+        # ui images
+        self.ui_background_dots = pg.image.load("assets/ui/images/bg_dots.svg")
+        self.ui_background_character = pg.image.load("assets/ui/images/bg_character.png")
+        self.ui_dropdown_arrow_down = pg.image.load("assets/ui/images/dropdown_arrow_down.svg")
 
         # font
         self.ibm_plex_condensed_font = pygame.font.Font("assets/ui/fonts/IBMPlexSansCondensed-Medium.ttf", 22)
@@ -169,9 +170,9 @@ class UI(Joystick, Game):
                 '     FLUTE W BLOW',
                 '     BASS',
             ],
-            borderColour=Colors.BLACK.value,
+            borderColour=Colors.BLACK.value,                        # for some strange reason, this is not working!
             borderThickness=100,
-            colour=Colors.BACKGROUND.value,
+            colour=Colors.DROPDOWN.value,
             hoverColour=Colors.DROPDOWN_HOVER.value,
             pressedColour=Colors.DROPDOWN_HOVER.value,
             values=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
@@ -330,10 +331,11 @@ class UI(Joystick, Game):
                 self.show_game_note(self.game_note_path)
 
                 # Go ahead and update the screen with what we've drawn.
-                self.screen.blit(self.background_dots, (0, 0))
-                self.screen.blit(self.background_character, (0, 164))
+                self.screen.blit(self.ui_background_dots, (0, 0))
+                self.screen.blit(self.ui_background_character, (0, 164))
                 pygame_widgets.update(events)
-                pg.display.update()
+                self.screen.blit(self.ui_dropdown_arrow_down, (1452, 92))
+                pg.display.flip()
                 # Limit to 60 frames per second
                 self.clock.tick(60)
 
