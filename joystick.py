@@ -3,9 +3,8 @@ from mingus.midi import pyfluidsynth as fs
 from configparser import ConfigParser
 from notation import Notation
 
-
 config_object = ConfigParser()
-config_object.read('config.ini') 
+config_object.read('config.ini')
 
 """
 Currently running with africa.sf2:
@@ -39,14 +38,12 @@ distribution of a soundfont.
 """
 
 
-
-
-
 class Joystick(Notation):
     """
     Manages the data from the joystick controls.
     Calculates the note values and makes a sound.
     """
+
     def __init__(self):
         super().__init__()
         # Instantiate the vars
@@ -56,7 +53,6 @@ class Joystick(Notation):
         self.B_button = 0
         self.X_button = 0
         self.Y_button = 0
-
 
         # init midi synth
         """
@@ -276,7 +272,7 @@ class Joystick(Notation):
                     note = 'B'
                 case 'N':
                     note = 'C'
-                    octave = self.octave+1
+                    octave = self.octave + 1
                 case 'NW':
                     note = 'A'
                 case 'W':
@@ -348,6 +344,7 @@ class Joystick(Notation):
 
     def stop_note(self, note_to_stop):
         self.fs.noteoff(1, key=int(Note(note_to_stop)))
+
 
 if __name__ == "__main__":
     js = Joystick()
