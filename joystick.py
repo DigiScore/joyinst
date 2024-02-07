@@ -333,12 +333,21 @@ class Joystick(Notation):
                 elif octave == 2:
                     self.neopitch += ",,"
 
-            # make into neoscore png for display
-            self.make_notation([self.neopitch],
-                               self.compass,
-                               arrow_help=arrow_help,
-                               name_help=name_help
-                               )
+            # # make into neoscore png for display
+            # self.make_notation([self.neopitch],
+            #                    self.compass,
+            #                    arrow_help=arrow_help,
+            #                    name_help=name_help
+            #                    )
+
+            note_filename = self.neopitch
+            if arrow_help:
+                note_filename += "_arrow"
+            if name_help:
+                note_filename += "_name"
+            note_filename += ".png"
+
+            self.note_to_show = note_filename
 
     def make_sound(self,
                    new_note,
