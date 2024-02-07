@@ -9,10 +9,8 @@ from time import sleep
 # import project modules
 from joystick import Joystick
 from game import Game
-
-# Define some colors
-BLACK = (0, 0, 0)
-WHITE = (255, 255, 255)
+from constants.user_interface import Colors
+from constants.user_interface import WindowSize
 
 
 class TextPrint(object):
@@ -31,7 +29,7 @@ class TextPrint(object):
 
     def print(self, my_screen, text_string):
         """ Draw text onto the screen. """
-        text_bitmap = self.font.render(text_string, True, BLACK)
+        text_bitmap = self.font.render(text_string, True, Colors.BLACK.value)
         my_screen.blit(text_bitmap, [self.x_pos, self.y_pos])
         self.y_pos += self.line_height
 
@@ -133,15 +131,17 @@ class UI(Joystick, Game):
         pygame.init()
 
         # Set the width and depth of the screen [width,depth]
-        self.WIDTH = 1000
-        self.DEPTH = 750
-        size = [self.WIDTH, self.DEPTH]
+        size = [WindowSize.WIDTH, WindowSize.HEIGHT]
 
         # set game params
         self.playing_game = playing_game
         self.game_note_path = 0
 
         self.screen = pygame.display.set_mode(size)
+
+        background_color = (239, 229, 186)
+        self.screen.fill(background_color)
+
         pygame.display.set_caption("OshunAI")
 
         # Used to manage how fast the screen updates
@@ -152,7 +152,7 @@ class UI(Joystick, Game):
 
         # make dropdown menu for instrument choice
         self.dropdown = Dropdown(
-            self.screen, self.WIDTH / 2, 50, 150, 50, name='Select Instrument',
+            self.screen, int(WindowSize.WIDTH / 2), 50, 150, 50, name='Select Instrument',
             choices=[
                 "Vocals/FX's",
                 'Hmmm',
@@ -213,7 +213,7 @@ class UI(Joystick, Game):
 
             # DRAWING STEP
             # First, clear the screen to white. Don't put other drawing commands
-            self.screen.fill(WHITE)
+            self.screen.fill(Colors.BACKGROUND.value)
             text_print.reset()
 
             # Get count of joysticks
@@ -259,7 +259,7 @@ class UI(Joystick, Game):
                     solfa = Solfa[compass].value
 
                     # print to screen
-                    self.screen.fill(WHITE)
+                    self.screen.fill(WHITE_COLOR)
                     text_print.reset()
 
                     text_print.print(self.screen, "Compass    {}".format(compass))
@@ -389,7 +389,7 @@ class UI(Joystick, Game):
         note = pygame.transform.scale_by(note, 0.3)
         # Create a rect with the size of the image.
         rect = note.get_rect()
-        rect.center = (self.WIDTH / 2, (self.DEPTH / 2) - 100)
+        rect.center = (WindowSize.WIDTH / 2, (WindowSize.HEIGHT / 2) - 100)
         self.screen.blit(note, rect)
 
     def show_game_note(self, path_to_new_image):
@@ -397,7 +397,7 @@ class UI(Joystick, Game):
         note = pygame.transform.scale_by(note, 0.3)
         # Create a rect with the size of the image.
         rect = note.get_rect()
-        rect.center = (self.WIDTH / 2, (self.DEPTH / 2) + 150)
+        rect.center = (WindowSize.WIDTH / 2, (WindowSize.HEIGHT / 2) + 150)
         self.screen.blit(note, rect)
 
 
