@@ -9,7 +9,6 @@ readme = "README.md"
 python = "^3.10"
 pygame = "^2.5.2"
 mingus = "^0.6.1"
-pygame-widgets = "^1.1.5"
 typing-extensions = "^4.9.0"
 
 
