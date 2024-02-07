@@ -1,6 +1,6 @@
 from random import choice
 from notation import Notation
-from threading import Thread
+
 
 class Game(Notation):
     """
@@ -28,7 +28,7 @@ class Game(Notation):
                      }
 
     learning_seq = [
-        "level_1", "level_2", "level_3", "level_4", "level_5" , "level_6"
+        "level_1", "level_2", "level_3", "level_4", "level_5", "level_6"
     ]
 
     correct_words = ["Way to go!",
@@ -139,10 +139,10 @@ class Game(Notation):
 
         # make the note glyph
         note = self.make_notation([current_game_note],
-                           compass,
-                           self.arrow_help,
-                           self.name_help
-                           )
+                                  compass,
+                                  self.arrow_help,
+                                  self.name_help
+                                  )
         return note
 
     def check_notes_match(self, played_note):
@@ -182,7 +182,7 @@ class Game(Notation):
             if result:
                 print(choice(self.correct_words), "next note")
                 # have 3 rounds per sub-level (help indicators)
-                self.sub_level_rounds -=1
+                self.sub_level_rounds -= 1
 
                 if self.sub_level_rounds <= 0:
                     print(choice(self.correct_words), "on to next sub-level - we've reduced the help")
@@ -199,11 +199,10 @@ class Game(Notation):
                 self.tries -= 1
 
                 if self.tries <= 0:
-
-                # if self.sub_level_rounds > 0:
-                #     self.tries -= 1
-                #
-                # else:
+                    # if self.sub_level_rounds > 0:
+                    #     self.tries -= 1
+                    #
+                    # else:
                     print(choice(self.wrong_words), "Lets try some easier notes")
 
                     self.sub_level -= 1
