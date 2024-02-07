@@ -89,8 +89,9 @@ class Dropdown(WidgetBase):
     def draw(self):
         if not self._hidden:
             self.__main.draw()
-            for c in self.__choices:
-                c.draw()
+            num_choices = len(self.__choices) - 1
+            for idx, c in enumerate(self.__choices):
+                c.draw(idx, num_choices)
 
     def contains(self, x, y):
         return super().contains(x, y) or (any([c.contains(x, y) for c in self.__choices]) and self._dropped)
@@ -167,7 +168,7 @@ class DropdownChoice(WidgetBase):
         self.__direction = kwargs.get('direction', 'down')
         self.__last = last
 
-    def draw(self):
+    def draw(self, idx: int = -1, num_choices: int = 0) -> None:
         if not self._hidden:
             rect = pygame.Rect(
                 self.computedX,
@@ -191,6 +192,26 @@ class DropdownChoice(WidgetBase):
                              (self.computedX + self._width, self.computedY),
                              (self.computedX + self._width, self.computedY + self._height),
                              3)
+
+            if idx == -1:
+                pygame.draw.line(self.win,
+                                 Colors.BLACK.value,
+                                 (self.computedX - 1, self.computedY),
+                                 (self.computedX + self._width + 1, self.computedY),
+                                 3)
+                pygame.draw.line(self.win,
+                                 Colors.BLACK.value,
+                                 (self.computedX - 1, self.computedY + self._height + 1),
+                                 (self.computedX + self._width + 1, self.computedY + self._height + 1),
+                                 3)
+            elif idx == num_choices:
+                pygame.draw.line(self.win,
+                                 Colors.BLACK.value,
+                                 (self.computedX - 1, self.computedY + self._height + 1),
+                                 (self.computedX + self._width + 1, self.computedY + self._height + 1),
+                                 3)
+            print(num_choices)
+
 
             text_rendered = self.font.render(self.text, True, self.textColour)
 
