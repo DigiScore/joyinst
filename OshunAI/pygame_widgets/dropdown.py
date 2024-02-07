@@ -88,10 +88,10 @@ class Dropdown(WidgetBase):
 
     def draw(self):
         if not self._hidden:
-            self.__main.draw()
+            self.__main.draw(dropped=self._dropped)
             num_choices = len(self.__choices) - 1
             for idx, c in enumerate(self.__choices):
-                c.draw(idx, num_choices)
+                c.draw(idx, num_choices, self._dropped)
 
     def contains(self, x, y):
         return super().contains(x, y) or (any([c.contains(x, y) for c in self.__choices]) and self._dropped)
@@ -168,9 +168,10 @@ class DropdownChoice(WidgetBase):
         self.__direction = kwargs.get('direction', 'down')
         self.__last = last
 
-        self.ui_dropdown_arrow_down = pg.image.load("assets/ui/images/dropdown_arrow_down.svg")
+        self.ui_arrow_down = pg.image.load("assets/ui/images/dropdown_arrow_down.svg")
+        self.ui_arrow_up = pg.image.load("assets/ui/images/dropdown_arrow_up.svg")
 
-    def draw(self, idx: int = -1, num_choices: int = 0) -> None:
+    def draw(self, idx: int = -1, num_choices: int = 0, dropped: bool = False) -> None:
         if not self._hidden:
             rect = pg.Rect(
                 self.computedX,
@@ -185,34 +186,38 @@ class DropdownChoice(WidgetBase):
             )
 
             pg.draw.line(self.win,
-                             Colors.BLACK.value,
-                             (self.computedX, self.computedY),
-                             (self.computedX, self.computedY + self._height),
-                             3)
+                         Colors.BLACK.value,
+                         (self.computedX, self.computedY),
+                         (self.computedX, self.computedY + self._height),
+                         3)
             pg.draw.line(self.win,
-                             Colors.BLACK.value,
-                             (self.computedX + self._width, self.computedY),
-                             (self.computedX + self._width, self.computedY + self._height),
-                             3)
+                         Colors.BLACK.value,
+                         (self.computedX + self._width, self.computedY),
+                         (self.computedX + self._width, self.computedY + self._height),
+                         3)
 
             if idx == -1:
                 pg.draw.line(self.win,
-                                 Colors.BLACK.value,
-                                 (self.computedX - 1, self.computedY),
-                                 (self.computedX + self._width + 1, self.computedY),
-                                 3)
+                             Colors.BLACK.value,
+                             (self.computedX - 1, self.computedY),
+                             (self.computedX + self._width + 1, self.computedY),
+                             3)
                 pg.draw.line(self.win,
-                                 Colors.BLACK.value,
-                                 (self.computedX - 1, self.computedY + self._height + 1),
-                                 (self.computedX + self._width + 1, self.computedY + self._height + 1),
-                                 3)
-                self.win.blit(self.ui_dropdown_arrow_down, (self.computedX + 326, self.computedY + 16))
+                             Colors.BLACK.value,
+                             (self.computedX - 1, self.computedY + self._height + 1),
+                             (self.computedX + self._width + 1, self.computedY + self._height + 1),
+                             3)
             elif idx == num_choices:
                 pg.draw.line(self.win,
-                                 Colors.BLACK.value,
-                                 (self.computedX - 1, self.computedY + self._height + 1),
-                                 (self.computedX + self._width + 1, self.computedY + self._height + 1),
-                                 3)
+                             Colors.BLACK.value,
+                             (self.computedX - 1, self.computedY + self._height + 1),
+                             (self.computedX + self._width + 1, self.computedY + self._height + 1),
+                             3)
+
+            if not dropped and idx == -1:
+                self.win.blit(self.ui_arrow_down, (self.computedX + 326, self.computedY + 16))
+            elif dropped and idx == -1:
+                self.win.blit(self.ui_arrow_up, (self.computedX + 326, self.computedY + 16))
 
             text_rendered = self.font.render(self.text, True, self.textColour)
 

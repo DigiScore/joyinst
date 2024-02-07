@@ -9,6 +9,7 @@ class Colors(Enum):
     BACKGROUND = Color(239, 229, 186)
     DROPDOWN = Color(230, 216, 160)
     DROPDOWN_HOVER = Color(220, 206, 139)
+    TRANSPARENT = (0, 0, 0, 0)
 
 
 class WindowSize(IntEnum):
