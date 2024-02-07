@@ -206,6 +206,7 @@ class DropdownChoice(WidgetBase):
                                  (self.computedX - 1, self.computedY + self._height + 1),
                                  (self.computedX + self._width + 1, self.computedY + self._height + 1),
                                  3)
+                self.win.blit(self.ui_dropdown_arrow_down, (self.computedX + 326, self.computedY + 16))
             elif idx == num_choices:
                 pg.draw.line(self.win,
                                  Colors.BLACK.value,
