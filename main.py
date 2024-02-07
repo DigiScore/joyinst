@@ -14,6 +14,7 @@ from game import Game
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 
+
 class TextPrint(object):
     """
     This is a simple class that will help us print to the screen
@@ -99,6 +100,7 @@ class Colour(Enum):
     SW = '#996633'
     S = '#ff0000'
 
+
 class Solfa(Enum):
     """
     Sol Fa translation of compass points
@@ -119,6 +121,7 @@ class Solfa(Enum):
 
 class UI(Joystick, Game):
     """Main class for running UI. Inherits the joystick and instrument objects"""
+
     # todo - transpositions!!! this is in C only. Tonic & position & arrows
     #  needs to be related to parent key.
 
@@ -149,7 +152,7 @@ class UI(Joystick, Game):
 
         # make dropdown menu for instrument choice
         self.dropdown = Dropdown(
-            self.screen, self.WIDTH/2, 50, 150, 50, name='Select Instrument',
+            self.screen, self.WIDTH / 2, 50, 150, 50, name='Select Instrument',
             choices=[
                 "Vocals/FX's",
                 'Hmmm',
@@ -177,14 +180,13 @@ class UI(Joystick, Game):
         self.last_guess = pygame.time.get_ticks()
         self.smoothing = smoothing
 
-
     def mainloop(self):
         # Get ready to print
         textPrint = TextPrint()
 
         # init vars
         done = False
-        button_down = False # might be useful later on
+        button_down = False  # might be useful later on
 
         while not done:
             # EVENT PROCESSING STEP
@@ -203,7 +205,6 @@ class UI(Joystick, Game):
                     button_down = False
                 # if event.type == pygame.JOYAXISMOTION:
                 #     print("Joystick axis motion.")
-
 
             # Get instrument choice
             if self.dropdown.getSelected():
@@ -343,7 +344,7 @@ class UI(Joystick, Game):
 
         result = self.check_notes_match(self.neopitch)
         print("guess result = ", result)
-        sleep (0.5)
+        sleep(0.5)
 
         # blank the game staff
         previous_game_note_path = self.game_note_path
@@ -357,12 +358,12 @@ class UI(Joystick, Game):
         # print("\t\tgoes at sub level = ", self.sub_level_rounds)
         # print("\t\tguesses = ", self.tries)
         # print("\t\tlives = ", self.lives)
-        sleep (0.5)
+        sleep(0.5)
 
         # update visual helpers on the note
         self.check_helpers()
         print("adjusting helpers")
-        sleep (0.5)
+        sleep(0.5)
 
         # if correct guess
         if result:
@@ -402,6 +403,6 @@ class UI(Joystick, Game):
 
 if __name__ == "__main__":
     ui = UI(playing_game=True,
-            smoothing = 500
+            smoothing=500
             )
     ui.mainloop()
