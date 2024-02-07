@@ -7,6 +7,7 @@ class Colors(Enum):
     BLACK = Color(0, 0, 0)
     WHITE = Color(255, 255, 255)
     BACKGROUND = Color(239, 229, 186)
+    DROPDOWN_HOVER = Color(220, 206, 139)
 
 
 class WindowSize(IntEnum):

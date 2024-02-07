@@ -171,6 +171,8 @@ class UI(Joystick, Game):
             ],
             borderRadius=0,
             colour=Colors.BACKGROUND.value,
+            hoverColour=Colors.DROPDOWN_HOVER.value,
+            pressedColour=Colors.DROPDOWN_HOVER.value,
             values=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
             direction='down',
             textHAlign='left',
