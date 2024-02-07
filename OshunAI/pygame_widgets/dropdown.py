@@ -1,4 +1,4 @@
-import pygame
+import pygame as pg
 
 import pygame_widgets
 from pygame_widgets.widget import WidgetBase
@@ -156,7 +156,7 @@ class DropdownChoice(WidgetBase):
         # Text
         self.textColour = kwargs.get('textColour', (0, 0, 0))
         self.fontSize = kwargs.get('fontSize', 20)
-        self.font = kwargs.get('font', pygame.font.SysFont('sans-serif', self.fontSize))
+        self.font = kwargs.get('font', pg.font.SysFont('sans-serif', self.fontSize))
         self.textHAlign = kwargs.get('textHAlign', 'centre')
 
         self.textOffsetLeft = self.fontSize // 5
@@ -168,50 +168,50 @@ class DropdownChoice(WidgetBase):
         self.__direction = kwargs.get('direction', 'down')
         self.__last = last
 
+        self.ui_dropdown_arrow_down = pg.image.load("assets/ui/images/dropdown_arrow_down.svg")
+
     def draw(self, idx: int = -1, num_choices: int = 0) -> None:
         if not self._hidden:
-            rect = pygame.Rect(
+            rect = pg.Rect(
                 self.computedX,
                 self.computedY,
                 self._width,
                 self._height,
             )
-            pygame.draw.rect(
+            pg.draw.rect(
                 self.win,
                 self.colour,
                 rect
             )
 
-            pygame.draw.line(self.win,
+            pg.draw.line(self.win,
                              Colors.BLACK.value,
                              (self.computedX, self.computedY),
                              (self.computedX, self.computedY + self._height),
                              3)
-            pygame.draw.line(self.win,
+            pg.draw.line(self.win,
                              Colors.BLACK.value,
                              (self.computedX + self._width, self.computedY),
                              (self.computedX + self._width, self.computedY + self._height),
                              3)
 
             if idx == -1:
-                pygame.draw.line(self.win,
+                pg.draw.line(self.win,
                                  Colors.BLACK.value,
                                  (self.computedX - 1, self.computedY),
                                  (self.computedX + self._width + 1, self.computedY),
                                  3)
-                pygame.draw.line(self.win,
+                pg.draw.line(self.win,
                                  Colors.BLACK.value,
                                  (self.computedX - 1, self.computedY + self._height + 1),
                                  (self.computedX + self._width + 1, self.computedY + self._height + 1),
                                  3)
             elif idx == num_choices:
-                pygame.draw.line(self.win,
+                pg.draw.line(self.win,
                                  Colors.BLACK.value,
                                  (self.computedX - 1, self.computedY + self._height + 1),
                                  (self.computedX + self._width + 1, self.computedY + self._height + 1),
                                  3)
-            print(num_choices)
-
 
             text_rendered = self.font.render(self.text, True, self.textColour)
 
@@ -415,9 +415,9 @@ class HeadDropdown(DropdownChoice):
 if __name__ == '__main__':
     from pygame_widgets.button import Button
 
-    pygame.init()
-    win = pygame.display.set_mode((400, 280))
-    width, height = pygame.display.get_window_size()
+    pg.init()
+    win = pg.display.set_mode((400, 280))
+    width, height = pg.display.get_window_size()
 
     dropdown = Dropdown(
         win, 120, 10, 100, 50, name='Select Colour',
@@ -433,13 +433,13 @@ if __name__ == '__main__':
     button = Button(
         win, 120, 100, 100, 50, text='Print Value', fontSize=30,
         margin=20, inactiveColour=(255, 0, 0), pressedColour=(0, 255, 0),
-        radius=5, onClick=printValue, font=pygame.font.SysFont('calibri', 10),
+        radius=5, onClick=printValue, font=pg.font.SysFont('calibri', 10),
         textVAlign='bottom'
     )
 
     run = True
     while run:
-        events = pygame.event.get()
+        events = pg.event.get()
         for event in events:
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -449,4 +449,4 @@ if __name__ == '__main__':
         win.fill((255, 255, 255))
 
         pygame_widgets.update(events)
-        pygame.display.update()
+        pg.display.update()
