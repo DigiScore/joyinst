@@ -170,8 +170,6 @@ class UI(Joystick, Game):
                 '     FLUTE W BLOW',
                 '     BASS',
             ],
-            borderColour=Colors.BLACK.value,                        # for some strange reason, this is not working!
-            borderThickness=100,
             colour=Colors.DROPDOWN.value,
             hoverColour=Colors.DROPDOWN_HOVER.value,
             pressedColour=Colors.DROPDOWN_HOVER.value,
@@ -331,7 +329,7 @@ class UI(Joystick, Game):
                 self.show_game_note(self.game_note_path)
 
                 # Go ahead and update the screen with what we've drawn.
-                pg.draw.rect(self.screen, Colors.BLACK.value, pg.Rect(1123, 73, 391, 56))
+                # pg.draw.rect(self.screen, Colors.BLACK.value, pg.Rect(1123, 73, 391, 56))
                 self.screen.blit(self.ui_background_dots, (0, 0))
                 self.screen.blit(self.ui_background_character, (0, 164))
                 pygame_widgets.update(events)
