@@ -142,7 +142,7 @@ class UI(Joystick, Game):
         self.game_note_path = 0
 
         self.screen = pygame.display.set_mode(size)
-        pygame.display.set_caption("MachAInst")
+        pygame.display.set_caption("OshunAI")
 
         # Used to manage how fast the screen updates
         self.clock = pygame.time.Clock()
