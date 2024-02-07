@@ -1,10 +1,11 @@
+import tomllib
+
 from mingus.containers import Note, NoteContainer, Bar, Track
 from mingus.midi import pyfluidsynth as fs
-from configparser import ConfigParser
 from notation import Notation
 
-config_object = ConfigParser()
-config_object.read('config.ini')
+with open('config.toml', 'rb') as config_file:
+    config = tomllib.load(config_file)
 
 """
 Currently running with africa.sf2:
@@ -84,7 +85,7 @@ class Joystick(Notation):
         self.fs.start()
 
         # self.sf = fluidsynth.init("africa.sf2")
-        self.instrument = config_object['MIDI'].getint('instrument')
+        self.instrument = config['midi']['instrument']
         self.fs.program_select(1, self.sfid, 0, self.instrument)
 
         self.fs_is_playing = 0
