@@ -331,6 +331,7 @@ class UI(Joystick, Game):
                 self.show_game_note(self.game_note_path)
 
                 # Go ahead and update the screen with what we've drawn.
+                pg.draw.rect(self.screen, Colors.BLACK.value, pg.Rect(1126, 76, 365, 50), 10)
                 self.screen.blit(self.ui_background_dots, (0, 0))
                 self.screen.blit(self.ui_background_character, (0, 164))
                 pygame_widgets.update(events)
