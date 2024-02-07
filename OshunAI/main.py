@@ -9,8 +9,7 @@ from time import sleep
 # import project modules
 from joystick import Joystick
 from game import Game
-from constants.user_interface import Colors
-from constants.user_interface import WindowSize
+from constants.user_interface import Colors, WindowSize
 
 
 class TextPrint(object):
@@ -133,14 +132,14 @@ class UI(Joystick, Game):
         # Set the width and depth of the screen [width,depth]
         size = [WindowSize.WIDTH, WindowSize.HEIGHT]
 
+        # background images
+        self.background_dots = pygame.image.load("assets/ui/bg_dots.svg")
+
         # set game params
         self.playing_game = playing_game
         self.game_note_path = 0
 
         self.screen = pygame.display.set_mode(size)
-
-        background_color = (239, 229, 186)
-        self.screen.fill(background_color)
 
         pygame.display.set_caption("OshunAI")
 
@@ -212,7 +211,7 @@ class UI(Joystick, Game):
                 self.fs.program_select(1, self.sfid, 0, self.inst)
 
             # DRAWING STEP
-            # First, clear the screen to white. Don't put other drawing commands
+            # First, clear the screen. Don't put other drawing commands
             self.screen.fill(Colors.BACKGROUND.value)
             text_print.reset()
 
@@ -322,6 +321,7 @@ class UI(Joystick, Game):
                 self.show_game_note(self.game_note_path)
 
                 # Go ahead and update the screen with what we've drawn.
+                self.screen.blit(self.background_dots, (0, 0))
                 pygame_widgets.update(events)
                 pygame.display.update()
                 # Limit to 60 frames per second
