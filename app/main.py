@@ -180,7 +180,7 @@ class UI(Joystick, Game):
 
         # setup inst & notation vars
         self.inst = self.instrument
-        self.path_to_generated_images = "media/generated_notes/"
+        self.path_to_generated_images = "assets/ui/images/generated_notes/"
 
         # event vars
         self.last_guess = pg.time.get_ticks()
@@ -308,7 +308,7 @@ class UI(Joystick, Game):
 
                 else:
                     # put empty stave on screen
-                    path_to_new_image = 'media/empty_staves/empty_treble.png'
+                    path_to_new_image = 'assets/ui/images/empty_staves/empty_treble.png'
                     self.show_note(path_to_new_image)
 
                 #############
@@ -323,7 +323,7 @@ class UI(Joystick, Game):
 
                 else:
                     # if not playing put empty game stave on screen
-                    self.game_note_path = 'media/empty_staves/empty_treble.png'
+                    self.game_note_path = 'assets/ui/images/empty_staves/empty_treble.png'
 
                 self.show_game_note(self.game_note_path)
 
@@ -356,7 +356,7 @@ class UI(Joystick, Game):
 
         # blank the game staff
         previous_game_note_path = self.game_note_path
-        self.game_note_path = 'media/empty_staves/empty_treble.png'
+        self.game_note_path = 'assets/ui/images/empty_staves/empty_treble.png'
 
         # update game status depending on result
         self.update_game_states(result)

@@ -84,7 +84,7 @@ class Notation:
         # self.n1 = None
 
         # save path
-        self.save_path = "media/generated_notes/"
+        self.save_path = "assets/ui/images/generated_notes/"
 
         # compile a list of generated png's to optimise any duplications
         self.notelist = os.listdir(self.save_path)

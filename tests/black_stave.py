@@ -2,7 +2,7 @@ from neoscore.common import *
 
 neoscore.setup()
 
-save_path = "../app/media/empty_staves/"
+save_path = "../app/assets/ui/images/empty_staves/"
 
 empty_staff = Staff(ORIGIN, None, Mm(200), line_spacing=Mm(5))
 
