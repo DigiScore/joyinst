@@ -1,9 +1,6 @@
 from neoscore.common import *
 from enum import Enum
 
-from time import sleep
-
-
 class Arrow(Enum):
     """
     Smufl Arrows
@@ -81,9 +78,6 @@ class Notation:
         # note to print
         self.note_to_show = None
 
-        # # make a blank note
-        # self.n1 = None
-
         # save path
         self.save_path = "../media/generated_notes/"
 
@@ -140,7 +134,6 @@ class Notation:
                                        scale=2
                                      )
                 list_of_objects.append(help_arrow)
-                # note_filename = note_filename # + "_arrow"
 
             if name_help:
                 upper_note = note[0].upper() + note[1:]
@@ -150,10 +143,8 @@ class Notation:
                                  scale=4
                      )
                 list_of_objects.append(help_text)
-                # note_filename = note_filename # + "_name"
 
             # render new image
-            # note_filename = note_filename + ".png"
             save_dest = self.save_path + note_filename
             neoscore.render_image(rect=None,
                                   dest=save_dest,
@@ -175,8 +166,6 @@ class Notation:
                      arrow_help,
                      name_help
                      ):
-        # get current octave
-        # octave = self.octave
 
         # match compass to notes
         match compass:
@@ -190,7 +179,6 @@ class Notation:
                 note = 'B'
             case 'N':
                 note = 'C'
-                # octave = octave + 1
             case 'NW':
                 note = 'A'
             case 'W':
@@ -248,7 +236,6 @@ if __name__ == "__main__":
     octave_range = [2, 3, 4, 5, 6]
     accidental_list = [0, 1, -1]
     helplist = [[True, True], [False, True], [False, False]]
-    # namelist = [True, False]
     for octa in octave_range:
         for acc in accidental_list:
             for comp in compass_list:

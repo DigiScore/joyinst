@@ -1,7 +1,6 @@
-from mingus.containers import Note, NoteContainer, Bar, Track
+from mingus.containers import Note
 from mingus.midi import pyfluidsynth as fs
 from configparser import ConfigParser
-# from notation import Notation
 
 
 config_object = ConfigParser()
@@ -37,10 +36,6 @@ also allowed with no restrictions. The only condition is to give appropriate cre
 its name (good practices for attribution are described here). This license is recommended for an optimal use and
 distribution of a soundfont.
 """
-
-
-
-
 
 class Joystick:
     """
@@ -246,10 +241,10 @@ class Joystick:
         elif self.rt_release:  # RT
             self.octave += -1
 
-        if self.octave <= 2:
-            self.octave = 2
-        elif self.octave > 6:
-            self.octave = 6
+        if self.octave <= 3:
+            self.octave = 3
+        elif self.octave > 5:
+            self.octave = 5
 
         # make a sound or not
         if self.compass == "":
@@ -336,13 +331,6 @@ class Joystick:
                     self.neopitch += ",,,"
                 elif octave == 0:
                     self.neopitch += ",,,,"
-
-            # # make into neoscore png for display
-            # self.make_notation([self.neopitch],
-            #                    self.compass,
-            #                    arrow_help=arrow_help,
-            #                    name_help=name_help
-            #                    )
 
             note_filename = self.neopitch + self.compass
             if arrow_help:
