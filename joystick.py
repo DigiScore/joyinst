@@ -1,19 +1,20 @@
 from mingus.containers import Note, NoteContainer, Bar, Track
-from mingus.midi import fluidsynth
-import hid
+from mingus.midi import pyfluidsynth as fs
 from configparser import ConfigParser
 
 config_object = ConfigParser()
-config_object.read('config.ini')
+config_object.read('config.ini') 
 
 
 class Joystick:
+    """
+    Manages the data from the joystick controls.
+    Calculates the note values and makes a sound.
+    """
     def __init__(self):
-        # Instantiate the game device
-        self.gamepad = hid.Device('/dev/hidraw0')
-        self.gamepad.open(0x2563, 0x0575)  # PC/PS3/Android. gamepad.open(0x045e, 0x02fd) = Bluetooth # XBOX One
-        self.gamepad.set_nonblocking(True)
+        # Instantiate the vars
         self.sensitivity = 20
+        self.joystick_active_range = 0.9
 
         # init midi synth
         """
@@ -22,15 +23,32 @@ class Joystick:
         74 = recorder
         108 = kalimba
         110 = orutu fiddle
+        
+        africa.sf2
+        Bank	Preset	Name
+        0	1	Vocals/FX's
+        0	2	Hmmm
+        0	3	Moog
+        0	4	Hi Pad slide A
+        0	5	Tom slider C&A
+        0	6	Lo Pad slide A
+        0	7	Shofars
+        0	8	Kalimba
+        0	9	FIute w warble
+        0	10	FIute w blow
+        0	11	Bass
         """
 
-        fluidsynth.init("GeneralUserGSv1.471.sf2")
-        instrument = config_object['MIDI'].getint('instrument')
-        fluidsynth.set_instrument(1, instrument)
-        fluidsynth.main_volume(1, 100)  # set volume control (7) to 70
-        fluidsynth.modulation(1, 0)  # set modulation wheel to 0
-        if instrument == 74 or instrument == 110:
-            fluidsynth.control_change(1, 5, 100)
+        # Download https://www.polyphone-soundfonts.com/documents/file/470-africa-sf2/latest/download?f7af2bbf653590fa8046b3fc31797913=1&return=aHR0cHMlM0ElMkYlMkZ3d3cucG9seXBob25lLXNvdW5kZm9udHMuY29tJTJGZG9jdW1lbnRzJTJGMjctaW5zdHJ1bWVudC1zZXRzJTJGMzQ2LWFmcmljYQ==
+        sf2 = "africa.sf2"
+        self.fs = fs.Synth()
+        self.sfid = self.fs.sfload(sf2)
+        self.fs.start()
+
+        # self.sf = fluidsynth.init("africa.sf2")
+        self.instrument = config_object['MIDI'].getint('instrument')
+        self.fs.program_select(1, self.sfid, 0, self.instrument)
+
         self.fs_is_playing = 0
 
         # midi vars
@@ -48,31 +66,65 @@ class Joystick:
         # neoscore vars
         self.neopitch = None
 
-    def mainloop(self):
-        # -------- Main Program Loop -----------
-        report = self.gamepad.read(64)
-        if report:
-            # print(report)
+    def get_data(self, joystick):
+        """
+        Parses the data from the joystick object.
+        calculates the note values. Makes a sound
 
-            ####
-            # wireless PC/PS3/Android
-            # joystick range = (0 - 127) - 128 - (129 - 255)
-            ####
-            joystick_left_y = report[4]
-            joystick_left_x = report[3]
-            joystick_left_button = report[5]  # code 64
-            joystick_right_x = report[5]
-            joystick_right_y = report[6]
-            lb = report[15]
-            lt = report[17]
-            rb = report[16]
-            rt = report[18]
+        :param joystick: object
+        :return:
+        """
+        # reset vars
+        self.compass = ""
+        self.add_accidental = 0
+        rb = 0
+        rt = 0
 
-            buttons = report[0]  # 1 lb, 2 lt
+        # Get the name from the OS for the controller/joystick
+        name = joystick.get_name()
 
-            # reset vars
-            self.compass = ""
-            self.add_accidental = 0
+        # Calc # or b using buttons 4 & 5
+        buttons = joystick.get_numbuttons()
+        for i in range(buttons):
+            button = joystick.get_button(i)
+
+            # Accidental b or #
+            if i == 4 and button == 1:
+                self.add_accidental = 1
+            if i == 5 and button == 1:
+                self.add_accidental = -1
+
+            # Calculate octave shift
+            if i == 6 and button == 1:
+                # self.octave += 1
+                rb = 1
+            elif i == 7 and button == 1:
+                # self.octave -= 1
+                rt = 1
+
+        # Usually axis run in pairs, up/down for one, and left/right for
+        # the other.
+        axes = joystick.get_numaxes()
+
+        for i in range(axes):
+            axis = joystick.get_axis(i)
+
+            # Calculate note joystick position for notes
+            if i == 2 and axis < -self.joystick_active_range:
+                self.compass += "N"
+            elif i == 2 and axis >= self.joystick_active_range:
+                self.compass += "S"
+
+            if i == 3 and axis < -self.joystick_active_range:
+                self.compass += "W"
+            elif i == 3 and axis >= self.joystick_active_range:
+                self.compass += "E"
+
+            # todo - Calculate dynamic joystick for dynamics
+            if i == 1:
+                round(axis, 2)
+                # NewValue = (((OldValue - OldMin) * (NewMax - NewMin)) / (OldMax - OldMin)) + NewMin
+                self.dynamic = int((((axis - -1) * (20 - 120)) / (1 - -1)) + 120)
 
             # check release of rb and rt
             if rb < self.rb_val:
@@ -89,41 +141,6 @@ class Joystick:
                 self.rt_val = rt
                 self.rt_release = False
 
-            # Decode buttons
-            if lb >= 32:  # LB
-                self.add_accidental = 1
-            elif lt >= 32:  # LT
-                self.add_accidental = -1
-
-            # decode joystick right (notes) as compass points
-            if 0 <= joystick_right_y < (0 + self.sensitivity):
-                self.compass += "N"
-            elif (255 - self.sensitivity) < joystick_right_y <= 255:
-                self.compass += "S"
-
-            if 0 <= joystick_right_x < (0 + self.sensitivity):
-                self.compass += "W"
-            elif (255 - self.sensitivity) < joystick_right_x <= 255:
-                self.compass += "E"
-
-            # print(self.compass)
-
-            # Calculate dynamic joystick for dynamics
-            if 120 <= joystick_left_y <= 132:
-                vol_param = 70
-            elif joystick_left_y >= 132:
-                # NewValue = (((OldValue - OldMin) * (NewMax - NewMin)) / (OldMax - OldMin)) + NewMin
-                vol_param = int(((joystick_left_y - 255) * (120 - 70)) / (128 - 255)) + 70
-            elif joystick_left_y < 120:
-                # NewValue = (((OldValue - OldMin) * (NewMax - NewMin)) / (OldMax - OldMin)) + NewMin
-                vol_param = int(((joystick_left_y - 127) * (70 - 20)) / (1 - 127)) + 20
-
-            if not self.fs_is_playing:
-                self.dynamic = vol_param
-            else:
-                fluidsynth.main_volume(1, vol_param)
-
-            # todo change this to mod wheel CC control fluidsynth.control_change(1, 1, n)
             # Calculate octave shift
             if self.rb_release and self.rt_release:
                 self.octave = 5
@@ -137,121 +154,102 @@ class Joystick:
             elif self.octave > 8:
                 self.octave = 8
 
-            # change mod wheel/ expression
-            if 120 <= joystick_left_x <= 132:
-                fluidsynth.modulation(1, 0)
-                # fluidsynth.control_change(1, 2, 0)
-            elif joystick_left_x > 132:
-                # print('modulation')
-                # NewValue = (((OldValue - OldMin) * (NewMax - NewMin)) / (OldMax - OldMin)) + NewMin
-                mod_param = int(((joystick_left_x - 255) * (120 - 70)) / (128 - 255)) + 70
-                fluidsynth.modulation(1, mod_param)
+        # make a sound or not
+        if self.compass == "":
+            # send a stop to the FS player
+            if self.fs_is_playing != 0:
+                self.stop_note(self.fs_is_playing)
+                self.fs_is_playing = 0
+            # reset CC volume
+            self.fs.cc(1, 7, 100)
+            self.neopitch = ""
+        else:
+            # get current octave
+            octave = self.octave
 
-            elif joystick_left_x < 120:
-                # print('after touch')
-                # NewValue = (((OldValue - OldMin) * (NewMax - NewMin)) / (OldMax - OldMin)) + NewMin
-                mod_param = int(((joystick_left_x - 127) * (70 - 20)) / (1 - 127)) + 20
-                fluidsynth.control_change(1, 68, mod_param)
+            # match compass to notes
+            match self.compass:
+                case 'N':
+                    note = 'C'
+                case 'NE':
+                    note = 'E'
+                case 'E':
+                    note = 'G'
+                case 'SE':
+                    note = 'B'
+                case 'S':
+                    note = 'C'
+                    octave = self.octave+1
+                case 'SW':
+                    note = 'A'
+                case 'W':
+                    note = 'F'
+                case 'NW':
+                    note = 'D'
 
-            # make a sound or not
-            if self.compass == "":
-                # send a stop to the FS player
-                if self.fs_is_playing != 0:
-                    self.stop_note(self.fs_is_playing)
-                    self.fs_is_playing = 0
-                # reset CC volume
-                fluidsynth.main_volume(1, 100)
-                self.neopitch = ""
+            # print(note)
+            # adjust note for enharmonic shift
+            match self.add_accidental:
+                case 1:
+                    note = f"{note}#"
+                case -1:
+                    note = f"{note}b"
+
+            # make fs style note str
+            fs_note = f"{note}-{octave}"
+
+            # if not playing - make a note
+            if self.fs_is_playing == 0:
+                self.make_sound(fs_note,
+                                self.dynamic
+                                )
+                self.fs_is_playing = fs_note
+
+            # if already playing and new note called, change it
+            elif fs_note != self.fs_is_playing:
+                # stop note
+                self.stop_note(self.fs_is_playing)
+                # play new note
+                self.make_sound(fs_note,
+                                self.dynamic
+                                )
+                self.fs_is_playing = fs_note
+
+            # make into neoscore note value
+            if note[-1] == "#":
+                self.neopitch = f"{note[0].lower()}s"
+            elif note[-1] == "b":
+                self.neopitch = f"{note[0].lower()}f"
             else:
-                # get current octave
-                octave = self.octave
+                self.neopitch = note[0].lower()
 
-                # match compass to notes
-                match self.compass:
-                    case 'N':
-                        note = 'C'
-                    case 'NE':
-                        note = 'E'
-                    case 'E':
-                        note = 'G'
-                    case 'SE':
-                        note = 'B'
-                    case 'S':
-                        note = 'C'
-                        octave = self.octave + 1
-                    case 'SW':
-                        note = 'A'
-                    case 'W':
-                        note = 'F'
-                    case 'NW':
-                        note = 'D'
+            # add higher octave indicators "'"
+            if octave > 4:
+                ticks = octave - 4
+                for tick in range(ticks):
+                    self.neopitch += "'"
 
-                # adjust note for enharmonic shift
-                match self.add_accidental:
-                    case 1:
-                        note = f"{note}#"
-                    case -1:
-                        note = f"{note}b"
-
-                # make fs style note str
-                fs_note = f"{note}-{octave}"
-                # print(f"making note {fs_note}")
-
-                # if not playing - make a note
-                if self.fs_is_playing == 0:
-                    self.make_sound(fs_note,
-                                    self.dynamic
-                                    )
-                    self.fs_is_playing = fs_note
-
-                # if already playing and new note called, change it
-                elif fs_note != self.fs_is_playing:
-                    # stop note
-                    self.stop_note(self.fs_is_playing)
-                    # play new note
-                    self.make_sound(fs_note,
-                                    self.dynamic
-                                    )
-                    self.fs_is_playing = fs_note
-
-                # make into neoscore note value
-                if note[-1] == "#":
-                    self.neopitch = f"{note[0].lower()}s"
-                elif note[-1] == "b":
-                    self.neopitch = f"{note[0].lower()}f"
-                else:
-                    self.neopitch = note[0].lower()
-
-                # add higher octave indicators "'"
-                if octave > 4:
-                    ticks = octave - 4
-                    for tick in range(ticks):
-                        self.neopitch += "'"
-
-                # add lower octave indicators ","
-                elif octave < 4:
-                    if octave == 3:
-                        self.neopitch += ","
-                    elif octave == 2:
-                        self.neopitch += ",,"
+            # add lower octave indicators ","
+            elif octave < 4:
+                if octave == 3:
+                    self.neopitch += ","
+                elif octave == 2:
+                    self.neopitch += ",,"
 
     def make_sound(self,
                    new_note,
                    dynamic,
                    ):
 
-        fluidsynth.play_Note(Note(new_note,
-                                  velocity=dynamic
-                                  )
-                             )
+        # self.fs.(Note(new_note,
+        #                           velocity=dynamic
+        #                           )
+        #                      )
+        self.fs.noteon(1, key=int(Note(new_note)), vel=dynamic)
 
     def stop_note(self, note_to_stop):
-        fluidsynth.stop_Note(Note(note_to_stop))
-
-    # def terminate(self):
-    #     fluids
-
+        # self.sf.stop_Note(Note(note_to_stop))
+        self.fs.noteoff(1, key=int(Note(note_to_stop)))
 
 if __name__ == "__main__":
     js = Joystick()
-    js.mainloop()

@@ -1,3 +1,2 @@
-hid~=1.0.5
+pygame~=2.5.2
 mingus~=0.6.1
-neoscore
