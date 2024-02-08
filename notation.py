@@ -1,4 +1,4 @@
-from neoscore.common import *
+# from neoscore.common import *
 from enum import Enum
 import os
 
@@ -75,7 +75,7 @@ class Notation:
 
     def __init__(self):
         # init neoscore
-        neoscore.setup()
+        # neoscore.setup()
 
         # note to print
         self.note_to_show = None
@@ -87,7 +87,7 @@ class Notation:
         self.save_path = "media/generated_notes/"
 
         # compile a list of generated png's to optimise any duplications
-        self.notelist = os.listdir(self.save_path)
+        # self.notelist = os.listdir(self.save_path)
 
     def make_notation(self, notes: list,
                       compass: str,
@@ -104,7 +104,7 @@ class Notation:
         """
 
         # setup an empty list for removal later
-        list_of_objects = []
+        # list_of_objects = []
 
         # iterate through note list
         for i, note in enumerate(notes):
@@ -112,70 +112,70 @@ class Notation:
             pos_offset_x = i * 10
 
             # make a new note name to build extra help factors
-            note_filename = note
+            note_filename = note + compass
             if arrow_help:
                 note_filename += "_arrow"
             if name_help:
                 note_filename += "_name"
             note_filename += ".png"
 
-            if note_filename in self.notelist:
-                self.note_to_show = note_filename
+            # if note_filename in self.notelist:
+            self.note_to_show = note_filename
 
-            else:
-                # make a new note and save
-                empty_staff = Staff(ORIGIN, None, Mm(200), line_spacing=Mm(5))
-                Clef(Mm(60), empty_staff, 'treble')
-
-                n = Chordrest(Mm(100 + (pos_offset_x + 10)),
-                               empty_staff,
-                               [note],
-                               Duration(1, 2))
-                # add to existing note list
-                list_of_objects.append(n)
-
-                if arrow_help:
-                    arrow_direction = Arrow[compass].value
-                    arrow_colour = Colour[compass].value
-                    colour_brush = Brush(color=arrow_colour)
-                    help_arrow = MusicText((Mm(20), Mm(-20)), n, arrow_direction,
-                                         alignment_x=AlignmentX.CENTER, alignment_y=AlignmentY.CENTER,
-                                         brush=colour_brush,
-                                           scale=2
-                                         )
-                    list_of_objects.append(help_arrow)
-                    # note_filename = note_filename # + "_arrow"
-
-                if name_help:
-                    upper_note = note[0].upper() + note[1:]
-                    help_text = Text((Mm(-20), Mm(-15)), n, upper_note,
-                         alignment_x=AlignmentX.CENTER,
-                         alignment_y=AlignmentY.CENTER,
-                                     scale=4
-                         )
-                    list_of_objects.append(help_text)
-                    # note_filename = note_filename # + "_name"
-
-                # add new image to note list
-                self.notelist.append(note_filename)
-
-                # render new image
-                # note_filename = note_filename + ".png"
-                save_dest = self.save_path + note_filename
-                neoscore.render_image(rect=None,
-                                      dest=save_dest,
-                                      autocrop=True,
-                                      preserve_alpha=False,
-                                      wait=True
-                                      )
-                print(f"Saving new image to {save_dest}")
-                # hand name back to mainloop
-                self.note_to_show = note_filename
-
-                # delete them all
-                for o in list_of_objects:
-                    # print(o)
-                    o.remove()
+            # else:
+            #     # make a new note and save
+            #     empty_staff = Staff(ORIGIN, None, Mm(200), line_spacing=Mm(5))
+            #     Clef(Mm(60), empty_staff, 'treble')
+            #
+            #     n = Chordrest(Mm(100 + (pos_offset_x + 10)),
+            #                    empty_staff,
+            #                    [note],
+            #                    Duration(1, 2))
+            #     # add to existing note list
+            #     list_of_objects.append(n)
+            #
+            #     if arrow_help:
+            #         arrow_direction = Arrow[compass].value
+            #         arrow_colour = Colour[compass].value
+            #         colour_brush = Brush(color=arrow_colour)
+            #         help_arrow = MusicText((Mm(20), Mm(-20)), n, arrow_direction,
+            #                              alignment_x=AlignmentX.CENTER, alignment_y=AlignmentY.CENTER,
+            #                              brush=colour_brush,
+            #                                scale=2
+            #                              )
+            #         list_of_objects.append(help_arrow)
+            #         # note_filename = note_filename # + "_arrow"
+            #
+            #     if name_help:
+            #         upper_note = note[0].upper() + note[1:]
+            #         help_text = Text((Mm(-20), Mm(-15)), n, upper_note,
+            #              alignment_x=AlignmentX.CENTER,
+            #              alignment_y=AlignmentY.CENTER,
+            #                          scale=4
+            #              )
+            #         list_of_objects.append(help_text)
+            #         # note_filename = note_filename # + "_name"
+            #
+            #     # add new image to note list
+            #     self.notelist.append(note_filename)
+            #
+            #     # render new image
+            #     # note_filename = note_filename + ".png"
+            #     save_dest = self.save_path + note_filename
+            #     neoscore.render_image(rect=None,
+            #                           dest=save_dest,
+            #                           autocrop=True,
+            #                           preserve_alpha=False,
+            #                           wait=True
+            #                           )
+            #     print(f"Saving new image to {save_dest}")
+            #     # hand name back to mainloop
+            #     self.note_to_show = note_filename
+            #
+            #     # delete them all
+            #     for o in list_of_objects:
+            #         # print(o)
+            #         o.remove()
 
         return note_filename
 

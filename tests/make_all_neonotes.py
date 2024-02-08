@@ -113,7 +113,7 @@ class Notation:
             pos_offset_x = i * 10
 
             # make a new note name to build extra help factors
-            note_filename = note
+            note_filename = note+compass
             if arrow_help:
                 note_filename += "_arrow"
             if name_help:
@@ -190,7 +190,7 @@ class Notation:
                 note = 'B'
             case 'N':
                 note = 'C'
-                octave = octave + 1
+                # octave = octave + 1
             case 'NW':
                 note = 'A'
             case 'W':
@@ -208,7 +208,6 @@ class Notation:
 
         # make fs style note str
         fs_note = f"{note}-{octave + 1}"
-
 
         # make into neoscore note value
         if note[-1] == "#":
@@ -230,6 +229,10 @@ class Notation:
                 self.neopitch += ","
             elif octave == 2:
                 self.neopitch += ",,"
+            elif octave == 1:
+                self.neopitch += ",,,"
+            elif octave == 0:
+                self.neopitch += ",,,,"
 
         # make into neoscore png for display
         print(self.neopitch, compass, arrow_help, name_help)
@@ -242,15 +245,15 @@ class Notation:
 if __name__ == "__main__":
     test = Notation()
     compass_list = ["S", "SW", "SE", "W", "E", "NW", "NE", "N"]
-    octave_range = 9
+    octave_range = [2, 3, 4, 5, 6]
     accidental_list = [0, 1, -1]
     helplist = [[True, True], [False, True], [False, False]]
     # namelist = [True, False]
-    for oct in range(octave_range):
+    for octa in octave_range:
         for acc in accidental_list:
             for comp in compass_list:
                 for help in helplist:
-                    test.make_neonote(oct,
+                    test.make_neonote(octa,
                                  acc,
                                  comp,
                                  help[0],

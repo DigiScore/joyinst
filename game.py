@@ -1,8 +1,8 @@
 from random import choice
-from notation import Notation
-from threading import Thread
+# from notation import Notation
+# from threading import Thread
 
-class Game(Notation):
+class Game:
     """
     Class that runs the mecahnics for the learning game.
     If is_game is True, then it will check the realtime input of notes against the game note.
@@ -118,9 +118,9 @@ class Game(Notation):
     def make_game_note_notation(self, current_game_note):
 
         # extract only the note name
-        game_note = current_game_note[0]
+        game_note = current_game_note
         match game_note:
-            case 'c':
+            case "c'":
                 compass = 'N'
             case 'e':
                 compass = 'SE'
@@ -137,13 +137,21 @@ class Game(Notation):
             case 'd':
                 compass = 'SW'
 
-        # make the note glyph
-        note = self.make_notation([current_game_note],
-                           compass,
-                           self.arrow_help,
-                           self.name_help
-                           )
-        return note
+        # # make the note glyph
+        # note = self.make_notation([current_game_note],
+        #                    compass,
+        #                    self.arrow_help,
+        #                    self.name_help
+        #                    )
+
+        note_filename = game_note + compass
+        if self.arrow_help:
+            note_filename += "_arrow"
+        if self.name_help:
+            note_filename += "_name"
+        note_filename += ".png"
+
+        return note_filename
 
     def check_notes_match(self, played_note):
         """

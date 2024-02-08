@@ -402,6 +402,6 @@ class UI(Joystick, Game):
 
 if __name__ == "__main__":
     ui = UI(playing_game=True,
-            smoothing = 500
+            smoothing=500
             )
     ui.mainloop()
