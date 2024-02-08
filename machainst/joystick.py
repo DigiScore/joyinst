@@ -1,10 +1,10 @@
+import tomllib
+
 from mingus.containers import Note
 from mingus.midi import pyfluidsynth as fs
-from configparser import ConfigParser
 
-
-config_object = ConfigParser()
-config_object.read('config.ini') 
+with open('config.toml', 'rb') as config_file:
+    config = tomllib.load(config_file)
 
 """
 Currently running with africa.sf2:
@@ -77,13 +77,13 @@ class Joystick:
         """
 
         # Download https://www.polyphone-soundfonts.com/documents/file/470-africa-sf2/latest/download?f7af2bbf653590fa8046b3fc31797913=1&return=aHR0cHMlM0ElMkYlMkZ3d3cucG9seXBob25lLXNvdW5kZm9udHMuY29tJTJGZG9jdW1lbnRzJTJGMjctaW5zdHJ1bWVudC1zZXRzJTJGMzQ2LWFmcmljYQ==
-        sf2 = "africa.sf2"
+        sf2 = "assets/soundfonts/africa.sf2"
         self.fs = fs.Synth()
         self.sfid = self.fs.sfload(sf2)
         self.fs.start()
 
         # self.sf = fluidsynth.init("africa.sf2")
-        self.instrument = config_object['MIDI'].getint('instrument')
+        self.instrument = config['midi']['instrument']
         self.fs.program_select(1, self.sfid, 0, self.instrument)
 
         self.fs_is_playing = 0

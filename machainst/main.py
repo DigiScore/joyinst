@@ -119,9 +119,6 @@ class Solfa(Enum):
 class UI(Joystick, Game):
     """Main class for running UI. Inherits the joystick and instrument objects"""
 
-    # todo - transpositions!!! this is in C only. Tonic & position & arrows
-    #  needs to be related to parent key.
-
     def __init__(self,
                  playing_game: bool = True,
                  smoothing: int = 300
@@ -347,12 +344,11 @@ class UI(Joystick, Game):
         # self.show_game_note(self.game_note_path)
 
     def game_loop(self):
-        # todo - this is a verbose sequence - we can optimise later
         # check if current note matches. Lock so as not to repeat comparisons
 
         result = self.check_notes_match(self.neopitch)
         print("guess result = ", result)
-        sleep(0.5)
+        sleep(0.2)
 
         # blank the game staff
         previous_game_note_path = self.game_note_path
@@ -366,17 +362,17 @@ class UI(Joystick, Game):
         # print("\t\tgoes at sub level = ", self.sub_level_rounds)
         # print("\t\tguesses = ", self.tries)
         # print("\t\tlives = ", self.lives)
-        sleep(0.5)
+        sleep(0.2)
 
         # update visual helpers on the note
         self.check_helpers()
         print("adjusting helpers")
-        sleep(0.5)
+        sleep(0.2)
 
         # if correct guess
         if result:
             print("Picking new note")
-            sleep(0.5)
+            sleep(0.2)
             # get a new note from current list
             self._game_new_note = self.get_random_note()
             note_to_show = self.make_game_note_notation(self._game_new_note)
@@ -385,7 +381,7 @@ class UI(Joystick, Game):
         # false guess
         else:
             print("RETRY")
-            sleep(0.5)
+            sleep(0.2)
             # show same note with adjusted helps?
             note_to_show = self.make_game_note_notation(self._game_new_note)
             self.game_note_path = self.path_to_generated_images + note_to_show
@@ -410,7 +406,7 @@ class UI(Joystick, Game):
 
 
 if __name__ == "__main__":
-    ui = UI(playing_game=True,
+    ui = UI(playing_game=False,
             smoothing=500
             )
     ui.mainloop()
