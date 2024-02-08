@@ -100,7 +100,7 @@ To get a local copy up and running follow these simple example steps.
 
 1. Enter the main APP folder
    ```sh
-   cd app
+   cd machainst
    ```
 2. Execute the code
    ```sh

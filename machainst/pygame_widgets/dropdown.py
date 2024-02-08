@@ -4,7 +4,7 @@ import pygame_widgets
 from pygame_widgets.widget import WidgetBase
 from pygame_widgets.mouse import Mouse, MouseState
 
-from app.constants.user_interface import Colors
+from machainst.constants.user_interface import Colors
 
 
 class Dropdown(WidgetBase):
