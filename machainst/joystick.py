@@ -1,11 +1,10 @@
-import tomllib
-
-from mingus.containers import Note, NoteContainer, Bar, Track
+from mingus.containers import Note
 from mingus.midi import pyfluidsynth as fs
-from notation import Notation
+from configparser import ConfigParser
 
-with open('config.toml', 'rb') as config_file:
-    config = tomllib.load(config_file)
+
+config_object = ConfigParser()
+config_object.read('config.ini') 
 
 """
 Currently running with africa.sf2:
@@ -38,22 +37,21 @@ its name (good practices for attribution are described here). This license is re
 distribution of a soundfont.
 """
 
-
-class Joystick(Notation):
+class Joystick:
     """
     Manages the data from the joystick controls.
     Calculates the note values and makes a sound.
     """
-
     def __init__(self):
         super().__init__()
         # Instantiate the vars
         self.sensitivity = 20
-        self.joystick_active_range = 0.9
+        self.joystick_active_range = 0.95
         self.A_button = 0
         self.B_button = 0
         self.X_button = 0
         self.Y_button = 0
+
 
         # init midi synth
         """
@@ -79,13 +77,13 @@ class Joystick(Notation):
         """
 
         # Download https://www.polyphone-soundfonts.com/documents/file/470-africa-sf2/latest/download?f7af2bbf653590fa8046b3fc31797913=1&return=aHR0cHMlM0ElMkYlMkZ3d3cucG9seXBob25lLXNvdW5kZm9udHMuY29tJTJGZG9jdW1lbnRzJTJGMjctaW5zdHJ1bWVudC1zZXRzJTJGMzQ2LWFmcmljYQ==
-        sf2 = "assets/soundfonts/africa.sf2"
+        sf2 = "africa.sf2"
         self.fs = fs.Synth()
         self.sfid = self.fs.sfload(sf2)
         self.fs.start()
 
         # self.sf = fluidsynth.init("africa.sf2")
-        self.instrument = config['midi']['instrument']
+        self.instrument = config_object['MIDI'].getint('instrument')
         self.fs.program_select(1, self.sfid, 0, self.instrument)
 
         self.fs_is_playing = 0
@@ -188,13 +186,13 @@ class Joystick(Notation):
         elif axis_dict["3"] >= self.joystick_active_range:
             self.compass = "E"
 
-        elif axis_dict["4"] < -0.5 and axis_dict["3"] > 0.4:
+        elif axis_dict["4"] < -0.4 and axis_dict["3"] > 0.4:
             self.compass = "NE"
-        elif axis_dict["4"] < -0.5 and axis_dict["3"] < -0.4:
+        elif axis_dict["4"] < -0.4 and axis_dict["3"] < -0.4:
             self.compass = "NW"
-        elif axis_dict["4"] > 0.5 and axis_dict["3"] > 0.4:
+        elif axis_dict["4"] > 0.4 and axis_dict["3"] > 0.4:
             self.compass = "SE"
-        elif axis_dict["4"] > 0.5 and axis_dict["3"] < -0.4:
+        elif axis_dict["4"] > 0.4 and axis_dict["3"] < -0.4:
             self.compass = "SW"
 
         # PS buttons
@@ -243,10 +241,10 @@ class Joystick(Notation):
         elif self.rt_release:  # RT
             self.octave += -1
 
-        if self.octave <= 0:
-            self.octave = 0
-        elif self.octave > 8:
-            self.octave = 8
+        if self.octave <= 3:
+            self.octave = 3
+        elif self.octave > 5:
+            self.octave = 5
 
         # make a sound or not
         if self.compass == "":
@@ -273,7 +271,7 @@ class Joystick(Notation):
                     note = 'B'
                 case 'N':
                     note = 'C'
-                    octave = self.octave + 1
+                    octave = self.octave+1
                 case 'NW':
                     note = 'A'
                 case 'W':
@@ -329,13 +327,19 @@ class Joystick(Notation):
                     self.neopitch += ","
                 elif octave == 2:
                     self.neopitch += ",,"
+                elif octave == 1:
+                    self.neopitch += ",,,"
+                elif octave == 0:
+                    self.neopitch += ",,,,"
 
-            # make into neoscore png for display
-            self.make_notation([self.neopitch],
-                               self.compass,
-                               arrow_help=arrow_help,
-                               name_help=name_help
-                               )
+            note_filename = self.neopitch + self.compass
+            if arrow_help:
+                note_filename += "_arrow"
+            if name_help:
+                note_filename += "_name"
+            note_filename += ".png"
+
+            self.note_to_show = note_filename
 
     def make_sound(self,
                    new_note,
@@ -345,7 +349,6 @@ class Joystick(Notation):
 
     def stop_note(self, note_to_stop):
         self.fs.noteoff(1, key=int(Note(note_to_stop)))
-
 
 if __name__ == "__main__":
     js = Joystick()

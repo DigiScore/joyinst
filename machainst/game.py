@@ -1,8 +1,8 @@
 from random import choice
-from notation import Notation
+# from notation import Notation
+# from threading import Thread
 
-
-class Game(Notation):
+class Game:
     """
     Class that runs the mecahnics for the learning game.
     If is_game is True, then it will check the realtime input of notes against the game note.
@@ -28,7 +28,7 @@ class Game(Notation):
                      }
 
     learning_seq = [
-        "level_1", "level_2", "level_3", "level_4", "level_5", "level_6"
+        "level_1", "level_2", "level_3", "level_4", "level_5" , "level_6"
     ]
 
     correct_words = ["Way to go!",
@@ -99,7 +99,7 @@ class Game(Notation):
         # if sub-level 0 sequence through list
         if self.sub_level == 0:
             self.current_game_note = self.current_level_list[self.melody_position]
-            # self.melody_position += 1
+
             # for any other sub-level:
         else:
             # self.melody_position = 0
@@ -118,9 +118,9 @@ class Game(Notation):
     def make_game_note_notation(self, current_game_note):
 
         # extract only the note name
-        game_note = current_game_note[0]
+        game_note = current_game_note
         match game_note:
-            case 'c':
+            case "c'":
                 compass = 'N'
             case 'e':
                 compass = 'SE'
@@ -137,13 +137,14 @@ class Game(Notation):
             case 'd':
                 compass = 'SW'
 
-        # make the note glyph
-        note = self.make_notation([current_game_note],
-                                  compass,
-                                  self.arrow_help,
-                                  self.name_help
-                                  )
-        return note
+        note_filename = game_note + compass
+        if self.arrow_help:
+            note_filename += "_arrow"
+        if self.name_help:
+            note_filename += "_name"
+        note_filename += ".png"
+
+        return note_filename
 
     def check_notes_match(self, played_note):
         """
@@ -182,7 +183,7 @@ class Game(Notation):
             if result:
                 print(choice(self.correct_words), "next note")
                 # have 3 rounds per sub-level (help indicators)
-                self.sub_level_rounds -= 1
+                self.sub_level_rounds -=1
 
                 if self.sub_level_rounds <= 0:
                     print(choice(self.correct_words), "on to next sub-level - we've reduced the help")
@@ -199,10 +200,6 @@ class Game(Notation):
                 self.tries -= 1
 
                 if self.tries <= 0:
-                    # if self.sub_level_rounds > 0:
-                    #     self.tries -= 1
-                    #
-                    # else:
                     print(choice(self.wrong_words), "Lets try some easier notes")
 
                     self.sub_level -= 1
