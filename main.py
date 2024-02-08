@@ -177,7 +177,6 @@ class UI(Joystick, Game):
         self.last_guess = pygame.time.get_ticks()
         self.smoothing = smoothing
 
-
     def mainloop(self):
         # Get ready to print
         textPrint = TextPrint()
@@ -223,9 +222,6 @@ class UI(Joystick, Game):
             for i in range(joystick_count):
                 joystick = pygame.joystick.Joystick(i)
                 joystick.init()
-                # # Get the joystick data
-                # joystick = pygame.joystick.Joystick(0)
-                # joystick.init()
 
                 # Parse data with Joystick class
                 self.get_data(joystick,

@@ -99,7 +99,7 @@ class Game:
         # if sub-level 0 sequence through list
         if self.sub_level == 0:
             self.current_game_note = self.current_level_list[self.melody_position]
-            # self.melody_position += 1
+
             # for any other sub-level:
         else:
             # self.melody_position = 0
@@ -136,13 +136,6 @@ class Game:
                 compass = 'W'
             case 'd':
                 compass = 'SW'
-
-        # # make the note glyph
-        # note = self.make_notation([current_game_note],
-        #                    compass,
-        #                    self.arrow_help,
-        #                    self.name_help
-        #                    )
 
         note_filename = game_note + compass
         if self.arrow_help:
@@ -207,11 +200,6 @@ class Game:
                 self.tries -= 1
 
                 if self.tries <= 0:
-
-                # if self.sub_level_rounds > 0:
-                #     self.tries -= 1
-                #
-                # else:
                     print(choice(self.wrong_words), "Lets try some easier notes")
 
                     self.sub_level -= 1
