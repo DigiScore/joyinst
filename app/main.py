@@ -145,7 +145,7 @@ class UI(Joystick, Game):
 
         self.screen = pg.display.set_mode(size)
 
-        pg.display.set_caption("OshunAI")
+        pg.display.set_caption("app")
 
         # Used to manage how fast the screen updates
         self.clock = pg.time.Clock()
