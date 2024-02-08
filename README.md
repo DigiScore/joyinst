@@ -7,10 +7,10 @@
     <img src="images/Oshun_African-Goddess.webp" alt="Logo" width="160" height="160">
   </a>
 
-  <h3 align="center">OshunAI</h3>
+  <h3 align="center">machAInst</h3>
 
   <p align="center">
-    OshunAI (pronounced Ocean AI) uses widely available gaming technology, such as gamepads and accessible joysticks, to turn a smartphone or tablet into a new digital instrument.
+    About it
     <br />
   </p>
 </div>
@@ -48,7 +48,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![OshunAI Screen Shot][product-screenshot]](https://example.com)
+[![machAInst Screen Shot][product-screenshot]](https://example.com)
 
 Say how wonderful it is!
 
@@ -183,6 +183,6 @@ Use this space to list resources you find helpful and would like to give credit 
 [license-url]: https://github.com/othneildrew/Best-README-Template/blob/master/LICENSE.txt
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/othneildrew
-[product-screenshot]: images/OshunAIMainInterface.png
+[product-screenshot]: images/MainInterface.png
 [Python]: https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white
 [Python-url]: https://python.org/
