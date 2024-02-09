@@ -270,6 +270,7 @@ class UI(Joystick, Game):
                 text_print.print(self.screen, "goes at sub level    {}".format(self.sub_level_rounds))
                 text_print.print(self.screen, "guesses    {}".format(self.tries))
                 text_print.print(self.screen, "lives    {}".format(self.lives))
+                text_print.print(self.screen, "Feedback    ")
 
                 #############
                 # JOYSTICK LOOP
@@ -283,6 +284,8 @@ class UI(Joystick, Game):
 
                     # make solfa
                     solfa = Solfa[compass].value
+                    # add feedback from game
+                    text_print.print(self.screen, "Feedback    {}".format(self.feedback))
 
                     # print to screen
                     self.screen.fill(Colors.BACKGROUND.value)
@@ -380,11 +383,11 @@ class UI(Joystick, Game):
         # update game status depending on result
         self.update_game_states(result)
         print("\t\tchecking game stats")
-        print("\t\tlevel = ", self.level)
-        print("\t\tsub-level = ", self.sub_level)
-        print("\t\tgoes at sub level = ", self.sub_level_rounds)
-        print("\t\tguesses = ", self.tries)
-        print("\t\tlives = ", self.lives)
+        # print("\t\tlevel = ", self.level)
+        # print("\t\tsub-level = ", self.sub_level)
+        # print("\t\tgoes at sub level = ", self.sub_level_rounds)
+        # print("\t\tguesses = ", self.tries)
+        # print("\t\tlives = ", self.lives)
         sleep(0.2)
 
         # update visual helpers on the note
@@ -413,15 +416,15 @@ class UI(Joystick, Game):
 
     def show_note(self, path_to_new_image):
         note = pg.image.load(path_to_new_image).convert_alpha()
-        note = pg.transform.scale_by(note, 0.3)
+        note = pg.transform.scale_by(note, 0.5)
         # Create a rect with the size of the image.
         rect = note.get_rect()
-        rect.center = ((WindowSize.WIDTH / 2) - 200, (WindowSize.HEIGHT / 2) - 150)
+        rect.center = ((WindowSize.WIDTH / 2) - 150, (WindowSize.HEIGHT / 2) - 100)
         self.screen.blit(note, rect)
 
     def show_game_note(self, path_to_new_image):
         note = pg.image.load(path_to_new_image).convert_alpha()
-        note = pg.transform.scale_by(note, 0.3)
+        note = pg.transform.scale_by(note, 0.5)
         # Create a rect with the size of the image.
         rect = note.get_rect()
         rect.center = ((WindowSize.WIDTH / 2) - 200, (WindowSize.HEIGHT / 2) + 200)

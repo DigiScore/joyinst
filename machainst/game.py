@@ -75,6 +75,7 @@ class Game:
         # sub-level associated with helpers on screen
         self.sub_level = 0
         self.sub_level_rounds = 3
+        self.feedback = ""
 
         # locks the game loop while dealing with guess
         self.game_lock = False
@@ -165,14 +166,14 @@ class Game:
         if self.sub_level == 0:
             # unlimited goes at sub-level 0
             if result:
-                print(choice(self.correct_words), "CORRECT")
+                self.feedback = choice(self.correct_words), "CORRECT"
                 self.melody_position += 1
                 # reached end of level list? Now onto game
                 if self.melody_position >= self.len_current_level_list:
                     self.sub_level += 1
                     self.melody_position = 0
             else:
-                print(choice(self.wrong_words), "Have a nother go")
+                self.feedback = (choice(self.wrong_words), "Have another go")
 
         #################
         # sub-levels 1,2,3 where tries and lives matter
@@ -181,12 +182,12 @@ class Game:
         else:
             # if correct match (True)
             if result:
-                print(choice(self.correct_words), "next note")
+                self.feedback = (choice(self.correct_words), "next note")
                 # have 3 rounds per sub-level (help indicators)
                 self.sub_level_rounds -=1
 
                 if self.sub_level_rounds <= 0:
-                    print(choice(self.correct_words), "on to next sub-level - we've reduced the help")
+                    self.feedback = (choice(self.correct_words), "on to next sub-level - we've reduced the help")
                     # sub-level goes up
                     self.sub_level += 1
 
@@ -195,12 +196,12 @@ class Game:
                     self.tries = 3
 
             else:
-                print(choice(self.wrong_words), "have another go")
+                self.feedback = (choice(self.wrong_words), "have another go")
                 # if incorrect then try again, loose a try
                 self.tries -= 1
 
                 if self.tries <= 0:
-                    print(choice(self.wrong_words), "Lets try some easier notes")
+                    self.feedback = (choice(self.wrong_words), "Lets try some easier notes")
 
                     self.sub_level -= 1
                     self.sub_level_rounds = 3
@@ -213,7 +214,7 @@ class Game:
 
             # check if we are through sub-levels and move to next level
             if self.sub_level > 3:
-                print(choice(self.correct_words), "Whoop Whoop - LEVEL UP")
+                self.feedback = (choice(self.correct_words), "Whoop Whoop - LEVEL UP")
 
                 # get the next level
                 self.current_level_list = self.learning_dict.get(self.learning_seq[self.level])
@@ -226,7 +227,7 @@ class Game:
                 self.tries = 3
 
             if self.lives == 0:
-                print(choice(self.wrong_words), "Game Over. Have another go.   Lives back up to 3")
+                self.feedback = (choice(self.wrong_words), "Game Over. Have another go.   Lives back up to 3")
                 # reset every thing
                 self.lives = 3
                 self.tries = 3
