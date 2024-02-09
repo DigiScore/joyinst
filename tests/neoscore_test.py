@@ -66,20 +66,20 @@ class Solfa(Enum):
 
 pos_offset_x = 10
 
-note = "d'"
+note = "gb'"
 arrow_help = True
 name_help = True
 
-compass = 'N'
+compass = 'NW'
 
 neoscore.setup()
 
 # make a new note and save
-empty_staff = Staff(ORIGIN, None, Mm(300), line_spacing=Mm(8))
+empty_staff = Staff(ORIGIN, None, Mm(300), line_spacing=Mm(5))
 clef = Clef(Mm(80), empty_staff, 'treble')
 
-n = Chordrest(Mm(78),
-              clef,
+n = Chordrest(Mm(150),
+              empty_staff,
               [note],
               Duration(1, 2))
 
@@ -90,17 +90,26 @@ if arrow_help:
     arrow_direction = Arrow[compass].value
     arrow_colour = Colour[compass].value
     colour_brush = Brush(color=arrow_colour)
-    help_arrow = MusicText((Mm(125), Mm(-60)), clef, arrow_direction,
+    help_arrow = MusicText((Mm(120), Mm(-35)), clef, arrow_direction,
                            alignment_x=AlignmentX.CENTER, alignment_y=AlignmentY.CENTER,
                            brush=colour_brush, scale=2
                            )
 
 if name_help:
     upper_note = note[0].upper() + note[1:]
-    help_text = Text((Mm(27), Mm(-40)), clef, upper_note,
+    help_text = Text((Mm(25), Mm(-20)), clef, upper_note,
                      # alignment_x=AlignmentX.CENTER,
                      # alignment_y=AlignmentY.CENTER,
-                     scale=4
+                     scale=3
                      )
 
 neoscore.show(display_page_geometry=False)
+
+# save_dest = "../machainst/assets/ui/images/empty_staves/empty_treble.png"
+# neoscore.render_image(rect=None,
+#                       dest=save_dest,
+#                       autocrop=True,
+#                       preserve_alpha=True,
+#                       wait=True
+#                       )
+# print(f"Saving new image to {save_dest}")

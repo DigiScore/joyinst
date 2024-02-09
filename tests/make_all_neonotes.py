@@ -114,11 +114,11 @@ class Notation:
                 note_filename += "_name"
             note_filename += ".png"
 
-            empty_staff = Staff(ORIGIN, None, Mm(300), line_spacing=Mm(8))
+            empty_staff = Staff(ORIGIN, None, Mm(300), line_spacing=Mm(5))
             clef = Clef(Mm(80), empty_staff, 'treble')
 
-            n = Chordrest(Mm(78),
-                           clef,
+            n = Chordrest(Mm(150),
+                           empty_staff,
                            [note],
                            Duration(1, 2))
 
@@ -129,7 +129,7 @@ class Notation:
                 arrow_direction = Arrow[compass].value
                 arrow_colour = Colour[compass].value
                 colour_brush = Brush(color=arrow_colour)
-                help_arrow = MusicText((Mm(125), Mm(-60)), clef, arrow_direction,
+                help_arrow = MusicText((Mm(120), Mm(-35)), clef, arrow_direction,
                                      alignment_x=AlignmentX.CENTER, alignment_y=AlignmentY.CENTER,
                                      brush=colour_brush,
                                        scale=2
@@ -138,10 +138,10 @@ class Notation:
 
             if name_help:
                 upper_note = note[0].upper() + note[1:]
-                help_text = Text((Mm(27), Mm(-40)), clef, upper_note,
+                help_text = Text((Mm(25), Mm(-20)), clef, upper_note,
                      # alignment_x=AlignmentX.CENTER,
                      # alignment_y=AlignmentY.CENTER,
-                                 scale=4
+                                 scale=3
                      )
                 list_of_objects.append(help_text)
 
@@ -149,7 +149,7 @@ class Notation:
             save_dest = self.save_path + note_filename
             neoscore.render_image(rect=None,
                                   dest=save_dest,
-                                  autocrop=True,
+                                  autocrop=False,
                                   preserve_alpha=True,
                                   wait=True
                                   )

@@ -175,6 +175,22 @@ class UI(Joystick, Game):
             font=self.ibm_plex_condensed_font
         )
 
+        self.play_mode = Dropdown(
+            self.screen, 900, 76, 185, 50, name='     PLAY/ GAME',
+            choices=[
+                "     PLAY",
+                '     GAME',
+
+            ],
+            colour=Colors.DROPDOWN.value,
+            hoverColour=Colors.DROPDOWN_HOVER.value,
+            pressedColour=Colors.DROPDOWN_HOVER.value,
+            values=[False, True],
+            direction='down',
+            textHAlign='left',
+            font=self.ibm_plex_condensed_font
+        )
+
         # setup inst & notation vars
         self.inst = self.instrument
         self.path_to_generated_images = "assets/ui/images/generated_notes/"
@@ -214,6 +230,9 @@ class UI(Joystick, Game):
                 self.inst = self.dropdown.getSelected()
                 self.fs.program_select(1, self.sfid, 0, self.inst)
 
+            if self.play_mode.getSelected():
+                self.playing_game = self.play_mode.getSelected()
+
             # DRAWING STEP
             # First, clear the screen. Don't put other drawing commands
             self.screen.fill(Colors.BACKGROUND.value)
@@ -241,11 +260,11 @@ class UI(Joystick, Game):
                               self.name_help
                               )
 
-                text_print.print(self.screen, "Compass")
-                text_print.print(self.screen, "arrow_direction")
-                text_print.print(self.screen, "arrow_colour")
-                text_print.print(self.screen, "note")
-                text_print.print(self.screen, "solfa")
+                # text_print.print(self.screen, "Compass")
+                # text_print.print(self.screen, "arrow_direction")
+                # text_print.print(self.screen, "arrow_colour")
+                # text_print.print(self.screen, "note")
+                # text_print.print(self.screen, "solfa")
                 text_print.print(self.screen, "level    {}".format(self.level))
                 text_print.print(self.screen, "sub-level    {}".format(self.sub_level))
                 text_print.print(self.screen, "goes at sub level    {}".format(self.sub_level_rounds))
@@ -269,11 +288,11 @@ class UI(Joystick, Game):
                     self.screen.fill(Colors.BACKGROUND.value)
                     text_print.reset()
 
-                    text_print.print(self.screen, "Compass    {}".format(compass))
-                    text_print.print(self.screen, "arrow_direction    {}".format(arrow_direction))
-                    text_print.print(self.screen, "arrow_colour   {}".format(arrow_colour))
-                    text_print.print(self.screen, "note   {}".format(self.neopitch))
-                    text_print.print(self.screen, "solfa  {}".format(solfa))
+                    # text_print.print(self.screen, "Compass    {}".format(compass))
+                    # text_print.print(self.screen, "arrow_direction    {}".format(arrow_direction))
+                    # text_print.print(self.screen, "arrow_colour   {}".format(arrow_colour))
+                    # text_print.print(self.screen, "note   {}".format(self.neopitch))
+                    # text_print.print(self.screen, "solfa  {}".format(solfa))
                     text_print.print(self.screen, "level    {}".format(self.level))
                     text_print.print(self.screen, "sub-level    {}".format(self.sub_level))
                     text_print.print(self.screen, "goes at sub level    {}".format(self.sub_level_rounds))
@@ -410,7 +429,7 @@ class UI(Joystick, Game):
 
 
 if __name__ == "__main__":
-    ui = UI(playing_game=True,
+    ui = UI(playing_game=False,
             smoothing=500
             )
     ui.mainloop()
