@@ -66,22 +66,22 @@ class Solfa(Enum):
 
 pos_offset_x = 10
 
-note = "c"
+note = "d'"
 arrow_help = True
 name_help = True
 
-compass = 'S'
+compass = 'N'
 
 neoscore.setup()
 
 # make a new note and save
-empty_staff = Staff(ORIGIN, None, Mm(50), line_spacing=Mm(5))
-Clef(ZERO, empty_staff, 'treble')
+empty_staff = Staff(ORIGIN, None, Mm(300), line_spacing=Mm(8))
+clef = Clef(Mm(80), empty_staff, 'treble')
 
-n = Chordrest(Mm(10 + pos_offset_x),
-                      empty_staff,
-                      [note],
-                      Duration(1, 2))
+n = Chordrest(Mm(78),
+              clef,
+              [note],
+              Duration(1, 2))
 
 # add to existing note list
 
@@ -90,16 +90,17 @@ if arrow_help:
     arrow_direction = Arrow[compass].value
     arrow_colour = Colour[compass].value
     colour_brush = Brush(color=arrow_colour)
-    help_arrow = MusicText((Mm(20), Mm(-15)), n, arrow_direction,
+    help_arrow = MusicText((Mm(125), Mm(-60)), clef, arrow_direction,
                            alignment_x=AlignmentX.CENTER, alignment_y=AlignmentY.CENTER,
                            brush=colour_brush, scale=2
                            )
 
 if name_help:
-    help_text = Text((Mm(-15), Mm(-15)), n, note,
-                     alignment_x=AlignmentX.CENTER,
-                     alignment_y=AlignmentY.CENTER,
-                     scale=5
+    upper_note = note[0].upper() + note[1:]
+    help_text = Text((Mm(27), Mm(-40)), clef, upper_note,
+                     # alignment_x=AlignmentX.CENTER,
+                     # alignment_y=AlignmentY.CENTER,
+                     scale=4
                      )
 
 neoscore.show(display_page_geometry=False)

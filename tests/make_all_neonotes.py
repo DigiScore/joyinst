@@ -79,7 +79,7 @@ class Notation:
         self.note_to_show = None
 
         # save path
-        self.save_path = "../media/generated_notes/"
+        self.save_path = "../machainst/assets/ui/images/generated_notes/"
 
         # compile a list of generated png's to optimise any duplications
         # self.notelist = os.listdir(self.save_path)
@@ -114,13 +114,14 @@ class Notation:
                 note_filename += "_name"
             note_filename += ".png"
 
-            empty_staff = Staff(ORIGIN, None, Mm(200), line_spacing=Mm(5))
-            Clef(Mm(60), empty_staff, 'treble')
+            empty_staff = Staff(ORIGIN, None, Mm(300), line_spacing=Mm(8))
+            clef = Clef(Mm(80), empty_staff, 'treble')
 
-            n = Chordrest(Mm(100 + (pos_offset_x + 10)),
-                           empty_staff,
+            n = Chordrest(Mm(78),
+                           clef,
                            [note],
                            Duration(1, 2))
+
             # add to existing note list
             list_of_objects.append(n)
 
@@ -128,7 +129,7 @@ class Notation:
                 arrow_direction = Arrow[compass].value
                 arrow_colour = Colour[compass].value
                 colour_brush = Brush(color=arrow_colour)
-                help_arrow = MusicText((Mm(20), Mm(-20)), n, arrow_direction,
+                help_arrow = MusicText((Mm(125), Mm(-60)), clef, arrow_direction,
                                      alignment_x=AlignmentX.CENTER, alignment_y=AlignmentY.CENTER,
                                      brush=colour_brush,
                                        scale=2
@@ -137,9 +138,9 @@ class Notation:
 
             if name_help:
                 upper_note = note[0].upper() + note[1:]
-                help_text = Text((Mm(-20), Mm(-15)), n, upper_note,
-                     alignment_x=AlignmentX.CENTER,
-                     alignment_y=AlignmentY.CENTER,
+                help_text = Text((Mm(27), Mm(-40)), clef, upper_note,
+                     # alignment_x=AlignmentX.CENTER,
+                     # alignment_y=AlignmentY.CENTER,
                                  scale=4
                      )
                 list_of_objects.append(help_text)
@@ -149,7 +150,7 @@ class Notation:
             neoscore.render_image(rect=None,
                                   dest=save_dest,
                                   autocrop=True,
-                                  preserve_alpha=False,
+                                  preserve_alpha=True,
                                   wait=True
                                   )
             print(f"Saving new image to {save_dest}")

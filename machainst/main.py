@@ -219,6 +219,10 @@ class UI(Joystick, Game):
             self.screen.fill(Colors.BACKGROUND.value)
             text_print.reset()
 
+            # draw the backgrounds.
+            self.screen.blit(self.ui_background_dots, (0, 0))
+            self.screen.blit(self.ui_background_character, (0, 164))
+
             # Get count of joysticks
             joystick_count = pg.joystick.get_count()
 
@@ -325,8 +329,8 @@ class UI(Joystick, Game):
                 self.show_game_note(self.game_note_path)
 
                 # Go ahead and update the screen with what we've drawn.
-                self.screen.blit(self.ui_background_dots, (0, 0))
-                self.screen.blit(self.ui_background_character, (0, 164))
+                # self.screen.blit(self.ui_background_dots, (0, 0))
+                # self.screen.blit(self.ui_background_character, (0, 164))
                 pygame_widgets.update(events)
                 pg.display.flip()
                 # Limit to 60 frames per second
@@ -357,11 +361,11 @@ class UI(Joystick, Game):
         # update game status depending on result
         self.update_game_states(result)
         print("\t\tchecking game stats")
-        # print("\t\tlevel = ", self.level)
-        # print("\t\tsub-level = ", self.sub_level)
-        # print("\t\tgoes at sub level = ", self.sub_level_rounds)
-        # print("\t\tguesses = ", self.tries)
-        # print("\t\tlives = ", self.lives)
+        print("\t\tlevel = ", self.level)
+        print("\t\tsub-level = ", self.sub_level)
+        print("\t\tgoes at sub level = ", self.sub_level_rounds)
+        print("\t\tguesses = ", self.tries)
+        print("\t\tlives = ", self.lives)
         sleep(0.2)
 
         # update visual helpers on the note
@@ -393,7 +397,7 @@ class UI(Joystick, Game):
         note = pg.transform.scale_by(note, 0.3)
         # Create a rect with the size of the image.
         rect = note.get_rect()
-        rect.center = (WindowSize.WIDTH / 2, (WindowSize.HEIGHT / 2) - 100)
+        rect.center = ((WindowSize.WIDTH / 2) - 200, (WindowSize.HEIGHT / 2) - 150)
         self.screen.blit(note, rect)
 
     def show_game_note(self, path_to_new_image):
@@ -401,12 +405,12 @@ class UI(Joystick, Game):
         note = pg.transform.scale_by(note, 0.3)
         # Create a rect with the size of the image.
         rect = note.get_rect()
-        rect.center = (WindowSize.WIDTH / 2, (WindowSize.HEIGHT / 2) + 150)
+        rect.center = ((WindowSize.WIDTH / 2) - 200, (WindowSize.HEIGHT / 2) + 200)
         self.screen.blit(note, rect)
 
 
 if __name__ == "__main__":
-    ui = UI(playing_game=False,
+    ui = UI(playing_game=True,
             smoothing=500
             )
     ui.mainloop()
