@@ -24,7 +24,8 @@ class TextPrint(object):
         self.reset()
         self.x_pos = 10
         self.y_pos = 10
-        self.font = pg.font.Font(None, 60)
+        # self.font = pg.font.Font(None, 60)
+        self.font = pg.font.Font("assets/ui/fonts/IBMPlexSansCondensed-Medium.ttf", 55)
 
     def print(self, my_screen, text_string):
         """ Draw text onto the screen. """
@@ -36,7 +37,7 @@ class TextPrint(object):
         """ Reset text to the top of the screen. """
         self.x_pos = 10
         self.y_pos = 10
-        self.line_height = 40
+        self.line_height = 60
 
     def indent(self):
         """ Indent the next line of text """
@@ -267,11 +268,11 @@ class UI(Joystick, Game):
                 # text_print.print(self.screen, "arrow_colour")
                 # text_print.print(self.screen, "note")
                 # text_print.print(self.screen, "solfa")
-                text_print.print(self.screen, "level    {}".format(self.level))
-                text_print.print(self.screen, "sub-level    {}".format(self.sub_level))
-                text_print.print(self.screen, "goes at sub level    {}".format(self.sub_level_rounds))
-                text_print.print(self.screen, "guesses    {}".format(self.tries))
-                text_print.print(self.screen, "lives    {}".format(self.lives))
+                text_print.print(self.screen, "Level    {}".format(self.level))
+                text_print.print(self.screen, "Sub-level    {}".format(self.sub_level))
+                text_print.print(self.screen, "Goes at sub level    {}".format(self.sub_level_rounds))
+                text_print.print(self.screen, "Guesses    {}".format(self.tries))
+                text_print.print(self.screen, "Lives    {}".format(self.lives))
                 text_print.print(self.screen, "Feedback    {}".format(self.feedback))
 
                 #############
@@ -296,11 +297,11 @@ class UI(Joystick, Game):
                     # text_print.print(self.screen, "arrow_colour   {}".format(arrow_colour))
                     # text_print.print(self.screen, "note   {}".format(self.neopitch))
                     # text_print.print(self.screen, "solfa  {}".format(solfa))
-                    text_print.print(self.screen, "level    {}".format(self.level))
-                    text_print.print(self.screen, "sub-level    {}".format(self.sub_level))
-                    text_print.print(self.screen, "goes at sub level    {}".format(self.sub_level_rounds))
-                    text_print.print(self.screen, "guesses    {}".format(self.tries))
-                    text_print.print(self.screen, "lives    {}".format(self.lives))
+                    text_print.print(self.screen, "Level    {}".format(self.level))
+                    text_print.print(self.screen, "Sub-level    {}".format(self.sub_level))
+                    text_print.print(self.screen, "Goes at sub level    {}".format(self.sub_level_rounds))
+                    text_print.print(self.screen, "Guesses    {}".format(self.tries))
+                    text_print.print(self.screen, "Lives    {}".format(self.lives))
                     # add feedback from game
                     text_print.print(self.screen, "Feedback    {}".format(self.feedback))
 
