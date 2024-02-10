@@ -228,16 +228,13 @@ class UI(Joystick, Game):
                 self.fs.program_select(1, self.sfid, 0, self.inst)
 
             if self.play_mode.getSelected():
-                self.playing_game = self.play_mode.getSelected()
+                game_mode = self.play_mode.getSelected()
+                self.playing_game = game_mode
 
             # DRAWING STEP
             # First, clear the screen. Don't put other drawing commands
             self.screen.fill(Colors.BACKGROUND.value)
             text_print.reset()
-
-            # draw the backgrounds.
-            self.screen.blit(self.ui_background_dots, (0, 0))
-            self.screen.blit(self.ui_background_character, (0, 164))
 
             # Get count of joysticks
             joystick_count = pg.joystick.get_count()
@@ -257,6 +254,10 @@ class UI(Joystick, Game):
                               self.name_help
                               )
 
+                # draw the backgrounds.
+                self.screen.blit(self.ui_background_dots, (0, 0))
+                self.screen.blit(self.ui_background_character, (0, 164))
+
                 # text_print.print(self.screen, "Compass")
                 # text_print.print(self.screen, "arrow_direction")
                 # text_print.print(self.screen, "arrow_colour")
@@ -267,7 +268,7 @@ class UI(Joystick, Game):
                 text_print.print(self.screen, "goes at sub level    {}".format(self.sub_level_rounds))
                 text_print.print(self.screen, "guesses    {}".format(self.tries))
                 text_print.print(self.screen, "lives    {}".format(self.lives))
-                text_print.print(self.screen, "Feedback    ")
+                text_print.print(self.screen, "Feedback    {}".format(self.feedback))
 
                 #############
                 # JOYSTICK LOOP
@@ -281,8 +282,6 @@ class UI(Joystick, Game):
 
                     # make solfa
                     solfa = Solfa[compass].value
-                    # add feedback from game
-                    text_print.print(self.screen, "Feedback    {}".format(self.feedback))
 
                     # print to screen
                     self.screen.fill(Colors.BACKGROUND.value)
@@ -298,6 +297,8 @@ class UI(Joystick, Game):
                     text_print.print(self.screen, "goes at sub level    {}".format(self.sub_level_rounds))
                     text_print.print(self.screen, "guesses    {}".format(self.tries))
                     text_print.print(self.screen, "lives    {}".format(self.lives))
+                    # add feedback from game
+                    text_print.print(self.screen, "Feedback    {}".format(self.feedback))
 
                     # freeze guess on screen if game_lock
                     # if not self.game_lock:
@@ -403,6 +404,7 @@ class UI(Joystick, Game):
             self.game_note_path = self.path_to_generated_images + note_to_show
 
         # false guess
+
         else:
             print("RETRY")
             sleep(0.2)
@@ -425,7 +427,7 @@ class UI(Joystick, Game):
         note = pg.transform.scale_by(note, 0.5)
         # Create a rect with the size of the image.
         rect = note.get_rect()
-        rect.center = ((WindowSize.WIDTH / 2) + 10, (WindowSize.HEIGHT / 2) + 50)
+        rect.center = ((WindowSize.WIDTH / 2) + 10, (WindowSize.HEIGHT / 2) + 200)
         self.screen.blit(note, rect)
 
 
