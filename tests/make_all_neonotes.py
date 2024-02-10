@@ -71,6 +71,8 @@ class Solfa(Enum):
 class Notation:
     """Builds all the notation images for the game"""
 
+    color = "#FFF"  # make everthing white
+
     def __init__(self):
         # init neoscore
         neoscore.setup()
@@ -84,6 +86,27 @@ class Notation:
 
         # compile a list of generated png's to optimise any duplications
         # self.notelist = os.listdir(self.save_path)
+
+    def change_all_chordrest_colors(self, cr: Chordrest):
+        """Change the colors of all Chordrest component objects.
+
+        This does not change any attached beams.
+        """
+
+        for notehead in cr.noteheads:
+            notehead.brush = Brush.from_existing(notehead.brush, self.color)
+        for accidental in cr.accidentals:
+            accidental.brush = Brush.from_existing(accidental.brush, self.color)
+        for ledger in cr.ledgers:
+            ledger.pen = Pen.from_existing(ledger.pen, color=self.color)
+        for dot in cr.dots:
+            dot.brush = Brush.from_existing(ledger.brush, self.color)
+        if cr.stem:
+            cr.stem.pen = Pen.from_existing(cr.stem.pen, color=self.color)
+        if cr.flag:
+            cr.flag.brush = Brush.from_existing(cr.flag.brush, self.color)
+        if cr.rest:
+            cr.rest.brush = Brush.from_existing(cr.rest.brush, self.color)
 
     def make_notation(self, notes: list,
                       compass: str,
@@ -115,13 +138,15 @@ class Notation:
                 note_filename += "_name"
             note_filename += ".png"
 
-            empty_staff = Staff(ORIGIN, None, Mm(300), line_spacing=Mm(5))
-            clef = Clef(Mm(80), empty_staff, 'treble')
+            empty_staff = Staff(ORIGIN, None, Mm(100), line_spacing=Mm(5), pen=Pen(self.color))
+            clef = Clef(ZERO, empty_staff, 'treble', brush=Brush(self.color), pen=Pen(self.color))
 
-            n = Chordrest(Mm(150),
+            n = Chordrest(Mm(50),
                            empty_staff,
                            [note],
                            Duration(1, 2))
+
+            self.change_all_chordrest_colors(n)
 
             # add to existing note list
             list_of_objects.append(n)
@@ -130,7 +155,7 @@ class Notation:
                 arrow_direction = Arrow[compass].value
                 arrow_colour = Colour[compass].value
                 colour_brush = Brush(color=arrow_colour)
-                help_arrow = MusicText((Mm(120), Mm(-35)), clef, arrow_direction,
+                help_arrow = MusicText((Mm(85), Mm(-35)), clef, arrow_direction,
                                      alignment_x=AlignmentX.CENTER, alignment_y=AlignmentY.CENTER,
                                      brush=colour_brush,
                                        scale=2
@@ -139,7 +164,8 @@ class Notation:
 
             if name_help:
                 upper_note = note[0].upper() + note[1:]
-                help_text = Text((Mm(25), Mm(-20)), clef, upper_note,
+                help_text = Text((Mm(10), Mm(-20)), clef, upper_note,
+                brush = Brush(self.color), pen = Pen(self.color),
                      # alignment_x=AlignmentX.CENTER,
                      # alignment_y=AlignmentY.CENTER,
                                  scale=3
@@ -236,7 +262,7 @@ if __name__ == "__main__":
     test = Notation()
 
     compass_list = ["S", "SW", "SE", "W", "E", "NW", "NE", "N"]
-    octave_range = [4]  # [2, 3, 4, 5, 6]
+    octave_range = [2, 3, 4, 5, 6]
     accidental_list = [0, 1, -1]
     helplist = [[True, True], [False, True], [False, False]]
     for octa in octave_range:

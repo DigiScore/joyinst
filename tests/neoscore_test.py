@@ -63,6 +63,26 @@ class Solfa(Enum):
     SE = 'ti'
     S = 'do'
 
+def change_all_chordrest_colors(cr: Chordrest):
+    """Change the colors of all Chordrest component objects.
+
+    This does not change any attached beams.
+    """
+
+    for notehead in cr.noteheads:
+        notehead.brush = Brush.from_existing(notehead.brush, color)
+    for accidental in cr.accidentals:
+        accidental.brush = Brush.from_existing(accidental.brush, color)
+    for ledger in cr.ledgers:
+        ledger.pen = Pen.from_existing(ledger.pen, color=color)
+    for dot in cr.dots:
+        dot.brush = Brush.from_existing(ledger.brush, color)
+    if cr.stem:
+        cr.stem.pen = Pen.from_existing(cr.stem.pen, color=color)
+    if cr.flag:
+        cr.flag.brush = Brush.from_existing(cr.flag.brush, color)
+    if cr.rest:
+        cr.rest.brush = Brush.from_existing(cr.rest.brush, color)
 
 pos_offset_x = 10
 
@@ -73,32 +93,34 @@ name_help = True
 compass = 'NW'
 
 neoscore.setup()
-neoscore.set_background_brush(Brush("#FF001200"))
+neoscore.set_background_brush(Brush("#00000000"))
+color = "#FFF"  # make everthing white
 
 # make a new note and save
-empty_staff = Staff(ORIGIN, None, Mm(300), line_spacing=Mm(5))
-clef = Clef(Mm(80), empty_staff, 'treble')
+empty_staff = Staff(ORIGIN, None, Mm(100), line_spacing=Mm(5), pen = Pen(color))
+clef = Clef(ZERO, empty_staff, 'treble', pen=Pen(color), brush=Brush(color))
 
-n = Chordrest(Mm(150),
+n = Chordrest(Mm(50),
               empty_staff,
               [note],
               Duration(1, 2))
 
-# add to existing note list
+change_all_chordrest_colors(n)
 
 
 if arrow_help:
     arrow_direction = Arrow[compass].value
     arrow_colour = Colour[compass].value
     colour_brush = Brush(color=arrow_colour)
-    help_arrow = MusicText((Mm(120), Mm(-35)), clef, arrow_direction,
+    help_arrow = MusicText((Mm(85), Mm(-35)), clef, arrow_direction,
                            alignment_x=AlignmentX.CENTER, alignment_y=AlignmentY.CENTER,
                            brush=colour_brush, scale=2
                            )
 
 if name_help:
     upper_note = note[0].upper() + note[1:]
-    help_text = Text((Mm(25), Mm(-20)), clef, upper_note,
+    help_text = Text((Mm(10), Mm(-20)), clef, upper_note,
+                     brush=Brush(color), pen=Pen(color),
                      # alignment_x=AlignmentX.CENTER,
                      # alignment_y=AlignmentY.CENTER,
                      scale=3
@@ -106,7 +128,7 @@ if name_help:
 
 # neoscore.show(display_page_geometry=False)
 
-save_dest = "../machainst/assets/ui/images/empty_staves/test.png"
+save_dest = "../machainst/assets/ui/images/empty_staves/empty_treble.png"
 neoscore.render_image(rect=None,
                       dest=save_dest,
                       autocrop=False,

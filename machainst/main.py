@@ -24,7 +24,7 @@ class TextPrint(object):
         self.reset()
         self.x_pos = 10
         self.y_pos = 10
-        self.font = pg.font.Font(None, 20)
+        self.font = pg.font.Font(None, 60)
 
     def print(self, my_screen, text_string):
         """ Draw text onto the screen. """
@@ -36,7 +36,7 @@ class TextPrint(object):
         """ Reset text to the top of the screen. """
         self.x_pos = 10
         self.y_pos = 10
-        self.line_height = 15
+        self.line_height = 40
 
     def indent(self):
         """ Indent the next line of text """
@@ -358,6 +358,7 @@ class UI(Joystick, Game):
     def first_game_note(self):
         # put first game image on screen
         # get a new note from current list
+
         self._game_new_note = self.get_random_note()
         print(self._game_new_note)
         note_to_show = self.make_game_note_notation(self._game_new_note)
@@ -416,7 +417,7 @@ class UI(Joystick, Game):
         note = pg.transform.scale_by(note, 0.5)
         # Create a rect with the size of the image.
         rect = note.get_rect()
-        rect.center = ((WindowSize.WIDTH / 2) - 150, (WindowSize.HEIGHT / 2) - 100)
+        rect.center = ((WindowSize.WIDTH / 2) + 10, (WindowSize.HEIGHT / 2))
         self.screen.blit(note, rect)
 
     def show_game_note(self, path_to_new_image):
@@ -424,7 +425,7 @@ class UI(Joystick, Game):
         note = pg.transform.scale_by(note, 0.5)
         # Create a rect with the size of the image.
         rect = note.get_rect()
-        rect.center = ((WindowSize.WIDTH / 2) - 200, (WindowSize.HEIGHT / 2) + 200)
+        rect.center = ((WindowSize.WIDTH / 2) + 10, (WindowSize.HEIGHT / 2) + 50)
         self.screen.blit(note, rect)
 
 
