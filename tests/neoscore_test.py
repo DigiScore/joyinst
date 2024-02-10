@@ -66,13 +66,14 @@ class Solfa(Enum):
 
 pos_offset_x = 10
 
-note = "gb'"
+note = "g#'"
 arrow_help = True
 name_help = True
 
 compass = 'NW'
 
 neoscore.setup()
+neoscore.set_background_brush(Brush("#FF001200"))
 
 # make a new note and save
 empty_staff = Staff(ORIGIN, None, Mm(300), line_spacing=Mm(5))
@@ -103,13 +104,13 @@ if name_help:
                      scale=3
                      )
 
-neoscore.show(display_page_geometry=False)
+# neoscore.show(display_page_geometry=False)
 
-# save_dest = "../machainst/assets/ui/images/empty_staves/empty_treble.png"
-# neoscore.render_image(rect=None,
-#                       dest=save_dest,
-#                       autocrop=True,
-#                       preserve_alpha=True,
-#                       wait=True
-#                       )
-# print(f"Saving new image to {save_dest}")
+save_dest = "../machainst/assets/ui/images/empty_staves/test.png"
+neoscore.render_image(rect=None,
+                      dest=save_dest,
+                      autocrop=False,
+                      preserve_alpha=True,
+                      wait=True
+                      )
+print(f"Saving new image to {save_dest}")

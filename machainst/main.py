@@ -119,10 +119,7 @@ class Solfa(Enum):
 class UI(Joystick, Game):
     """Main class for running UI. Inherits the joystick and instrument objects"""
 
-    def __init__(self,
-                 playing_game: bool = True,
-                 smoothing: int = 300
-                 ):
+    def __init__(self):
         super().__init__()
         pg.init()
 
@@ -137,7 +134,7 @@ class UI(Joystick, Game):
         self.ibm_plex_condensed_font = pygame.font.Font("assets/ui/fonts/IBMPlexSansCondensed-Medium.ttf", 22)
 
         # set game params
-        self.playing_game = playing_game
+        self.playing_game = False
         self.game_note_path = 0
 
         self.screen = pg.display.set_mode(size)
@@ -176,10 +173,10 @@ class UI(Joystick, Game):
         )
 
         self.play_mode = Dropdown(
-            self.screen, 900, 76, 185, 50, name='     PLAY/ GAME',
+            self.screen, 700, 76, 385, 50, name='     PLAY MODE',
             choices=[
-                "     PLAY",
-                '     GAME',
+                "     OPEN PLAY",
+                '     LEARN GAME',
 
             ],
             colour=Colors.DROPDOWN.value,
@@ -197,7 +194,7 @@ class UI(Joystick, Game):
 
         # event vars
         self.last_guess = pg.time.get_ticks()
-        self.smoothing = smoothing
+        self.smoothing = 300
 
     def mainloop(self):
         # Get ready to print
@@ -432,7 +429,5 @@ class UI(Joystick, Game):
 
 
 if __name__ == "__main__":
-    ui = UI(playing_game=False,
-            smoothing=500
-            )
+    ui = UI()
     ui.mainloop()

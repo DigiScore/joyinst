@@ -74,6 +74,7 @@ class Notation:
     def __init__(self):
         # init neoscore
         neoscore.setup()
+        neoscore.set_background_brush(Brush(Color("#00000000")))
 
         # note to print
         self.note_to_show = None
@@ -233,8 +234,9 @@ class Notation:
 
 if __name__ == "__main__":
     test = Notation()
+
     compass_list = ["S", "SW", "SE", "W", "E", "NW", "NE", "N"]
-    octave_range = [2, 3, 4, 5, 6]
+    octave_range = [4]  # [2, 3, 4, 5, 6]
     accidental_list = [0, 1, -1]
     helplist = [[True, True], [False, True], [False, False]]
     for octa in octave_range:
