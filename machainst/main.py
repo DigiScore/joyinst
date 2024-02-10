@@ -137,6 +137,10 @@ class UI(Joystick, Game):
         self.playing_game = False
         self.game_note_path = 0
 
+        # set sfx params
+        self.correct_sound = pg.mixer.Sound("assets/sx/game_sound_correct.wav")
+        self.wrong_sound = pg.mixer.Sound("assets/sx/game_sound_wrong.wav")
+
         self.screen = pg.display.set_mode(size)
 
         pg.display.set_caption("machAInst")
@@ -396,6 +400,7 @@ class UI(Joystick, Game):
 
         # if correct guess
         if result:
+            pg.mixer.Sound.play(self.correct_sound)
             print("Picking new note")
             sleep(0.2)
             # get a new note from current list
@@ -404,8 +409,8 @@ class UI(Joystick, Game):
             self.game_note_path = self.path_to_generated_images + note_to_show
 
         # false guess
-
         else:
+            pg.mixer.Sound.play(self.wrong_sound)
             print("RETRY")
             sleep(0.2)
             # show same note with adjusted helps?
