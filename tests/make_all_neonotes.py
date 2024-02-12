@@ -78,6 +78,7 @@ class Notation:
         neoscore.setup()
         neoscore.set_background_brush(Brush(Color("#00000000")))
 
+
         # note to print
         self.note_to_show = None
 
@@ -138,10 +139,10 @@ class Notation:
                 note_filename += "_name"
             note_filename += ".png"
 
-            empty_staff = Staff(ORIGIN, None, Mm(100), line_spacing=Mm(5), pen=Pen(self.color))
-            clef = Clef(ZERO, empty_staff, 'treble', brush=Brush(self.color), pen=Pen(self.color))
+            empty_staff = Staff((Mm(10), Mm(100)), None, Mm(400), line_spacing=Mm(5), pen=Pen(self.color))
+            clef = Clef(Mm(150), empty_staff, 'treble', brush=Brush(self.color), pen=Pen(self.color))
 
-            n = Chordrest(Mm(50),
+            n = Chordrest(Mm(200),
                            empty_staff,
                            [note],
                            Duration(1, 2))
@@ -155,17 +156,22 @@ class Notation:
                 arrow_direction = Arrow[compass].value
                 arrow_colour = Colour[compass].value
                 colour_brush = Brush(color=arrow_colour)
+                if compass == "E":
+                    pen = Pen(color=self.color, thickness=Mm(0.5))
+                else:
+                    pen = Pen(color=arrow_colour)
                 help_arrow = MusicText((Mm(85), Mm(-35)), clef, arrow_direction,
-                                     alignment_x=AlignmentX.CENTER, alignment_y=AlignmentY.CENTER,
-                                     brush=colour_brush,
+                                       alignment_x=AlignmentX.CENTER, alignment_y=AlignmentY.CENTER,
+                                       brush=colour_brush,
+                                       pen=pen,
                                        scale=2
-                                     )
+                                       )
                 list_of_objects.append(help_arrow)
 
             if name_help:
                 upper_note = note[0].upper() + note[1:]
-                help_text = Text((Mm(10), Mm(-20)), clef, upper_note,
-                brush = Brush(self.color), pen = Pen(self.color),
+                help_text = Text((Mm(10), Mm(-25)), clef, upper_note,
+                brush = Brush(self.color), pen=Pen(self.color),
                      # alignment_x=AlignmentX.CENTER,
                      # alignment_y=AlignmentY.CENTER,
                                  scale=3
@@ -174,7 +180,7 @@ class Notation:
 
             # render new image
             save_dest = self.save_path + note_filename
-            neoscore.render_image(rect=None,
+            neoscore.render_image(rect=(ZERO, ZERO, Mm(420), Mm(200)),
                                   dest=save_dest,
                                   autocrop=False,
                                   preserve_alpha=True,

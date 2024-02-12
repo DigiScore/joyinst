@@ -28,23 +28,24 @@ class Colour(Enum):
     Arrow notes COLOURS
     https://digitlearning.co.uk/what-are-arrownotes/
 
+   c = red N or S
+    b = green NE
+    a = yellow NW
+    g = black E
+    f = Blue W
+    e = grey SE
+    d = brown SW
     c = red N or S
-    d = orange NW
-    e = yellow NE
-    f = light green W
-    g = dark green E
-    a = purple SW
-    b = pink SE
-    c = red N or S
+
     """
-    N = '#FF0000'
-    NW = '#ffa500'
-    NE = '#FFFF00'
-    W = '#00FF00'
-    E = '#006400'
-    SW = '#800080'
-    SE = '#FF00FF'
-    S = '#FF0000'
+    N = '#ff0000'
+    NE = '#33cc33'
+    NW = '#ffff66'
+    W = '#0099ff'
+    E = '#000000'
+    SE = '#d9d9d9'
+    SW = '#996633'
+    S = '#ff0000'
 
 class Solfa(Enum):
     """
@@ -86,50 +87,56 @@ def change_all_chordrest_colors(cr: Chordrest):
 
 pos_offset_x = 10
 
-note = "g#'"
+note = "gn'"
 arrow_help = True
 name_help = True
 
-compass = 'NW'
+compass = 'W'
 
 neoscore.setup()
-neoscore.set_background_brush(Brush("#00000000"))
+neoscore.set_background_brush(Brush("#0000"))
 color = "#FFF"  # make everthing white
 
 # make a new note and save
-empty_staff = Staff(ORIGIN, None, Mm(100), line_spacing=Mm(5), pen = Pen(color))
-clef = Clef(ZERO, empty_staff, 'treble', pen=Pen(color), brush=Brush(color))
-
-n = Chordrest(Mm(50),
-              empty_staff,
-              [note],
-              Duration(1, 2))
-
-change_all_chordrest_colors(n)
-
-
-if arrow_help:
-    arrow_direction = Arrow[compass].value
-    arrow_colour = Colour[compass].value
-    colour_brush = Brush(color=arrow_colour)
-    help_arrow = MusicText((Mm(85), Mm(-35)), clef, arrow_direction,
-                           alignment_x=AlignmentX.CENTER, alignment_y=AlignmentY.CENTER,
-                           brush=colour_brush, scale=2
-                           )
-
-if name_help:
-    upper_note = note[0].upper() + note[1:]
-    help_text = Text((Mm(10), Mm(-20)), clef, upper_note,
-                     brush=Brush(color), pen=Pen(color),
-                     # alignment_x=AlignmentX.CENTER,
-                     # alignment_y=AlignmentY.CENTER,
-                     scale=3
-                     )
+empty_staff = Staff((Mm(10), Mm(100)), None, Mm(400), line_spacing=Mm(5), pen=Pen(color))
+clef = Clef(Mm(150), empty_staff, 'treble', pen=Pen(color), brush=Brush(color))
+#
+# n = Chordrest(Mm(200),
+#               empty_staff,
+#               [note],
+#               Duration(1, 2))
+#
+# change_all_chordrest_colors(n)
+#
+#
+# if arrow_help:
+#     arrow_direction = Arrow[compass].value
+#     arrow_colour = Colour[compass].value
+#     colour_brush = Brush(color=arrow_colour)
+#     if compass == "E":
+#         pen = Pen(color=color, thickness=Mm(0.5))
+#     else:
+#         pen = Pen(color=arrow_colour)
+#     help_arrow = MusicText((Mm(85), Mm(-35)), clef, arrow_direction,
+#                            alignment_x=AlignmentX.CENTER, alignment_y=AlignmentY.CENTER,
+#                            brush=colour_brush,
+#                            pen=pen,
+#                            scale=2
+#                            )
+#
+# if name_help:
+#     upper_note = note[0].upper() + note[1:]
+#     help_text = Text((Mm(10), Mm(-25)), clef, upper_note,
+#                      brush=Brush(color), pen=Pen(color),
+#                      # alignment_x=AlignmentX.CENTER,
+#                      # alignment_y=AlignmentY.CENTER,
+#                      scale=3
+#                      )
 
 # neoscore.show(display_page_geometry=False)
 
 save_dest = "../machainst/assets/ui/images/empty_staves/empty_treble.png"
-neoscore.render_image(rect=None,
+neoscore.render_image(rect=(ZERO, ZERO, Mm(420), Mm(200)),
                       dest=save_dest,
                       autocrop=False,
                       preserve_alpha=True,
