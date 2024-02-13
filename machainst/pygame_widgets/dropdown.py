@@ -168,8 +168,8 @@ class DropdownChoice(WidgetBase):
         self.__direction = kwargs.get('direction', 'down')
         self.__last = last
 
-        self.ui_arrow_down = pg.image.load("assets/ui/images/dropdown_arrow_down.svg")
-        self.ui_arrow_up = pg.image.load("assets/ui/images/dropdown_arrow_up.svg")
+        self.ui_arrow_down = pg.image.load("assets/ui/images/dropdown/dropdown_arrow_down.svg")
+        self.ui_arrow_up = pg.image.load("assets/ui/images/dropdown/dropdown_arrow_up.svg")
 
     def draw(self, idx: int = -1, num_choices: int = 0, dropped: bool = False) -> None:
         if not self._hidden:

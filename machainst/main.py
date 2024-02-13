@@ -128,8 +128,8 @@ class UI(Joystick, Game):
         size = [WindowSize.WIDTH, WindowSize.HEIGHT]
 
         # ui images
-        self.ui_background_dots = pg.image.load("assets/ui/images/bg_dots.svg")
-        self.ui_background_character = pg.image.load("assets/ui/images/bg_character.png")
+        self.ui_background_dots = pg.image.load("assets/ui/images/mascot/bg_dots.svg")
+        self.ui_background_character = pg.image.load("assets/ui/images/mascot/bg_character.png")
 
         # font
         self.ibm_plex_condensed_font = pygame.font.Font("assets/ui/fonts/IBMPlexSansCondensed-Medium.ttf", 22)
