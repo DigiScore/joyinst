@@ -129,7 +129,9 @@ class UI(Joystick, Game):
 
         # ui images
         self.ui_background_dots = pg.image.load("assets/ui/images/mascot/bg_dots.svg")
-        self.ui_background_character = pg.image.load("assets/ui/images/mascot/bg_character.png")
+        self.ui_background_mouth_character = pg.image.load("assets/ui/images/mascot/character_mouth.png")
+        self.ui_background_character = pg.image.load("assets/ui/images/mascot/character_body.png")
+        self.ui_background_hands_character = pg.image.load("assets/ui/images/mascot/character_hands.svg")
 
         # font
         self.ibm_plex_condensed_font = pygame.font.Font("assets/ui/fonts/IBMPlexSansCondensed-Medium.ttf", 22)
@@ -263,7 +265,9 @@ class UI(Joystick, Game):
 
                 # draw the backgrounds.
                 self.screen.blit(self.ui_background_dots, (0, 0))
+                self.screen.blit(self.ui_background_mouth_character, (487, 456))
                 self.screen.blit(self.ui_background_character, (0, 164))
+                self.screen.blit(self.ui_background_hands_character, (0, 688))
 
                 # text_print.print(self.screen, "Compass")
                 # text_print.print(self.screen, "arrow_direction")
@@ -292,6 +296,8 @@ class UI(Joystick, Game):
 
                     # print to screen
                     self.screen.fill(Colors.BACKGROUND.value)
+                    self.screen.blit(self.ui_background_dots, (0, 0))
+                    self.screen.blit(self.ui_background_mouth_character, (487, 456))
                     text_print.reset()
 
                     # text_print.print(self.screen, "Compass    {}".format(compass))
@@ -339,6 +345,8 @@ class UI(Joystick, Game):
                     path_to_new_image = 'assets/ui/images/empty_staves/empty_treble.png'
                     self.show_note(path_to_new_image)
 
+                self.screen.blit(self.ui_background_character, (0, 164))
+
                 #############
                 # GAME IMAGE
                 #############
@@ -354,10 +362,9 @@ class UI(Joystick, Game):
                     self.game_note_path = 'assets/ui/images/empty_staves/empty_treble.png'
 
                 self.show_game_note(self.game_note_path)
+                self.screen.blit(self.ui_background_hands_character, (0, 688))
 
                 # Go ahead and update the screen with what we've drawn.
-                # self.screen.blit(self.ui_background_dots, (0, 0))
-                # self.screen.blit(self.ui_background_character, (0, 164))
                 pygame_widgets.update(events)
                 pg.display.flip()
                 # Limit to 60 frames per second
