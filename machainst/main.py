@@ -132,6 +132,10 @@ class UI(Joystick, Game):
         self.ui_background_mouth_character = pg.image.load("assets/ui/images/mascot/character_mouth.png")
         self.ui_background_character = pg.image.load("assets/ui/images/mascot/character_body.png")
         self.ui_background_hands_character = pg.image.load("assets/ui/images/mascot/character_hands.svg")
+        self.ui_background_life_counter = [pg.image.load("assets/ui/images/life_counter/0_lives_left.svg"),
+                                           pg.image.load("assets/ui/images/life_counter/1_live_left.svg"),
+                                           pg.image.load("assets/ui/images/life_counter/2_lives_left.svg"),
+                                           pg.image.load("assets/ui/images/life_counter/3_lives_left.svg")]
 
         # font
         self.ibm_plex_condensed_font = pygame.font.Font("assets/ui/fonts/IBMPlexSansCondensed-Medium.ttf", 22)
@@ -265,6 +269,7 @@ class UI(Joystick, Game):
 
                 # draw the backgrounds.
                 self.screen.blit(self.ui_background_dots, (0, 0))
+                self.screen.blit(self.ui_background_life_counter[self.lives], (1645, 75))
                 self.screen.blit(self.ui_background_mouth_character, (487, 456))
                 self.screen.blit(self.ui_background_character, (0, 164))
                 self.screen.blit(self.ui_background_hands_character, (0, 688))
@@ -278,7 +283,6 @@ class UI(Joystick, Game):
                 text_print.print(self.screen, "Sub-level    {}".format(self.sub_level))
                 text_print.print(self.screen, "Goes at sub level    {}".format(self.sub_level_rounds))
                 text_print.print(self.screen, "Guesses    {}".format(self.tries))
-                text_print.print(self.screen, "Lives    {}".format(self.lives))
                 text_print.print(self.screen, "Feedback    {}".format(self.feedback))
 
                 #############
@@ -297,21 +301,9 @@ class UI(Joystick, Game):
                     # print to screen
                     self.screen.fill(Colors.BACKGROUND.value)
                     self.screen.blit(self.ui_background_dots, (0, 0))
+                    self.screen.blit(self.ui_background_life_counter[self.lives], (1645, 75))
                     self.screen.blit(self.ui_background_mouth_character, (487, 456))
-                    text_print.reset()
 
-                    # text_print.print(self.screen, "Compass    {}".format(compass))
-                    # text_print.print(self.screen, "arrow_direction    {}".format(arrow_direction))
-                    # text_print.print(self.screen, "arrow_colour   {}".format(arrow_colour))
-                    # text_print.print(self.screen, "note   {}".format(self.neopitch))
-                    # text_print.print(self.screen, "solfa  {}".format(solfa))
-                    text_print.print(self.screen, "Level    {}".format(self.level))
-                    text_print.print(self.screen, "Sub-level    {}".format(self.sub_level))
-                    text_print.print(self.screen, "Goes at sub level    {}".format(self.sub_level_rounds))
-                    text_print.print(self.screen, "Guesses    {}".format(self.tries))
-                    text_print.print(self.screen, "Lives    {}".format(self.lives))
-                    # add feedback from game
-                    text_print.print(self.screen, "Feedback    {}".format(self.feedback))
 
                     # freeze guess on screen if game_lock
                     # if not self.game_lock:
@@ -346,6 +338,20 @@ class UI(Joystick, Game):
                     self.show_note(path_to_new_image)
 
                 self.screen.blit(self.ui_background_character, (0, 164))
+
+                text_print.reset()
+
+                # text_print.print(self.screen, "Compass    {}".format(compass))
+                # text_print.print(self.screen, "arrow_direction    {}".format(arrow_direction))
+                # text_print.print(self.screen, "arrow_colour   {}".format(arrow_colour))
+                # text_print.print(self.screen, "note   {}".format(self.neopitch))
+                # text_print.print(self.screen, "solfa  {}".format(solfa))
+                text_print.print(self.screen, "Level    {}".format(self.level))
+                text_print.print(self.screen, "Sub-level    {}".format(self.sub_level))
+                text_print.print(self.screen, "Goes at sub level    {}".format(self.sub_level_rounds))
+                text_print.print(self.screen, "Guesses    {}".format(self.tries))
+                # add feedback from game
+                text_print.print(self.screen, "Feedback    {}".format(self.feedback))
 
                 #############
                 # GAME IMAGE
@@ -396,11 +402,6 @@ class UI(Joystick, Game):
         # update game status depending on result
         self.update_game_states(result)
         print("\t\tchecking game stats")
-        # print("\t\tlevel = ", self.level)
-        # print("\t\tsub-level = ", self.sub_level)
-        # print("\t\tgoes at sub level = ", self.sub_level_rounds)
-        # print("\t\tguesses = ", self.tries)
-        # print("\t\tlives = ", self.lives)
         sleep(0.2)
 
         # update visual helpers on the note
