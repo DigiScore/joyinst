@@ -111,8 +111,9 @@ class Notation:
 
     def make_notation(self, notes: list,
                       compass: str,
+                      clef_type: str,
                       arrow_help: bool = True,
-                      name_help: bool = True
+                      name_help: bool = True,
                       ) -> str:
         """
         Makes a new neoscore note on stave with option help indications of arrow and name
@@ -140,7 +141,8 @@ class Notation:
             note_filename += ".png"
 
             empty_staff = Staff((Mm(10), Mm(100)), None, Mm(400), line_spacing=Mm(5), pen=Pen(self.color))
-            clef = Clef(Mm(150), empty_staff, 'treble', brush=Brush(self.color), pen=Pen(self.color))
+            clef = Clef(Mm(150), empty_staff, clef_type, brush=Brush(self.color), pen=Pen(self.color))
+            list_of_objects.append(clef)
 
             n = Chordrest(Mm(200),
                            empty_staff,
@@ -160,7 +162,7 @@ class Notation:
                     pen = Pen(color=self.color, thickness=Mm(0.5))
                 else:
                     pen = Pen(color=arrow_colour)
-                help_arrow = MusicText((Mm(85), Mm(-35)), clef, arrow_direction,
+                help_arrow = MusicText((Mm(235), Mm(-20)), empty_staff, arrow_direction,
                                        alignment_x=AlignmentX.CENTER, alignment_y=AlignmentY.CENTER,
                                        brush=colour_brush,
                                        pen=pen,
@@ -170,7 +172,7 @@ class Notation:
 
             if name_help:
                 upper_note = note[0].upper() + note[1:]
-                help_text = Text((Mm(10), Mm(-25)), clef, upper_note,
+                help_text = Text((Mm(165), Mm(-10)), empty_staff, upper_note,
                 brush = Brush(self.color), pen=Pen(self.color),
                      # alignment_x=AlignmentX.CENTER,
                      # alignment_y=AlignmentY.CENTER,
@@ -242,24 +244,36 @@ class Notation:
         # add higher octave indicators "'"
         if octave > 4:
             ticks = octave - 4
-            for tick in range(ticks):
+            # for tick in range(ticks):
+            #     self.neopitch += "'"
+            if ticks == 1:
                 self.neopitch += "'"
+                clef_type = 'treble'
+            elif ticks == 2:
+                self.neopitch += "''"
+                clef_type = 'treble_8va'
 
         # add lower octave indicators ","
         elif octave < 4:
             if octave == 3:
                 self.neopitch += ","
+                clef_type = 'bass'
             elif octave == 2:
                 self.neopitch += ",,"
+                clef_type = 'bass_8vb'
             elif octave == 1:
                 self.neopitch += ",,,"
             elif octave == 0:
                 self.neopitch += ",,,,"
 
+        elif octave == 4:
+            clef_type = 'treble'
+
         # make into neoscore png for display
-        print(self.neopitch, compass, arrow_help, name_help)
+        # print(self.neopitch, compass, arrow_help, name_help)
         self.make_notation([self.neopitch],
-                           compass,
+                           compass=compass,
+                           clef_type=clef_type,
                            arrow_help=arrow_help,
                            name_help=name_help
                            )
@@ -275,6 +289,7 @@ if __name__ == "__main__":
         for acc in accidental_list:
             for comp in compass_list:
                 for help in helplist:
+                    print(comp, octa, acc, help[0], help[1])
                     test.make_neonote(octa,
                                  acc,
                                  comp,
