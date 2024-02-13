@@ -430,6 +430,7 @@ class UI(Joystick, Game):
         self.game_lock = False
 
     def show_note(self, path_to_new_image):
+        # top stave
         note = pg.image.load(path_to_new_image).convert_alpha()
         note = pg.transform.scale_by(note, 0.5)
         # Create a rect with the size of the image.
@@ -438,11 +439,12 @@ class UI(Joystick, Game):
         self.screen.blit(note, rect)
 
     def show_game_note(self, path_to_new_image):
+        # bottom stave
         note = pg.image.load(path_to_new_image).convert_alpha()
         note = pg.transform.scale_by(note, 0.5)
         # Create a rect with the size of the image.
         rect = note.get_rect()
-        rect.center = ((WindowSize.WIDTH / 2) + 10, (WindowSize.HEIGHT / 2) + 200)
+        rect.center = ((WindowSize.WIDTH / 2) + 10, (WindowSize.HEIGHT / 2) + 330)
         self.screen.blit(note, rect)
 
 
