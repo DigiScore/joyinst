@@ -359,7 +359,7 @@ class UI(Joystick, Game):
                     self.game_note_path = 'assets/ui/images/empty_staves/empty_treble.png'
 
                 self.show_game_note(self.game_note_path)
-                self.screen.blit(self.ui_background_hands_character, (0, 688))
+                self.screen.blit(self.ui_background_hands_character, (0, 475))
 
                 # Go ahead and update the screen with what we've drawn.
                 pygame_widgets.update(events)
