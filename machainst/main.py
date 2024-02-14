@@ -271,8 +271,6 @@ class UI(Joystick, Game):
                 self.screen.blit(self.ui_background_dots, (0, 0))
                 self.screen.blit(self.ui_background_life_counter[self.lives], (1645, 75))
                 self.screen.blit(self.ui_background_mouth_character, (487, 456))
-                self.screen.blit(self.ui_background_character, (0, 164))
-                self.screen.blit(self.ui_background_hands_character, (0, 688))
 
                 # text_print.print(self.screen, "Compass")
                 # text_print.print(self.screen, "arrow_direction")
