@@ -25,7 +25,7 @@ class TextPrint(object):
         self.x_pos = 10
         self.y_pos = 10
         # self.font = pg.font.Font(None, 60)
-        self.font = pg.font.Font("assets/ui/fonts/IBMPlexSansCondensed-Medium.ttf", 55)
+        self.font = pg.font.Font("assets/ui/fonts/IBMPlexSansCondensed-Medium.ttf", 36)
 
     def print(self, my_screen, text_string):
         """ Draw text onto the screen. """
