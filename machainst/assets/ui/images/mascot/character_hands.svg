@@ -1,4 +1,48 @@
-<svg width="1922" height="376" viewBox="0 0 1922 376" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M259.205 127.174L0 0V322L146.039 362.967C164.392 368.115 180.376 349.443 172.46 332.104C166.554 319.165 174.048 304.069 187.925 300.953L223.009 293.073C238.428 289.61 245.842 271.987 237.536 258.543L217.222 225.664C210.894 215.421 213.536 202.031 223.28 194.96L262.583 166.437C276.61 156.257 274.765 134.808 259.205 127.174Z" fill="#41A2C7"/>
-<path d="M1633.89 126.873L1922 0V322L1754.48 364.177C1736.15 368.792 1720.91 349.688 1729.48 332.84C1736.09 319.855 1728.49 304.15 1714.2 301.271L1672.61 292.886C1656.43 289.625 1648.85 270.892 1658.21 257.298L1679.11 226.935C1686.44 216.283 1683.55 201.681 1672.72 194.622L1630.61 167.194C1615.3 157.221 1617.17 134.237 1633.89 126.873Z" fill="#41A2C7"/>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="1280"
+   height="252"
+   viewBox="0 0 1280 252"
+   fill="none"
+   version="1.1"
+   id="svg2"
+   sodipodi:docname="character_hands.svg"
+   inkscape:version="1.3.2 (091e20ef0f, 2023-11-25, custom)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs2" />
+  <sodipodi:namedview
+     id="namedview2"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     showgrid="false"
+     inkscape:zoom="1.4235172"
+     inkscape:cx="528.97149"
+     inkscape:cy="144.71199"
+     inkscape:window-width="3440"
+     inkscape:window-height="1371"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg2" />
+  <g
+     id="g2"
+     transform="matrix(0.66614086,0,0,0.65304109,-0.16136646,0)">
+    <path
+       d="M 259.205,127.174 0,0 v 322 l 146.039,40.967 c 18.353,5.148 34.337,-13.524 26.421,-30.863 -5.906,-12.939 1.588,-28.035 15.465,-31.151 l 35.084,-7.88 c 15.419,-3.463 22.833,-21.086 14.527,-34.53 l -20.314,-32.879 c -6.328,-10.243 -3.686,-23.633 6.058,-30.704 l 39.303,-28.523 c 14.027,-10.18 12.182,-31.629 -3.378,-39.263 z"
+       fill="#41a2c7"
+       id="path1" />
+    <path
+       d="M 1633.89,126.873 1922,0 v 322 l -167.52,42.177 c -18.33,4.615 -33.57,-14.489 -25,-31.337 6.61,-12.985 -0.99,-28.69 -15.28,-31.569 l -41.59,-8.385 c -16.18,-3.261 -23.76,-21.994 -14.4,-35.588 l 20.9,-30.363 c 7.33,-10.652 4.44,-25.254 -6.39,-32.313 l -42.11,-27.428 c -15.31,-9.973 -13.44,-32.957 3.28,-40.321 z"
+       fill="#41a2c7"
+       id="path2" />
+  </g>
 </svg>
