@@ -13,5 +13,5 @@ class Colors(Enum):
 
 
 class WindowSize(IntEnum):
-    WIDTH = 1920
-    HEIGHT = 1080
+    WIDTH = 1280
+    HEIGHT = 720
