@@ -296,13 +296,6 @@ class UI(Joystick, Game):
                     # make solfa
                     solfa = Solfa[compass].value
 
-                    # print to screen
-                    self.screen.fill(Colors.BACKGROUND.value)
-                    self.screen.blit(self.ui_background_dots, (0, 0))
-                    self.screen.blit(self.ui_background_life_counter[self.lives], (1645, 75))
-                    self.screen.blit(self.ui_background_mouth_character, (487, 456))
-
-
                     # freeze guess on screen if game_lock
                     # if not self.game_lock:
                     note_to_show = self.note_to_show
