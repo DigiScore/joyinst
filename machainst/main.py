@@ -160,9 +160,24 @@ class UI(Joystick, Game):
         # Initialize the joysticks
         pg.joystick.init()
 
-        # make dropdown menu for instrument choice
+        self.play_mode = Dropdown(
+            self.screen, 400, 50, 385, 50, name='     PLAY MODE',
+            choices=[
+                "     OPEN PLAY",
+                '     LEARN GAME',
+
+            ],
+            colour=Colors.DROPDOWN.value,
+            hoverColour=Colors.DROPDOWN_HOVER.value,
+            pressedColour=Colors.DROPDOWN_HOVER.value,
+            values=[False, True],
+            direction='down',
+            textHAlign='left',
+            font=self.ibm_plex_condensed_font
+        )
+
         self.dropdown = Dropdown(
-            self.screen, 1126, 76, 385, 50, name='     SELECT INSTRUMENT',
+            self.screen, 820, 50, 385, 50, name='     SELECT INSTRUMENT',
             choices=[
                 "     VOCALS/FX's",
                 '     HMMM',
@@ -180,22 +195,6 @@ class UI(Joystick, Game):
             hoverColour=Colors.DROPDOWN_HOVER.value,
             pressedColour=Colors.DROPDOWN_HOVER.value,
             values=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
-            direction='down',
-            textHAlign='left',
-            font=self.ibm_plex_condensed_font
-        )
-
-        self.play_mode = Dropdown(
-            self.screen, 700, 76, 385, 50, name='     PLAY MODE',
-            choices=[
-                "     OPEN PLAY",
-                '     LEARN GAME',
-
-            ],
-            colour=Colors.DROPDOWN.value,
-            hoverColour=Colors.DROPDOWN_HOVER.value,
-            pressedColour=Colors.DROPDOWN_HOVER.value,
-            values=[False, True],
             direction='down',
             textHAlign='left',
             font=self.ibm_plex_condensed_font
@@ -272,11 +271,6 @@ class UI(Joystick, Game):
                 self.screen.blit(self.ui_background_life_counter[self.lives], (1645, 75))
                 self.screen.blit(self.ui_background_mouth_character, (326, 359))
 
-                # text_print.print(self.screen, "Compass")
-                # text_print.print(self.screen, "arrow_direction")
-                # text_print.print(self.screen, "arrow_colour")
-                # text_print.print(self.screen, "note")
-                # text_print.print(self.screen, "solfa")
                 text_print.print(self.screen, "Level    {}".format(self.level))
                 text_print.print(self.screen, "Sub-level    {}".format(self.sub_level))
                 text_print.print(self.screen, "Goes at sub level    {}".format(self.sub_level_rounds))
