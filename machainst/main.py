@@ -37,7 +37,7 @@ class TextPrint(object):
         """ Reset text to the top of the screen. """
         self.x_pos = 10
         self.y_pos = 10
-        self.line_height = 60
+        self.line_height = 40
 
     def indent(self):
         """ Indent the next line of text """
