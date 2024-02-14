@@ -426,7 +426,7 @@ class UI(Joystick, Game):
         note = pg.image.load(path_to_new_image).convert_alpha()
         # Create a rect with the size of the image.
         rect = note.get_rect()
-        rect.center = ((WindowSize.WIDTH / 2) + 10, (WindowSize.HEIGHT / 2)+20)
+        rect.center = ((WindowSize.WIDTH / 2) + 10, 430)
         self.screen.blit(note, rect)
 
     def show_game_note(self, path_to_new_image):
