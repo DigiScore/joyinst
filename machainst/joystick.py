@@ -206,17 +206,17 @@ class Joystick:
             self.Y_button = True
 
         # todo - Calculate dynamic joystick for dynamics
-        dyn_axis_value = axis_dict["1"]
-        if dyn_axis_value > 0.1:
-            round(dyn_axis_value, 2)
-            # NewValue = (((OldValue - OldMin) * (NewMax - NewMin)) / (OldMax - OldMin)) + NewMin
-            self.dynamic = int((((dyn_axis_value - -1) * (20 - 120)) / (1 - -1)) + 120)
-
-        texture_axis_value = axis_dict["0"]
-        if texture_axis_value > 0.1:
-            round(texture_axis_value, 2)
-            # NewValue = (((OldValue - OldMin) * (NewMax - NewMin)) / (OldMax - OldMin)) + NewMin
-            self.dynamic = int((((texture_axis_value - -1) * (20 - 120)) / (1 - -1)) + 120)
+        # dyn_axis_value = axis_dict["1"]
+        # if dyn_axis_value > 0.1:
+        #     round(dyn_axis_value, 2)
+        #     # NewValue = (((OldValue - OldMin) * (NewMax - NewMin)) / (OldMax - OldMin)) + NewMin
+        #     self.dynamic = int((((dyn_axis_value - -1) * (20 - 120)) / (1 - -1)) + 120)
+        #
+        # texture_axis_value = axis_dict["0"]
+        # if texture_axis_value > 0.1:
+        #     round(texture_axis_value, 2)
+        #     # NewValue = (((OldValue - OldMin) * (NewMax - NewMin)) / (OldMax - OldMin)) + NewMin
+        #     self.dynamic = int((((texture_axis_value - -1) * (20 - 120)) / (1 - -1)) + 120)
 
         # check release of rb and rt
         if rb < self.rb_val:
