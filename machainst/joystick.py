@@ -234,13 +234,18 @@ class Joystick:
             self.rt_release = False
 
         # Calculate octave shift
-        if self.rb_release and self.rt_release:
-            self.octave = 4
-        elif self.rb_release:  # RB
+        # if self.rb_release and self.rt_release:
+        #     self.octave = 4
+        if self.rb_release:  # RB
             self.octave += 1
         elif self.rt_release:  # RT
             self.octave += -1
 
+        # reset octave to 4
+        if button_dict["6"] == 1.0:
+            self.octave = 4
+
+        # check octave range
         if self.octave <= 3:
             self.octave = 3
         elif self.octave > 5:

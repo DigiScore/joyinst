@@ -28,8 +28,8 @@ class Game:
                      "level_7": ["a", "b", "c'"],
                      "level_8": ["d", "e", "a", "b"],
                      "level_9": ["c", "d", "e", "f", "g", "a", "b", "c'"],
-                     "level_10": ["d", "f#", "a"],
-                     "level_11": ["d", "a", "d'", "f#'"]
+                     "level_10": ["g", "b", "d"],
+                     "level_11": ["d", "e", "f#", "g"]
                      }
 
     learning_seq = [
