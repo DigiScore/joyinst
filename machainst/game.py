@@ -25,10 +25,16 @@ class Game:
                      "level_4": ["c", "g", "c'", "c", "f", "c'"],
                      "level_5": ["c", "d", "e"],
                      "level_6": ["c", "d", "e", "f", "g"],
+                     "level_7": ["a", "b", "c'"],
+                     "level_8": ["d", "e", "a", "b"],
+                     "level_9": ["c", "d", "e", "f", "g", "a", "b", "c'"],
+                     "level_10": ["d", "f#", "a"],
+                     "level_11": ["d", "a", "d'", "f#'"]
                      }
 
     learning_seq = [
-        "level_1", "level_2", "level_3", "level_4", "level_5" , "level_6"
+        "level_1", "level_2", "level_3", "level_4", "level_5" , "level_6", "level_7", "level_8", "level_9",
+        "level_10", "level_11"
     ]
 
     correct_words = ["Way to go!",
@@ -36,16 +42,16 @@ class Game:
                      "Nice going",
                      "You rock",
                      "You rule",
-                     "good",
-                     "job",
-                     "kudos",
-                     "phenomenal",
-                     "bravo/brava",
-                     "shout-out",
-                     "nailed it",
-                     "stellar",
-                     "on fire",
-                     "impressive"
+                     "Good",
+                     "Job",
+                     "Kudos",
+                     "Phenomenal",
+                     "Bravo/brava",
+                     "Shout-out",
+                     "Nailed it",
+                     "Stellar",
+                     "On fire!",
+                     "Impressive"
                      ]
 
     wrong_words = ["Try Again",
@@ -53,7 +59,7 @@ class Game:
                    "You can do it",
                    "Nealry",
                    "C'mon, one more",
-                   "close",
+                   "Close",
                    "We believe in you"
                    ]
 
