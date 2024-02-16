@@ -170,7 +170,7 @@ class UI(Joystick, Game):
             colour=Colors.DROPDOWN.value,
             hoverColour=Colors.DROPDOWN_HOVER.value,
             pressedColour=Colors.DROPDOWN_HOVER.value,
-            values=[False, True],
+            values=[1, 2],
             direction='down',
             textHAlign='left',
             font=self.ibm_plex_condensed_font
@@ -241,8 +241,10 @@ class UI(Joystick, Game):
 
             if self.play_mode.getSelected():
                 game_mode = self.play_mode.getSelected()
-                # print("GAME MODE == ", game_mode)
-                self.playing_game = game_mode
+                if game_mode == 1:
+                    self.playing_game = False
+                elif game_mode == 2:
+                    self.playing_game = True
 
             # DRAWING STEP
             # First, clear the screen. Don't put other drawing commands
