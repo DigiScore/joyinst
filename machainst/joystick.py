@@ -205,12 +205,20 @@ class Joystick:
         if button_dict["3"] == 1.0:
             self.Y_button = True
 
-        # todo - Calculate dynamic joystick for dynamics
-        # dyn_axis_value = axis_dict["1"]
-        # if dyn_axis_value > 0.1:
-        #     round(dyn_axis_value, 2)
-        #     # NewValue = (((OldValue - OldMin) * (NewMax - NewMin)) / (OldMax - OldMin)) + NewMin
-        #     self.dynamic = int((((dyn_axis_value - -1) * (20 - 120)) / (1 - -1)) + 120)
+        dyn_axis_value = round(axis_dict["1"], 2)
+        # round(dyn_axis_value, 2)
+        if dyn_axis_value == 0:
+            self.dynamic = 100
+
+        # value < 0 increase volume up to 127
+        elif dyn_axis_value < 0:
+            # NewValue = (((OldValue - OldMin) * (NewMax - NewMin)) / (OldMax - OldMin)) + NewMin
+            self.dynamic = int((((dyn_axis_value - 0) * (127 - 100)) / (-1 - 0)) + 100)
+        # value > 0 ->1 then scale between 0 and 100
+        elif dyn_axis_value > 0:
+            # NewValue = (((OldValue - OldMin) * (NewMax - NewMin)) / (OldMax - OldMin)) + NewMin
+            self.dynamic = int((((dyn_axis_value - 0) * (0 - 100)) / (1 - 0)) + 100)
+
         #
         # texture_axis_value = axis_dict["0"]
         # if texture_axis_value > 0.1:
