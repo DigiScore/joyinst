@@ -146,9 +146,9 @@ class UI(Joystick, Game):
 
         # set sfx params
         self.correct_sound = pg.mixer.Sound("assets/sx/game_sound_correct.wav")
-        self.correct_sound.set_volume(0.6)
+        self.correct_sound.set_volume(0.05)
         self.wrong_sound = pg.mixer.Sound("assets/sx/game_sound_wrong.wav")
-        self.wrong_sound.set_volume(0.3)
+        self.wrong_sound.set_volume(0.05)
 
         self.screen = pg.display.set_mode(size)
 
@@ -241,6 +241,7 @@ class UI(Joystick, Game):
 
             if self.play_mode.getSelected():
                 game_mode = self.play_mode.getSelected()
+                # print("GAME MODE == ", game_mode)
                 self.playing_game = game_mode
 
             # DRAWING STEP
@@ -396,7 +397,7 @@ class UI(Joystick, Game):
 
         # if correct guess
         if result:
-            pg.mixer.Sound.play(self.correct_sound)
+            self.correct_sound.play()
             print("Picking new note")
             sleep(0.2)
             # get a new note from current list
@@ -406,7 +407,7 @@ class UI(Joystick, Game):
 
         # false guess
         else:
-            pg.mixer.Sound.play(self.wrong_sound)
+            self.wrong_sound.play()
             print("RETRY")
             sleep(0.2)
             # show same note with adjusted helps?
