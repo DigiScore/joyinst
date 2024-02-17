@@ -148,6 +148,9 @@ class Joystick:
         # Get data from joystick
         #######################
 
+        # get name
+        name = joystick.get_name()
+
         # grab events from joystick
         buttons = joystick.get_numbuttons()
         for i in range(buttons):
@@ -167,25 +170,25 @@ class Joystick:
         #######################
 
         # Accidental b or #
-        if platform.system() == 'Windows':
+        if platform.system() == 'Windows' and name == "Logitech Dual Action":
             sharp = button_dict.get("4")
             flat = button_dict.get("6")
             octave_up = button_dict.get("5")
-            octave_down = axis_dict.get("5")
-            north_south = axis_dict["3"]
-            east_west = axis_dict["2"]
-            volume = axis_dict["1"]
-            reset_octave = button_dict["10"]
+            octave_down = button_dict.get("7")
+            north_south = axis_dict.get("3")
+            east_west = axis_dict.get("2")
+            volume = axis_dict.get("1")
+            reset_octave = button_dict.get("10")
 
-        else:
+        if platform.system() == 'Darwin' and name == "Logitech Dual Action":
             sharp = button_dict.get("4")
             flat = axis_dict.get("2")
             octave_up = button_dict.get("5")
-            octave_down = button_dict.get("57")
-            north_south = axis_dict["4"]
-            east_west = axis_dict["3"]
-            volume = axis_dict["1"]
-            reset_octave = button_dict["6"]
+            octave_down = axis_dict.get("5")
+            north_south = axis_dict.get("4")
+            east_west = axis_dict.get("3")
+            volume = axis_dict.get("1")
+            reset_octave = button_dict.get("6")
 
         #######################
         # Buttons
