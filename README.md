@@ -76,7 +76,10 @@ To get a local copy up and running follow these simple example steps.
 
 #### Windows install part A (checked on Windows 10 and 11)
 
-1. Install Fluidsynth installer (will need to open PowerShell as administrator). Follow instructions at: https://github.com/FluidSynth/fluidsynth/wiki/Download
+1. Install Fluidsynth installer (will need to open PowerShell as administrator)
+   1. Go to the FluidSynth releases page https://github.com/FluidSynth/fluidsynth/releases
+   2. Download the latest 64-bit release for Windows (e.g. fluidsynth-2.1.0-win64.zip). Extract this zip file into some directory, e.g. c:\Users\me\install\fluidsynth-x64.
+   3. Add the fluidsynth-x64\bin subdirectory to your PATH. To do this, click in the search box on the task bar, run the command 'Edit the system environment variables', click 'Environment Variables…', select Path in the 'User variables' section, click 'Edit…', click New, then enter the path of the bin subdirectory, e.g. c:\Users\me\install\fluidsynth-x64\bin.
 2. Install Poetry with the official installer (will need to open PowerShell as administrator). Follow the instructions at: https://python-poetry.org/docs/#installing-with-the-official-installer
 
 #### MacOS install part A (checked on Windows 10 and 11)
