@@ -161,7 +161,7 @@ class UI(Joystick, Game):
         pg.joystick.init()
 
         self.play_mode = Dropdown(
-            self.screen, 230, 50, 385, 50, name='     PLAY MODE',
+            self.screen, 260, 50, 385, 50, name='     PLAY MODE',
             choices=[
                 "     OPEN PLAY",
                 '     LEARN GAME',
@@ -177,7 +177,7 @@ class UI(Joystick, Game):
         )
 
         self.dropdown = Dropdown(
-            self.screen, 630, 50, 385, 50, name='     SELECT INSTRUMENT',
+            self.screen, 660, 50, 385, 50, name='     SELECT INSTRUMENT',
             choices=[
                 "     VOCALS/FX's",
                 '     HMMM',
@@ -271,7 +271,6 @@ class UI(Joystick, Game):
 
                 # draw the backgrounds.
                 self.screen.blit(self.ui_background_dots, (0, 0))
-                self.screen.blit(self.ui_background_life_counter[self.lives], (1645, 75))
                 self.screen.blit(self.ui_background_mouth_character, (326, 359))
 
                 text_print.print(self.screen, "Level    {}".format(self.level))
@@ -358,7 +357,7 @@ class UI(Joystick, Game):
                 self.show_game_note(self.game_note_path)
                 self.screen.blit(self.ui_background_hands_character, (0, 475))
 
-                self.screen.blit(self.ui_background_life_counter[self.lives], (1030, 49))
+                self.screen.blit(self.ui_background_life_counter[self.lives], (1060, 49))
 
                 # Go ahead and update the screen with what we've drawn.
                 pygame_widgets.update(events)
