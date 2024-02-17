@@ -25,7 +25,7 @@ class TextPrint(object):
         self.x_pos = 10
         self.y_pos = 10
         # self.font = pg.font.Font(None, 60)
-        self.font = pg.font.Font("assets/ui/fonts/IBMPlexSansCondensed-Medium.ttf", 36)
+        self.font = pg.font.Font("assets/ui/fonts/IBMPlexSansCondensed-Medium.ttf", 28)
 
     def print(self, my_screen, text_string):
         """ Draw text onto the screen. """
@@ -37,7 +37,7 @@ class TextPrint(object):
         """ Reset text to the top of the screen. """
         self.x_pos = 10
         self.y_pos = 10
-        self.line_height = 40
+        self.line_height = 30
 
     def indent(self):
         """ Indent the next line of text """
@@ -161,7 +161,7 @@ class UI(Joystick, Game):
         pg.joystick.init()
 
         self.play_mode = Dropdown(
-            self.screen, 400, 50, 385, 50, name='     PLAY MODE',
+            self.screen, 230, 50, 385, 50, name='     PLAY MODE',
             choices=[
                 "     OPEN PLAY",
                 '     LEARN GAME',
@@ -177,7 +177,7 @@ class UI(Joystick, Game):
         )
 
         self.dropdown = Dropdown(
-            self.screen, 820, 50, 385, 50, name='     SELECT INSTRUMENT',
+            self.screen, 630, 50, 385, 50, name='     SELECT INSTRUMENT',
             choices=[
                 "     VOCALS/FX's",
                 '     HMMM',
@@ -357,6 +357,8 @@ class UI(Joystick, Game):
 
                 self.show_game_note(self.game_note_path)
                 self.screen.blit(self.ui_background_hands_character, (0, 475))
+
+                self.screen.blit(self.ui_background_life_counter[self.lives], (1030, 49))
 
                 # Go ahead and update the screen with what we've drawn.
                 pygame_widgets.update(events)
