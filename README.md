@@ -76,12 +76,12 @@ To get a local copy up and running follow these simple example steps.
 
 #### Windows install part A (checked on Windows 10 and 11)
 
-1. Install Fluidsynth installer (will need to open PowerShell as administrator). Follow instructions at: 
+1. Install Fluidsynth installer (will need to open PowerShell as administrator). Follow instructions at: https://github.com/FluidSynth/fluidsynth/wiki/Download
 2. Install Poetry with the official installer (will need to open PowerShell as administrator). Follow the instructions at: https://python-poetry.org/docs/#installing-with-the-official-installer
 
 #### MacOS install part A (checked on Windows 10 and 11)
 
-1. Install HomeBrew. Follow instructions at:
+1. Install HomeBrew. Follow instructions at: https://brew.sh/
 2. Install Fluidsynth in HomeBrew
    ```sh
    brew install fluidsynth
