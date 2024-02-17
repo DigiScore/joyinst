@@ -78,13 +78,14 @@ class Joystick:
 
         # Download https://www.polyphone-soundfonts.com/documents/file/470-africa-sf2/latest/download?f7af2bbf653590fa8046b3fc31797913=1&return=aHR0cHMlM0ElMkYlMkZ3d3cucG9seXBob25lLXNvdW5kZm9udHMuY29tJTJGZG9jdW1lbnRzJTJGMjctaW5zdHJ1bWVudC1zZXRzJTJGMzQ2LWFmcmljYQ==
         sf2 = "assets/soundfonts/africa.sf2"
-        self.fs = fs.Synth()
+        self.fs = fs.Synth(gain=1.0)
         self.sfid = self.fs.sfload(sf2)
         self.fs.start()
 
         # self.sf = fluidsynth.init("africa.sf2")
         self.instrument = config['midi']['instrument']
         self.fs.program_select(1, self.sfid, 0, self.instrument)
+        # self.fs.
 
         self.fs_is_playing = 0
 
@@ -169,6 +170,7 @@ class Joystick:
         # Which Platform/ Joystick
         #######################
 
+        # todo - come up with a better solution for this.
         # Accidental b or #
         if platform.system() == 'Windows' and name == "Logitech Dual Action":
             sharp = button_dict.get("4")

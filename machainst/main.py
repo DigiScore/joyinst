@@ -146,9 +146,9 @@ class UI(Joystick, Game):
 
         # set sfx params
         self.correct_sound = pg.mixer.Sound("assets/sx/game_sound_correct.wav")
-        self.correct_sound.set_volume(0.05)
+        self.correct_sound.set_volume(0.1)
         self.wrong_sound = pg.mixer.Sound("assets/sx/game_sound_wrong.wav")
-        self.wrong_sound.set_volume(0.05)
+        self.wrong_sound.set_volume(0.1)
 
         self.screen = pg.display.set_mode(size)
 
