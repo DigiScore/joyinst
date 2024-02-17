@@ -182,7 +182,7 @@ class Joystick:
             volume = axis_dict.get("1")
             reset_octave = button_dict.get("10")
 
-        if platform.system() == 'Darwin' and name == "Logitech Dual Action":
+        if (platform.system() == 'Darwin' or platform.system() == "Linux") and name == "Logitech Dual Action":
             sharp = button_dict.get("4")
             flat = axis_dict.get("2")
             octave_up = button_dict.get("5")
