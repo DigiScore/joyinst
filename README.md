@@ -74,27 +74,38 @@ To get a local copy up and running follow these simple example steps.
 
 ### Prerequisites
 
-1. Install Poetry with the official installer. Follow the instructions at: https://python-poetry.org/docs/#installing-with-the-official-installer
-2. Clone the repo
+#### Windows install part A (checked on Windows 10 and 11)
+
+1. Install Fluidsynth installer (will need to open PowerShell as administrator). Follow instructions at: 
+2. Install Poetry with the official installer (will need to open PowerShell as administrator). Follow the instructions at: https://python-poetry.org/docs/#installing-with-the-official-installer
+
+#### MacOS install part A (checked on Windows 10 and 11)
+
+1. Install HomeBrew. Follow instructions at:
+2. Install Fluidsynth in HomeBrew
+   ```sh
+   brew install fluidsynth
+   ```
+   
+#### Install part B (Windows 10 & 11, and MacOS)
+
+1. Clone the repo
    ```sh
    git clone https://github.com/DigiScore/machAInst.git
    ```
-3. Navigate to the folder
+2. Navigate to the folder
    ```sh
    cd machAInst
    ```
-4. Activate the Poetry environment
+3. Activate the Poetry environment
    ```sh
    poetry shell
    ```
-5. Install the dependencies
+4. Install the dependencies
    ```sh
    poetry install
    ```
-6. Install Neoscore
-   ```sh
-   pip install neoscore
-   ```
+
 
 ### Running the app
 
@@ -141,10 +152,18 @@ See the [open issues](https://github.com/othneildrew/Best-README-Template/issues
 <!-- LICENSE -->
 ## License
 
-Distributed under the MIT License. See `LICENSE.txt` for more information.
+Distributed under the BSD 2-Clause License. See `LICENSE.txt` for more information.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+This version of MachAInst is running the africa.sf2 soundfont file by Herb Jimmerson  22 February 2017
+
+License on Creative Commons for africa.sf2
+
+The author allows a personal and commercial use of the soundfont along with derivative works whose distribution is
+also allowed with no restrictions. The only condition is to give appropriate credit to the initial author by mentioning
+its name (good practices for attribution are described here). This license is recommended for an optimal use and
+distribution of a soundfont.
 
 
 <!-- CONTACT -->

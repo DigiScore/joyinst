@@ -1,4 +1,5 @@
 import tomllib
+import platform
 
 from cvmingus.containers import Note
 from cvmingus.midi import pyfluidsynth as fs
@@ -51,7 +52,6 @@ class Joystick:
         self.B_button = 0
         self.X_button = 0
         self.Y_button = 0
-
 
         # init midi synth
         """
@@ -144,6 +144,10 @@ class Joystick:
                        "9": 0,
                        }
 
+        #######################
+        # Get data from joystick
+        #######################
+
         # grab events from joystick
         buttons = joystick.get_numbuttons()
         for i in range(buttons):
@@ -158,42 +162,48 @@ class Joystick:
             axis = joystick.get_axis(i)
             axis_dict.update({str(i): axis})
 
+        #######################
+        # Which Platform/ Joystick
+        #######################
+
         # Accidental b or #
-        sharp = button_dict.get("4")
-        flat = axis_dict.get("2")
+        if platform.system() == 'Windows':
+            sharp = button_dict.get("4")
+            flat = button_dict.get("6")
+            octave_up = button_dict.get("5")
+            octave_down = axis_dict.get("5")
+            north_south = axis_dict["3"]
+            east_west = axis_dict["2"]
+            volume = axis_dict["1"]
+            reset_octave = button_dict["10"]
+
+        else:
+            sharp = button_dict.get("4")
+            flat = axis_dict.get("2")
+            octave_up = button_dict.get("5")
+            octave_down = button_dict.get("57")
+            north_south = axis_dict["4"]
+            east_west = axis_dict["3"]
+            volume = axis_dict["1"]
+            reset_octave = button_dict["6"]
+
+        #######################
+        # Buttons
+        #######################
+
         if sharp >= 0.9:
             self.add_accidental = 1
         elif flat >= 0.9:
             self.add_accidental = -1
 
         # Calculate octave shift
-        octave_up = button_dict.get("5")
-        octave_down = axis_dict.get("5")
+
         if octave_up >= 0.9:
             # self.octave += 1
             rb = 1
         elif octave_down >= 0.9:
             # self.octave -= 1
             rt = 1
-
-        # Calculate note joystick position for notes
-        if axis_dict["4"] < -self.joystick_active_range:
-            self.compass = "N"
-        elif axis_dict["4"] >= self.joystick_active_range:
-            self.compass = "S"
-        elif axis_dict["3"] < -self.joystick_active_range:
-            self.compass = "W"
-        elif axis_dict["3"] >= self.joystick_active_range:
-            self.compass = "E"
-
-        elif axis_dict["4"] < -0.4 and axis_dict["3"] > 0.4:
-            self.compass = "NE"
-        elif axis_dict["4"] < -0.4 and axis_dict["3"] < -0.4:
-            self.compass = "NW"
-        elif axis_dict["4"] > 0.4 and axis_dict["3"] > 0.4:
-            self.compass = "SE"
-        elif axis_dict["4"] > 0.4 and axis_dict["3"] < -0.4:
-            self.compass = "SW"
 
         # PS buttons
         if button_dict["0"] == 1.0:
@@ -205,7 +215,34 @@ class Joystick:
         if button_dict["3"] == 1.0:
             self.Y_button = True
 
-        dyn_axis_value = round(axis_dict["1"], 2)
+        #######################
+        # Joysticks
+        #######################
+
+        # Calculate note joystick position for notes
+        if north_south < -self.joystick_active_range:
+            self.compass = "N"
+        elif north_south >= self.joystick_active_range:
+            self.compass = "S"
+        elif east_west < -self.joystick_active_range:
+            self.compass = "W"
+        elif east_west >= self.joystick_active_range:
+            self.compass = "E"
+
+        elif north_south < -0.4 and east_west > 0.4:
+            self.compass = "NE"
+        elif north_south < -0.4 and east_west < -0.4:
+            self.compass = "NW"
+        elif north_south > 0.4 and east_west > 0.4:
+            self.compass = "SE"
+        elif north_south > 0.4 and east_west < -0.4:
+            self.compass = "SW"
+
+        #######################
+        # Dynamics
+        #######################
+
+        dyn_axis_value = round(volume, 2)
         # round(dyn_axis_value, 2)
         if dyn_axis_value == 0:
             self.dynamic = 100
@@ -225,6 +262,10 @@ class Joystick:
         #     round(texture_axis_value, 2)
         #     # NewValue = (((OldValue - OldMin) * (NewMax - NewMin)) / (OldMax - OldMin)) + NewMin
         #     self.dynamic = int((((texture_axis_value - -1) * (20 - 120)) / (1 - -1)) + 120)
+
+        #######################
+        # Octave
+        #######################
 
         # check release of rb and rt
         if rb < self.rb_val:
@@ -250,7 +291,7 @@ class Joystick:
             self.octave += -1
 
         # reset octave to 4
-        if button_dict["6"] == 1.0:
+        if reset_octave == 1.0:
             self.octave = 4
 
         # check octave range
@@ -258,6 +299,10 @@ class Joystick:
             self.octave = 3
         elif self.octave > 5:
             self.octave = 5
+
+        #######################
+        # Sound
+        #######################
 
         # make a sound or not
         if self.compass == "":
@@ -319,6 +364,10 @@ class Joystick:
                                 self.dynamic
                                 )
                 self.fs_is_playing = fs_note
+
+            #######################
+            # Notation
+            #######################
 
             # make into neoscore note value
             if note[-1] == "#":
