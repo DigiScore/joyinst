@@ -25,7 +25,7 @@ class TextPrint(object):
         self.x_pos = 10
         self.y_pos = 10
         # self.font = pg.font.Font(None, 60)
-        self.font = pg.font.Font("assets/ui/fonts/IBMPlexSansCondensed-Medium.ttf", 36)
+        self.font = pg.font.Font("assets/ui/fonts/IBMPlexSansCondensed-Medium.ttf", 28)
 
     def print(self, my_screen, text_string):
         """ Draw text onto the screen. """
@@ -37,7 +37,7 @@ class TextPrint(object):
         """ Reset text to the top of the screen. """
         self.x_pos = 10
         self.y_pos = 10
-        self.line_height = 40
+        self.line_height = 30
 
     def indent(self):
         """ Indent the next line of text """
@@ -146,9 +146,9 @@ class UI(Joystick, Game):
 
         # set sfx params
         self.correct_sound = pg.mixer.Sound("assets/sx/game_sound_correct.wav")
-        self.correct_sound.set_volume(0.6)
+        self.correct_sound.set_volume(0.1)
         self.wrong_sound = pg.mixer.Sound("assets/sx/game_sound_wrong.wav")
-        self.wrong_sound.set_volume(0.3)
+        self.wrong_sound.set_volume(0.1)
 
         self.screen = pg.display.set_mode(size)
 
@@ -161,7 +161,7 @@ class UI(Joystick, Game):
         pg.joystick.init()
 
         self.play_mode = Dropdown(
-            self.screen, 400, 50, 385, 50, name='     PLAY MODE',
+            self.screen, 260, 50, 385, 50, name='     PLAY MODE',
             choices=[
                 "     OPEN PLAY",
                 '     LEARN GAME',
@@ -170,14 +170,14 @@ class UI(Joystick, Game):
             colour=Colors.DROPDOWN.value,
             hoverColour=Colors.DROPDOWN_HOVER.value,
             pressedColour=Colors.DROPDOWN_HOVER.value,
-            values=[False, True],
+            values=[1, 2],
             direction='down',
             textHAlign='left',
             font=self.ibm_plex_condensed_font
         )
 
         self.dropdown = Dropdown(
-            self.screen, 820, 50, 385, 50, name='     SELECT INSTRUMENT',
+            self.screen, 660, 50, 385, 50, name='     SELECT INSTRUMENT',
             choices=[
                 "     VOCALS/FX's",
                 '     HMMM',
@@ -241,7 +241,10 @@ class UI(Joystick, Game):
 
             if self.play_mode.getSelected():
                 game_mode = self.play_mode.getSelected()
-                self.playing_game = game_mode
+                if game_mode == 1:
+                    self.playing_game = False
+                elif game_mode == 2:
+                    self.playing_game = True
 
             # DRAWING STEP
             # First, clear the screen. Don't put other drawing commands
@@ -268,7 +271,6 @@ class UI(Joystick, Game):
 
                 # draw the backgrounds.
                 self.screen.blit(self.ui_background_dots, (0, 0))
-                self.screen.blit(self.ui_background_life_counter[self.lives], (1645, 75))
                 self.screen.blit(self.ui_background_mouth_character, (326, 359))
 
                 text_print.print(self.screen, "Level    {}".format(self.level))
@@ -355,6 +357,8 @@ class UI(Joystick, Game):
                 self.show_game_note(self.game_note_path)
                 self.screen.blit(self.ui_background_hands_character, (0, 475))
 
+                self.screen.blit(self.ui_background_life_counter[self.lives], (1060, 49))
+
                 # Go ahead and update the screen with what we've drawn.
                 pygame_widgets.update(events)
                 pg.display.flip()
@@ -396,7 +400,7 @@ class UI(Joystick, Game):
 
         # if correct guess
         if result:
-            pg.mixer.Sound.play(self.correct_sound)
+            self.correct_sound.play()
             print("Picking new note")
             sleep(0.2)
             # get a new note from current list
@@ -406,7 +410,7 @@ class UI(Joystick, Game):
 
         # false guess
         else:
-            pg.mixer.Sound.play(self.wrong_sound)
+            self.wrong_sound.play()
             print("RETRY")
             sleep(0.2)
             # show same note with adjusted helps?
