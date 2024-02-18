@@ -94,7 +94,7 @@ class Game:
         self.current_game_note = 0
         self.current_level_list = self.learning_dict.get(self.learning_seq[self.level])
         self.len_current_level_list = len(self.current_level_list)
-        print(self.len_current_level_list)
+        # print(self.len_current_level_list)
         self.melody_position = 0
 
     def get_random_note(self):
