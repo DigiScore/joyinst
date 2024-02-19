@@ -1,8 +1,8 @@
 import tomllib
 import platform
 
-from cvmingus.containers import Note
-from cvmingus.midi import pyfluidsynth as fs
+from mingus.containers import Note
+import fluidsynth as fs
 
 with open('config.toml', 'rb') as config_file:
     config = tomllib.load(config_file)
