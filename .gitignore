@@ -1,77 +1,95 @@
+# soundfont
+africa.sf2
 
-# User-specific stuff
-.idea/**/workspace.xml
-.idea/**/tasks.xml
-.idea/**/usage.statistics.xml
-.idea/**/dictionaries
-.idea/**/shelf
+# DS_Store
+.DS_Store
 
-# AWS User-specific
-.idea/**/aws.xml
+# JetBrains IDEs
+.idea
 
-# Generated files
-.idea/**/contentModel.xml
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
 
-# Sensitive or high-churn files
-.idea/**/dataSources/
-.idea/**/dataSources.ids
-.idea/**/dataSources.local.xml
-.idea/**/sqlDataSources.xml
-.idea/**/dynamic.xml
-.idea/**/uiDesigner.xml
-.idea/**/dbnavigator.xml
-
-# Gradle
-.idea/**/gradle.xml
-.idea/**/libraries
-
-# Gradle and Maven with auto-import
-# When using Gradle or Maven with auto-import, you should exclude module files,
-# since they will be recreated, and may cause churn.  Uncomment if using
-# auto-import.
-# .idea/artifacts
-# .idea/compiler.xml
-# .idea/jarRepositories.xml
-# .idea/modules.xml
-# .idea/*.iml
-# .idea/modules
-# *.iml
-# *.ipr
+# C extensions
+*.so
 
 # CMake
-cmake-build-*/
+CMakeLists.txt.user
+CMakeCache.txt
+CMakeFiles
+CMakeScripts
+Testing
+Makefile
+cmake_install.cmake
+install_manifest.txt
+compile_commands.json
+CTestTestfile.cmake
+_deps
 
-# Mongo Explorer plugin
-.idea/**/mongoSettings.xml
+# C++ Backstage Binary
+backstage_sdl2/Backstage
+backstage_sdl2/build/Backstage
 
-# File-based project format
-*.iws
+# Distribution / packaging
+bin/
+build/
+develop-eggs/
+dist/
+eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
 
-# IntelliJ
-out/
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
 
-# mpeltonen/sbt-idea plugin
-.idea_modules/
+# Unit test / coverage reports
+.tox/
+.coverage
+.cache
+nosetests.xml
+coverage.xml
 
-# JIRA plugin
-atlassian-ide-plugin.xml
+# Translations
+*.mo
 
-# Cursive Clojure plugin
-.idea/replstate.xml
+# Mr Developer
+.mr.developer.cfg
+.project
+.pydevproject
 
-# SonarLint plugin
-.idea/sonarlint/
+# Rope
+.ropeproject
 
-# Crashlytics plugin (for Android Studio and IntelliJ)
-com_crashlytics_export_strings.xml
-crashlytics.properties
-crashlytics-build.properties
-fabric.properties
+# Django stuff:
+*.log
+*.pot
 
-# Editor-based Rest Client
-.idea/httpRequests
+# Sphinx documentation
+docs/_build/
 
-# Android studio 3.1+ serialized cache file
-.idea/caches/build_file_checksums.ser
+# vscode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+!.vscode/*.code-snippets
+.vscode
 
-.idea
+# Local History for Visual Studio Code
+.history/
+
+# Built Visual Studio Code Extensions
+*.vsix
+
+# venv
+venv/
+
