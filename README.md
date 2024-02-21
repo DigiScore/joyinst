@@ -91,9 +91,10 @@ To get a local copy up and running follow these simple example steps.
    brew install fluidsynth
    ```
    
-#### Install part B (Windows 10 & 11, and MacOS)
+#### Install part B (Windows 10 & 11, Linux and MacOS)
 
-1. Clone the repo
+1. Open a Terminal window (Mac & Linux) or a Command Prompt (Windows: in the toolbar search type 'command prompt', and open as user).
+2. Clone the repo
    ```sh
    git clone https://github.com/DigiScore/machAInst.git
    ```
