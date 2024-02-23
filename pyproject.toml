@@ -2,14 +2,15 @@
 name = "machainst"
 version = "0.1.0"
 description = ""
-authors = ["Craig Vear <craig.vear@nottingham.ac.uk>, Fabrizio Poltronieri <fabrizio@fabriziopoltronieri.com>"]
+authors = ["Craig Vear <Craig.Vear@nottingham.ac.uk>, Fabrizio Augusto Poltronieri <fabrizio@fabriziopoltronieri.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.10"
-mingus = "^0.6.1"
-hid = "^1.0.5"
 pygame = "^2.5.2"
+typing-extensions = "^4.9.0"
+pyfluidsynth = "^1.3.3"
+mingus = "^0.6.1"
 
 
 [build-system]
