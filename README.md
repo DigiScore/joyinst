@@ -16,7 +16,7 @@ To get a local copy up and running follow these simple example steps.
    4. Add the C:\Users\me\install\bin subdirectory to your PATH. To do this, click in the search box on the task bar, run the command 'Edit the system environment variables', click 'Environment Variables…', select Path in the 'User variables' section, click 'Edit…', click New, then enter the path of the bin subdirectory, e.g. c:\Users\me\install\bin . NB It may have automatically done this
 
 3. Install Poetry with the official installer (will need to open PowerShell as administrator). Follow the instructions at: https://python-poetry.org/docs/#installing-with-the-official-installer
-4. Install Git (64-bit Git for Windows Setup): https://github.com/git-for-windows/git/releases/download/v2.44.0.windows.1/Git-2.44.0-64-bit.exe
+4. Install Git (64-bit Git for Windows Setup) accepting all the default options: https://github.com/git-for-windows/git/releases/download/v2.44.0.windows.1/Git-2.44.0-64-bit.exe
 
 #### MacOS install part A
 
@@ -38,13 +38,9 @@ To get a local copy up and running follow these simple example steps.
    ```sh
    cd machAInst
    ```
-4. Activate the Poetry environment
+4. Install the dependencies
    ```sh
-   poetry shell
-   ```
-5. Install the dependencies
-   ```sh
-   poetry install
+   pip install -r requirements.txt
    ```
 
 
@@ -56,5 +52,5 @@ To get a local copy up and running follow these simple example steps.
    ```
 2. Execute the code
    ```sh
-   poetry run python main.py
+   python main.py
    ```
