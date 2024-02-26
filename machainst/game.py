@@ -1,4 +1,6 @@
 from random import choice
+
+
 # from notation import Notation
 # from threading import Thread
 
@@ -33,7 +35,7 @@ class Game:
                      }
 
     learning_seq = [
-        "level_1", "level_2", "level_3", "level_4", "level_5" , "level_6", "level_7", "level_8", "level_9",
+        "level_1", "level_2", "level_3", "level_4", "level_5", "level_6", "level_7", "level_8", "level_9",
         "level_10", "level_11"
     ]
 
@@ -190,7 +192,7 @@ class Game:
             if result:
                 self.feedback = f"{choice(self.correct_words)}, next note"
                 # have 3 rounds per sub-level (help indicators)
-                self.sub_level_rounds -=1
+                self.sub_level_rounds -= 1
 
                 if self.sub_level_rounds <= 0:
                     self.feedback = f"{choice(self.correct_words)}, on to next sub-level - we've reduced the help"

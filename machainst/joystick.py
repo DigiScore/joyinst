@@ -38,11 +38,13 @@ its name (good practices for attribution are described here). This license is re
 distribution of a soundfont.
 """
 
+
 class Joystick:
     """
     Manages the data from the joystick controls.
     Calculates the note values and makes a sound.
     """
+
     def __init__(self):
         super().__init__()
         # Instantiate the vars
@@ -334,7 +336,7 @@ class Joystick:
                     note = 'B'
                 case 'N':
                     note = 'C'
-                    octave = self.octave+1
+                    octave = self.octave + 1
                 case 'NW':
                     note = 'A'
                 case 'W':
@@ -416,6 +418,7 @@ class Joystick:
 
     def stop_note(self, note_to_stop):
         self.fs.noteoff(1, key=int(Note(note_to_stop)))
+
 
 if __name__ == "__main__":
     js = Joystick()
