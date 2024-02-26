@@ -14,6 +14,9 @@ To get a local copy up and running follow these simple example steps.
    curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
    python get-pip.py
    ```
+   Edit the environment variables and add the Pip´s PATH, copying it from the command prompt.
+
+
 3. Install Fluidsynth installer (will need to open PowerShell as administrator)
    1. Go to the FluidSynth releases page https://github.com/FluidSynth/fluidsynth/releases
    2. Download the latest 64-bit release for Windows (e.g. fluidsynth-2.1.0-win64.zip). Extract this zip file into some directory, e.g. c:\Users\me\install\fluidsynth.
