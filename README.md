@@ -11,7 +11,7 @@ To get a local copy up and running follow these simple example steps.
 
 2. Install Pip (Python's package management system):
    ```sh
-   curl https://bootst/rap.pypa.io/get-pip.py -o get-pip.py
+   curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
    python get-pip.py
    ```
 3. Install Fluidsynth installer (will need to open PowerShell as administrator)
