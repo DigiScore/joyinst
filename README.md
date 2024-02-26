@@ -7,7 +7,7 @@ To get a local copy up and running follow these simple example steps.
 
 #### Windows install part A (checked on Windows 10 and 11)
 
-1. Install Python 3.11.7 https://www.python.org/downloads/windows/ . Download correct installer package for your computer. Run .exe program. When you run the installer **YOU MUST CHECK** *"Install launcher for all users"* AND **"Add Python 3.11 to PATH"**. Then run *"Install Now"*
+1. Install Python 3.11.8 https://www.python.org/ftp/python/3.11.8/python-3.11.8-amd64.exe . Download correct installer package for your computer. Run .exe program. When you run the installer **YOU MUST CHECK** *"Install launcher for all users"* AND **"Add Python 3.11 to PATH"**. Then run *"Install Now"*
 
 2. Install Pip (Python's package management system):
    ```sh
