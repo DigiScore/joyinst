@@ -1,4 +1,3 @@
--e git+ssh://git@github.com/DigiScore/machAInst.git@e1196ec84e522bcfbc48f5780cdcdf3bc387078e#egg=machainst
 mingus==0.6.1
 numpy==1.26.4
 pyFluidSynth==1.3.3
