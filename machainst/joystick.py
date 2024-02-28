@@ -184,7 +184,7 @@ class Joystick:
             volume = axis_dict.get("1")
             reset_octave = button_dict.get("10")
 
-        if (platform.system() == 'Darwin' or platform.system() == "Linux") and name == "Logitech Dual Action":
+        elif (platform.system() == 'Darwin' or platform.system() == "Linux") and name == "Logitech Dual Action":
             sharp = button_dict.get("4")
             flat = axis_dict.get("2")
             octave_up = button_dict.get("5")
@@ -193,6 +193,16 @@ class Joystick:
             east_west = axis_dict.get("3")
             volume = axis_dict.get("1")
             reset_octave = button_dict.get("6")
+
+        elif name == "Sony Interactive Entertainment Access Controller":
+            sharp = button_dict.get("9")
+            flat = axis_dict.get("2")
+            octave_up = button_dict.get("1")
+            octave_down = button_dict.get("1")
+            north_south = axis_dict.get("1")
+            east_west = axis_dict.get("0")
+            volume = button_dict.get("1")
+            reset_octave = button_dict.get("1")
 
         #######################
         # Buttons
