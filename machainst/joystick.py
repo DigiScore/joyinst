@@ -196,7 +196,7 @@ class Joystick:
 
         elif name == "Sony Interactive Entertainment Access Controller":
             sharp = button_dict.get("1")
-            flat = axis_dict.get("9")
+            flat = axis_dict.get("2")
             octave_up = 0  # button_dict.get("1")
             octave_down = 0  # button_dict.get("1")
             north_south = (axis_dict.get("1")) * -1
