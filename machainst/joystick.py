@@ -195,14 +195,14 @@ class Joystick:
             reset_octave = button_dict.get("6")
 
         elif name == "Sony Interactive Entertainment Access Controller":
-            sharp = button_dict.get("1")
-            flat = button_dict.get("9")
-            octave_up = 0  # button_dict.get("1")
-            octave_down = 0  # button_dict.get("1")
+            sharp = button_dict.get("5")
+            flat = button_dict.get("4")
+            octave_up = button_dict.get("0")
+            octave_down = button_dict.get("10")
             north_south = (axis_dict.get("1")) * -1
             east_west = (axis_dict.get("0")) * -1
             volume = 0  # button_dict.get("1")
-            reset_octave = 0  # button_dict.get("1")
+            reset_octave = button_dict.get("1")
 
         #######################
         # Buttons
