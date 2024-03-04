@@ -198,7 +198,7 @@ class Joystick:
             sharp = button_dict.get("5")
             flat = button_dict.get("4")
             octave_up = button_dict.get("0")
-            octave_down = button_dict.get("10")
+            octave_down = button_dict.get("6")
             north_south = (axis_dict.get("1")) * -1
             east_west = (axis_dict.get("0")) * -1
             volume = 0  # button_dict.get("1")
