@@ -127,6 +127,9 @@ class UI(Joystick, Game):
         # Set the width and depth of the screen [width,depth]
         size = [WindowSize.WIDTH, WindowSize.HEIGHT]
 
+        # show text?
+        self.show_text = False
+
         # ui images
         self.ui_background_dots = pg.image.load("assets/ui/images/mascot/bg_dots.svg")
         self.ui_background_mouth_character = pg.image.load("assets/ui/images/mascot/character_mouth.png")
@@ -223,6 +226,10 @@ class UI(Joystick, Game):
                 if event.type == pg.QUIT:
                     done = True
 
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_t:
+                        self.show_text = not self.show_text
+
                 # Possible joystick actions: JOYAXISMOTION JOYBALLMOTION JOYBUTTONDOWN
                 # JOYBUTTONUP JOYHATMOTION
                 if event.type == pg.JOYBUTTONDOWN:
@@ -273,11 +280,12 @@ class UI(Joystick, Game):
                 self.screen.blit(self.ui_background_dots, (0, 0))
                 self.screen.blit(self.ui_background_mouth_character, (326, 359))
 
-                text_print.print(self.screen, "Level    {}".format(self.level))
-                text_print.print(self.screen, "Sub-level    {}".format(self.sub_level))
-                text_print.print(self.screen, "Goes at sub level    {}".format(self.sub_level_rounds))
-                text_print.print(self.screen, "Guesses    {}".format(self.tries))
-                text_print.print(self.screen, "Feedback    {}".format(self.feedback))
+                if self.show_text:
+                    text_print.print(self.screen, "Level    {}".format(self.level))
+                    text_print.print(self.screen, "Sub-level    {}".format(self.sub_level))
+                    text_print.print(self.screen, "Goes at sub level    {}".format(self.sub_level_rounds))
+                    text_print.print(self.screen, "Guesses    {}".format(self.tries))
+                    text_print.print(self.screen, "Feedback    {}".format(self.feedback))
 
                 #############
                 # JOYSTICK LOOP
@@ -333,12 +341,13 @@ class UI(Joystick, Game):
                 # text_print.print(self.screen, "arrow_colour   {}".format(arrow_colour))
                 # text_print.print(self.screen, "note   {}".format(self.neopitch))
                 # text_print.print(self.screen, "solfa  {}".format(solfa))
-                text_print.print(self.screen, "Level    {}".format(self.level))
-                text_print.print(self.screen, "Sub-level    {}".format(self.sub_level))
-                text_print.print(self.screen, "Goes at sub level    {}".format(self.sub_level_rounds))
-                text_print.print(self.screen, "Guesses    {}".format(self.tries))
-                # add feedback from game
-                text_print.print(self.screen, "Feedback    {}".format(self.feedback))
+                if self.show_text:
+                    text_print.print(self.screen, "Level    {}".format(self.level))
+                    text_print.print(self.screen, "Sub-level    {}".format(self.sub_level))
+                    text_print.print(self.screen, "Goes at sub level    {}".format(self.sub_level_rounds))
+                    text_print.print(self.screen, "Guesses    {}".format(self.tries))
+                    # add feedback from game
+                    text_print.print(self.screen, "Feedback    {}".format(self.feedback))
 
                 #############
                 # GAME IMAGE
