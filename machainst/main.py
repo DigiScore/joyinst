@@ -128,7 +128,7 @@ class UI(Joystick, Game):
         size = [WindowSize.WIDTH, WindowSize.HEIGHT]
 
         # show text?
-        self.show_text = True
+        self.show_text = False
 
         # ui images
         self.ui_background_dots = pg.image.load("assets/ui/images/mascot/bg_dots.svg")
@@ -253,8 +253,15 @@ class UI(Joystick, Game):
                     # first note of game
                     self.first_note = False
 
+                    # remove text
+                    self.show_text = False
+
+
                 elif game_mode == 2:
                     self.playing_game = True
+
+                    # show text
+                    self.show_text = True
 
                     # reset game
                     if not self.first_note:
