@@ -250,11 +250,15 @@ class UI(Joystick, Game):
                 game_mode = self.play_mode.getSelected()
                 if game_mode == 1:
                     self.playing_game = False
+                    # first note of game
+                    self.first_note = False
+
                 elif game_mode == 2:
                     self.playing_game = True
 
                     # reset game
-                    self.reset()
+                    if not self.first_note:
+                        self.reset()
 
             # DRAWING STEP
             # First, clear the screen. Don't put other drawing commands
