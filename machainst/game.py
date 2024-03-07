@@ -99,6 +99,38 @@ class Game:
         # print(self.len_current_level_list)
         self.melody_position = 0
 
+    def reset(self):
+        # first note of game
+        self.first_note = False
+
+        # keeps track of the number of tries per test. 3 tries per test, then loose a live
+        self.tries = 3
+
+        # number of lives
+        self.lives = 3
+
+        # navigates the learning sequence
+        self.level = 0
+
+        # sub-level associated with helpers on screen
+        self.sub_level = 0
+        self.sub_level_rounds = 3
+        self.feedback = ""
+
+        # locks the game loop while dealing with guess
+        self.game_lock = False
+
+        # define notation helpers
+        self.arrow_help = True
+        self.name_help = True
+
+        # game params
+        self.current_game_note = 0
+        self.current_level_list = self.learning_dict.get(self.learning_seq[self.level])
+        self.len_current_level_list = len(self.current_level_list)
+        # print(self.len_current_level_list)
+        self.melody_position = 0
+
     def get_random_note(self):
         """
         randomly gets a note from current level list if level, otherwise

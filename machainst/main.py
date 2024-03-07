@@ -253,6 +253,9 @@ class UI(Joystick, Game):
                 elif game_mode == 2:
                     self.playing_game = True
 
+                    # reset game
+                    self.reset()
+
             # DRAWING STEP
             # First, clear the screen. Don't put other drawing commands
             self.screen.fill(Colors.BACKGROUND.value)
