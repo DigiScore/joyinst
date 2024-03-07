@@ -128,7 +128,7 @@ class UI(Joystick, Game):
         size = [WindowSize.WIDTH, WindowSize.HEIGHT]
 
         # show text?
-        self.show_text = False
+        self.show_text = True
 
         # ui images
         self.ui_background_dots = pg.image.load("assets/ui/images/mascot/bg_dots.svg")
