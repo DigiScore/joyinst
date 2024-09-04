@@ -59,7 +59,7 @@ class Game:
     wrong_words = ["Try Again",
                    "You got this",
                    "You can do it",
-                   "Nealry",
+                   "Nearly",
                    "C'mon, one more",
                    "Close",
                    "We believe in you"
