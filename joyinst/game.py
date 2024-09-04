@@ -1,4 +1,5 @@
 from random import choice
+import pandas as pd
 
 
 # from notation import Notation
@@ -20,24 +21,34 @@ class Game:
     3 lives overall
 
     """
+    df = pd.read_csv('curriculum.csv', header=None)
+    reader = df.values.tolist()
 
-    learning_dict = {"level_1": ["c", "c'"],
-                     "level_2": ["f", "g"],
-                     "level_3": ["c", "f", "g", "c'"],
-                     "level_4": ["c", "g", "c'", "c", "f", "c'"],
-                     "level_5": ["c", "d", "e"],
-                     "level_6": ["c", "d", "e", "f", "g"],
-                     "level_7": ["a", "b", "c'"],
-                     "level_8": ["d", "e", "a", "b"],
-                     "level_9": ["c", "d", "e", "f", "g", "a", "b", "c'"],
-                     "level_10": ["g", "b", "d"],
-                     "level_11": ["d", "e", "f#", "g"]
-                     }
+    # learning_dict = {"level_1": ["c", "c'"],
+    #                  "level_2": ["f", "g"],
+    #                  "level_3": ["c", "f", "g", "c'"],
+    #                  "level_4": ["c", "g", "c'", "c", "f", "c'"],
+    #                  "level_5": ["c", "d", "e"],
+    #                  "level_6": ["c", "d", "e", "f", "g"],
+    #                  "level_7": ["a", "b", "c'"],
+    #                  "level_8": ["d", "e", "a", "b"],
+    #                  "level_9": ["c", "d", "e", "f", "g", "a", "b", "c'"],
+    #                  "level_10": ["g", "b", "d"],
+    #                  "level_11": ["d", "e", "f#", "g"]
+    #                  }
 
-    learning_seq = [
-        "level_1", "level_2", "level_3", "level_4", "level_5", "level_6", "level_7", "level_8", "level_9",
-        "level_10", "level_11"
-    ]
+    learning_dict = []
+    for rows in reader:
+        level_notes = []
+        for note in rows:
+            if note == note:
+                level_notes.append(note)
+        learning_dict.append(level_notes)
+
+    # learning_seq = [
+    #     "level_1", "level_2", "level_3", "level_4", "level_5", "level_6", "level_7", "level_8", "level_9",
+    #     "level_10", "level_11"
+    # ]
 
     correct_words = ["Way to go!",
                      "Great job",
@@ -94,7 +105,7 @@ class Game:
 
         # game params
         self.current_game_note = 0
-        self.current_level_list = self.learning_dict.get(self.learning_seq[self.level])
+        self.current_level_list = self.learning_dict[self.level]
         self.len_current_level_list = len(self.current_level_list)
         # print(self.len_current_level_list)
         self.melody_position = 0
@@ -126,7 +137,7 @@ class Game:
 
         # game params
         self.current_game_note = 0
-        self.current_level_list = self.learning_dict.get(self.learning_seq[self.level])
+        self.current_level_list = self.learning_dict[self.level]
         self.len_current_level_list = len(self.current_level_list)
         # print(self.len_current_level_list)
         self.melody_position = 0
@@ -145,7 +156,7 @@ class Game:
         else:
             # self.melody_position = 0
             # check if its a level or test:
-            learning_key = self.learning_seq[self.level][0]
+            learning_key = self.level
             if learning_key == "l":
                 self.current_game_note = choice(self.current_level_list)
 
@@ -257,7 +268,7 @@ class Game:
                 self.feedback = f"{choice(self.correct_words)}, Whoop Whoop - LEVEL UP"
 
                 # get the next level
-                self.current_level_list = self.learning_dict.get(self.learning_seq[self.level])
+                self.current_level_list = self.learning_dict[self.level]
                 self.level += 1
 
                 # reset for walkthrogh note list
