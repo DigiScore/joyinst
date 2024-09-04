@@ -47,11 +47,11 @@ To get a local copy up and running follow these simple example steps.
 
 2. Clone the repo
    ```sh
-   git clone https://github.com/DigiScore/JoyInst.git
+   git clone https://github.com/DigiScore/machAInst.git
    ```
 3. Navigate to the folder
    ```sh
-   cd JoyInst
+   cd machAInst
    ```
 4. Install the dependencies
    ```sh
@@ -65,7 +65,7 @@ To get a local copy up and running follow these simple example steps.
 
 1. Enter the main APP folder
    ```sh
-   cd joyinst
+   cd machainst
    ```
 2. Execute the code
    ```sh
