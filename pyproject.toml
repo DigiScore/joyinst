@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "machainst"
+name = "joyinst"
 version = "0.1.0"
 description = ""
 authors = ["Craig Vear <Craig.Vear@nottingham.ac.uk>, Fabrizio Augusto Poltronieri <fabrizio@fabriziopoltronieri.com>"]
