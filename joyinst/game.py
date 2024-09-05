@@ -156,13 +156,13 @@ class Game:
         else:
             # self.melody_position = 0
             # check if its a level or test:
-            learning_key = self.level
-            if learning_key == "l":
-                self.current_game_note = choice(self.current_level_list)
+            # todo: sort this out.
+            # learning_key = self.level
+            # if learning_key == "l":
+            self.current_game_note = choice(self.current_level_list)
 
-            # todo - melody test (not implemented yet - can simply be sub;level 0 and no follow on sub-levels
-            else:
-                self.current_game_note = self.current_level_list[self.melody_position]
+            # else:
+            #     self.current_game_note = self.current_level_list[self.melody_position]
 
         print(self.current_game_note)
         return self.current_game_note
