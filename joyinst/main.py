@@ -130,15 +130,22 @@ class UI(Joystick, Game):
         # show text?
         self.show_text = False
 
+        # populate Levels dropdown with number of levels
+        user_levels_list = []
+        user_levels_str = []
+        for l in range(self.num_of_levels_from_csv):
+            user_levels_list.append(l+1)
+            user_levels_str.append(str(l))
+
         # ui images
         self.ui_background_dots = pg.image.load("assets/ui/images/mascot/bg_dots.svg")
         self.ui_background_mouth_character = pg.image.load("assets/ui/images/mascot/character_mouth.png")
         self.ui_background_character = pg.image.load("assets/ui/images/mascot/character_body.png")
         self.ui_background_hands_character = pg.image.load("assets/ui/images/mascot/character_hands.svg")
-        self.ui_background_life_counter = [pg.image.load("assets/ui/images/life_counter/0_lives_left.svg"),
-                                           pg.image.load("assets/ui/images/life_counter/1_live_left.svg"),
-                                           pg.image.load("assets/ui/images/life_counter/2_lives_left.svg"),
-                                           pg.image.load("assets/ui/images/life_counter/3_lives_left.svg")]
+        # self.ui_background_life_counter = [pg.image.load("assets/ui/images/life_counter/0_lives_left.svg"),
+        #                                    pg.image.load("assets/ui/images/life_counter/1_live_left.svg"),
+        #                                    pg.image.load("assets/ui/images/life_counter/2_lives_left.svg"),
+        #                                    pg.image.load("assets/ui/images/life_counter/3_lives_left.svg")]
 
         # font
         self.ibm_plex_condensed_font = pygame.font.Font("assets/ui/fonts/IBMPlexSansCondensed-Medium.ttf", 22)
@@ -179,7 +186,7 @@ class UI(Joystick, Game):
             font=self.ibm_plex_condensed_font
         )
 
-        self.dropdown = Dropdown(
+        self.instrument_dropdown = Dropdown(
             self.screen, 660, 50, 385, 50, name='     SELECT INSTRUMENT',
             choices=[
                 "     VOCALS/FX's",
@@ -198,6 +205,18 @@ class UI(Joystick, Game):
             hoverColour=Colors.DROPDOWN_HOVER.value,
             pressedColour=Colors.DROPDOWN_HOVER.value,
             values=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
+            direction='down',
+            textHAlign='left',
+            font=self.ibm_plex_condensed_font
+        )
+
+        self.level_dropdown = Dropdown(
+            self.screen, 1060, 50, 192, 50, name='LEVEL',
+            choices=user_levels_str,
+            colour=Colors.DROPDOWN.value,
+            hoverColour=Colors.DROPDOWN_HOVER.value,
+            pressedColour=Colors.DROPDOWN_HOVER.value,
+            values=user_levels_list,
             direction='down',
             textHAlign='left',
             font=self.ibm_plex_condensed_font
@@ -242,10 +261,11 @@ class UI(Joystick, Game):
                 #     print("Joystick axis motion.")
 
             # Get instrument choice
-            if self.dropdown.getSelected():
-                self.inst = self.dropdown.getSelected()
+            if self.instrument_dropdown.getSelected():
+                self.inst = self.instrument_dropdown.getSelected()
                 self.fs.program_select(1, self.sfid, 0, self.inst)
 
+            # Get play mode choice
             if self.play_mode.getSelected():
                 game_mode = self.play_mode.getSelected()
                 if game_mode == 1:
@@ -256,7 +276,6 @@ class UI(Joystick, Game):
                     # remove text
                     self.show_text = False
 
-
                 elif game_mode == 2:
                     self.playing_game = True
 
@@ -265,7 +284,17 @@ class UI(Joystick, Game):
 
                     # reset game
                     if not self.first_note:
-                        self.reset()
+                        self.reset(self.level)
+
+            # Get level choice
+            if self.level_dropdown.getSelected():
+                self.level = self.level_dropdown.getSelected() - 1
+                self.reset(level=self.level)
+                self.playing_game = False
+                # self.play_mode.setDropped(0)
+                self.level_dropdown.reset()
+                self.play_mode.reset()
+                self.show_text = False
 
             # DRAWING STEP
             # First, clear the screen. Don't put other drawing commands
@@ -297,7 +326,7 @@ class UI(Joystick, Game):
                 if self.show_text:
                     text_print.print(self.screen, "Level    {}".format(self.level))
                     text_print.print(self.screen, "Sub-level    {}".format(self.sub_level))
-                    text_print.print(self.screen, "Goes at sub level    {}".format(self.sub_level_rounds))
+                    # text_print.print(self.screen, "Attempts    {}".format(self.sub_level_rounds))
                     text_print.print(self.screen, "Guesses    {}".format(self.tries))
                     text_print.print(self.screen, "Feedback    {}".format(self.feedback))
 
@@ -358,7 +387,7 @@ class UI(Joystick, Game):
                 if self.show_text:
                     text_print.print(self.screen, "Level    {}".format(self.level))
                     text_print.print(self.screen, "Sub-level    {}".format(self.sub_level))
-                    text_print.print(self.screen, "Goes at sub level    {}".format(self.sub_level_rounds))
+                    # text_print.print(self.screen, "Goes at sub level    {}".format(self.sub_level_rounds))
                     text_print.print(self.screen, "Guesses    {}".format(self.tries))
                     # add feedback from game
                     text_print.print(self.screen, "Feedback    {}".format(self.feedback))
@@ -380,7 +409,7 @@ class UI(Joystick, Game):
                 self.show_game_note(self.game_note_path)
                 self.screen.blit(self.ui_background_hands_character, (0, 475))
 
-                self.screen.blit(self.ui_background_life_counter[self.lives], (1060, 49))
+                # self.screen.blit(self.ui_background_life_counter[self.lives], (1060, 49))
 
                 # Go ahead and update the screen with what we've drawn.
                 pygame_widgets.update(events)
@@ -393,7 +422,7 @@ class UI(Joystick, Game):
         # get a new note from current list
 
         self._game_new_note = self.get_random_note()
-        print(self._game_new_note)
+        print("new note = ", self._game_new_note)
         note_to_show = self.make_game_note_notation(self._game_new_note)
         # print(note_to_show)
         game_note_path = self.path_to_generated_images + note_to_show

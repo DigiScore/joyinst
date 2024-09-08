@@ -38,7 +38,9 @@ class Game:
     #                  }
 
     learning_dict = []
+    num_of_levels_from_csv = 0
     for rows in reader:
+        num_of_levels_from_csv += 1
         level_notes = []
         for note in rows:
             if note == note:
@@ -110,7 +112,7 @@ class Game:
         # print(self.len_current_level_list)
         self.melody_position = 0
 
-    def reset(self):
+    def reset(self, level=0):
         # first note of game
         self.first_note = False
 
@@ -121,7 +123,7 @@ class Game:
         self.lives = 3
 
         # navigates the learning sequence
-        self.level = 0
+        self.level = level
 
         # sub-level associated with helpers on screen
         self.sub_level = 0
@@ -164,7 +166,7 @@ class Game:
             # else:
             #     self.current_game_note = self.current_level_list[self.melody_position]
 
-        print(self.current_game_note)
+        print("Current game note = ", self.current_game_note)
         return self.current_game_note
 
     def make_game_note_notation(self, current_game_note):
