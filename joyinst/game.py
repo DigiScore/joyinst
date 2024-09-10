@@ -150,6 +150,13 @@ class Game:
         sequence through the melody test
         :return:
         """
+        # if a melody level
+        if self.current_level_list[0] == 'm':
+            try:
+                self.current_game_note = self.current_level_list[self.melody_position + 1]
+            except:
+
+
         # if sub-level 0 sequence through list
         if self.sub_level == 0:
             self.current_game_note = self.current_level_list[self.melody_position]
@@ -212,10 +219,27 @@ class Game:
 
     def update_game_states(self, result):
         #################
+        #  sub-level 0 - MELODY line
+        #################
+
+        # if its a new round
+        if self.sub_level == 0 and self.current_level_list[0] == "m":
+            if result:
+                self.feedback = f"{choice(self.correct_words)}, CORRECT"
+                self.melody_position += 1
+
+                # reached end of melody? now onto next level
+                if self.melody_position >= self.len_current_level_list:
+                    self.level += 1
+                    self.melody_position = 0
+            else:
+                self.feedback = f"{choice(self.wrong_words)}, Have another go"
+
+        #################
         #  sub-level 0 - training round
         #################
 
-        # equence through the whole list. unlimited tries
+        # sequence through the whole list. unlimited tries
         if self.sub_level == 0:
             # unlimited goes at sub-level 0
             if result:
