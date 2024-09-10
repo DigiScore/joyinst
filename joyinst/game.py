@@ -223,14 +223,14 @@ class Game:
         #################
 
         # if its a new round
-        if self.sub_level == 0 and self.current_level_list[0] == "m":
+        if self.current_level_list[0] == "m":
             if result:
                 self.feedback = f"{choice(self.correct_words)}, CORRECT"
                 self.melody_position += 1
 
                 # reached end of melody? now onto next level
                 if self.melody_position >= self.len_current_level_list:
-                    self.level += 1
+                    self.sub_level += 1
                     self.melody_position = 0
             else:
                 self.feedback = f"{choice(self.wrong_words)}, Have another go"
@@ -240,7 +240,7 @@ class Game:
         #################
 
         # sequence through the whole list. unlimited tries
-        if self.sub_level == 0:
+        elif self.sub_level == 0:
             # unlimited goes at sub-level 0
             if result:
                 self.feedback = f"{choice(self.correct_words)}, CORRECT"
