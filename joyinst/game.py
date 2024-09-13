@@ -1,6 +1,6 @@
-from random import choice
+# from random import choice
 import pandas as pd
-
+from secrets import choice
 
 # from notation import Notation
 # from threading import Thread
@@ -24,19 +24,6 @@ class Game:
     df = pd.read_csv('curriculum.csv', header=None)
     reader = df.values.tolist()
 
-    # learning_dict = {"level_1": ["c", "c'"],
-    #                  "level_2": ["f", "g"],
-    #                  "level_3": ["c", "f", "g", "c'"],
-    #                  "level_4": ["c", "g", "c'", "c", "f", "c'"],
-    #                  "level_5": ["c", "d", "e"],
-    #                  "level_6": ["c", "d", "e", "f", "g"],
-    #                  "level_7": ["a", "b", "c'"],
-    #                  "level_8": ["d", "e", "a", "b"],
-    #                  "level_9": ["c", "d", "e", "f", "g", "a", "b", "c'"],
-    #                  "level_10": ["g", "b", "d"],
-    #                  "level_11": ["d", "e", "f#", "g"]
-    #                  }
-
     learning_dict = []
     num_of_levels_from_csv = 0
     for rows in reader:
@@ -46,11 +33,6 @@ class Game:
             if note == note:
                 level_notes.append(note)
         learning_dict.append(level_notes)
-
-    # learning_seq = [
-    #     "level_1", "level_2", "level_3", "level_4", "level_5", "level_6", "level_7", "level_8", "level_9",
-    #     "level_10", "level_11"
-    # ]
 
     correct_words = ["Way to go!",
                      "Great job",
@@ -100,6 +82,7 @@ class Game:
 
         # locks the game loop while dealing with guess
         self.game_lock = False
+        self.melody_flag = False
 
         # define notation helpers
         self.arrow_help = True
@@ -108,8 +91,16 @@ class Game:
         # game params
         self.current_game_note = 0
         self.current_level_list = self.learning_dict[self.level]
+        print("current_level_list", self.current_level_list)
+
+        # check if level has a melody flag at [0]
+        if self.current_level_list[0] == "m":
+            print("MELODY", self.current_level_list)
+            self.current_level_list.pop(0)
+            self.melody_flag = True
+            print("Now", self.current_level_list)
+
         self.len_current_level_list = len(self.current_level_list)
-        # print(self.len_current_level_list)
         self.melody_position = 0
 
     def reset(self, level=0):
@@ -132,6 +123,7 @@ class Game:
 
         # locks the game loop while dealing with guess
         self.game_lock = False
+        self.melody_flag = False
 
         # define notation helpers
         self.arrow_help = True
@@ -140,8 +132,15 @@ class Game:
         # game params
         self.current_game_note = 0
         self.current_level_list = self.learning_dict[self.level]
+
+        # check if level has a melody flag at [0]
+        if self.current_level_list[0] == "m":
+            print("MELODY", self.current_level_list)
+            self.current_level_list.pop(0)
+            self.melody_flag = True
+            print("Now", self.current_level_list)
+
         self.len_current_level_list = len(self.current_level_list)
-        # print(self.len_current_level_list)
         self.melody_position = 0
 
     def get_random_note(self):
@@ -150,29 +149,14 @@ class Game:
         sequence through the melody test
         :return:
         """
-        # if a melody level
-        # todo POP fron of list.
-        if self.current_level_list[0] == 'm':
-            try:
-                self.current_game_note = self.current_level_list[self.melody_position + 1]
-            except:
-                print("EXCEPTION)")
 
-        # if sub-level 0 sequence through list
-        if self.sub_level == 0:
+        # if sub-level 0 or a melody - sequence through list
+        if self.sub_level == 0 or self.melody_flag:
             self.current_game_note = self.current_level_list[self.melody_position]
 
-            # for any other sub-level:
+        # for any other sub-level, choose a random note from the list:
         else:
-            # self.melody_position = 0
-            # check if its a level or test:
-            # todo: sort this out.
-            # learning_key = self.level
-            # if learning_key == "l":
             self.current_game_note = choice(self.current_level_list)
-
-            # else:
-            #     self.current_game_note = self.current_level_list[self.melody_position]
 
         print("Current game note = ", self.current_game_note)
         return self.current_game_note
@@ -220,11 +204,11 @@ class Game:
 
     def update_game_states(self, result):
         #################
-        #  sub-level 0 - MELODY line
+        #  level - MELODY line
         #################
+        print(f"melody flag {self.melody_flag}, level list {self.current_level_list}, len of lev list {self.len_current_level_list}")
 
-        # if its a new round
-        if self.current_level_list[0] == "m":
+        if self.melody_flag:
             if result:
                 self.feedback = f"{choice(self.correct_words)}, CORRECT"
                 self.melody_position += 1
@@ -241,7 +225,6 @@ class Game:
         #################
 
         # sequence through the whole list. unlimited tries
-        # todo remove level 0 ... get on with it.
         elif self.sub_level == 0:
             # unlimited goes at sub-level 0
             if result:
@@ -291,27 +274,48 @@ class Game:
                 self.sub_level = 1
                 # self.lives -= 1
 
-            # check if we are through sub-levels and move to next level
-            if self.sub_level > 3:
-                self.feedback = f"{choice(self.correct_words)}, Whoop Whoop - LEVEL UP"
+        # check if we are through sub-levels and move to next level
+        if self.sub_level > 3:
+            self.feedback = f"{choice(self.correct_words)}, Whoop Whoop - LEVEL UP"
 
-                # get the next level
-                self.level += 1
-                self.current_level_list = self.learning_dict[self.level]
+            # get the next level
+            self.level += 1
+            self.current_level_list = self.learning_dict[self.level]
 
-                # reset for walkthrogh note list
-                self.sub_level = 0
-                # reset tries and rounds
-                self.sub_level_rounds = 3
-                self.tries = 3
+            # check if level has a melody flag at [0]
+            if self.current_level_list[0] == "m":
+                print("MELODY", self.current_level_list)
+                self.current_level_list.pop(0)
+                self.melody_flag = True
+                print("Now", self.current_level_list)
+            else:
+                self.melody_flag = False
 
-            if self.lives == 0:
-                self.feedback = f"{choice(self.wrong_words)}, Game Over. Have another go.   Lives back up to 3"
-                # reset every thing
-                self.lives = 3
-                self.tries = 3
-                self.sub_level = 0
-                self.level = 0
+            # reset for walkthrogh note list
+            self.sub_level = 0
+            self.len_current_level_list = len(self.current_level_list)
+
+            # reset tries and rounds
+            self.sub_level_rounds = 3
+            self.tries = 3
+
+        if self.lives == 0:
+            self.feedback = f"{choice(self.wrong_words)}, Game Over. Have another go.   Lives back up to 3"
+            # reset every thing
+            self.lives = 3
+            self.tries = 3
+            self.sub_level = 0
+            self.level = 0
+            # check if level has a melody flag at [0]
+            if self.current_level_list[0] == "m":
+                print("MELODY", self.current_level_list)
+                self.current_level_list.pop(0)
+                self.melody_flag = True
+                print("Now", self.current_level_list)
+            else:
+                self.melody_flag = False
+            self.len_current_level_list = len(self.current_level_list)
+
 
     def check_helpers(self):
         """
