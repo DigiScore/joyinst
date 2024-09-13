@@ -151,11 +151,12 @@ class Game:
         :return:
         """
         # if a melody level
+        # todo POP fron of list.
         if self.current_level_list[0] == 'm':
             try:
                 self.current_game_note = self.current_level_list[self.melody_position + 1]
             except:
-
+                print("EXCEPTION)")
 
         # if sub-level 0 sequence through list
         if self.sub_level == 0:
@@ -240,6 +241,7 @@ class Game:
         #################
 
         # sequence through the whole list. unlimited tries
+        # todo remove level 0 ... get on with it.
         elif self.sub_level == 0:
             # unlimited goes at sub-level 0
             if result:
@@ -294,8 +296,8 @@ class Game:
                 self.feedback = f"{choice(self.correct_words)}, Whoop Whoop - LEVEL UP"
 
                 # get the next level
-                self.current_level_list = self.learning_dict[self.level]
                 self.level += 1
+                self.current_level_list = self.learning_dict[self.level]
 
                 # reset for walkthrogh note list
                 self.sub_level = 0
