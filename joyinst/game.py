@@ -103,6 +103,28 @@ class Game:
         self.len_current_level_list = len(self.current_level_list)
         self.melody_position = 0
 
+    def get_current_level_list(self, next_level) -> list:
+        """Gets current level list from level dict, using the level var.
+        Checks if it is a melody flag.
+        returns the current level list, as strings
+        """
+
+        new_level_list = self.learning_dict[next_level]
+
+        # check if level has a melody flag at [0]
+        if new_level_list[0] == "m":
+            print("MELODY", new_level_list)
+            new_level_list.pop(0)
+            self.melody_flag = True
+            print("Now", new_level_list)
+        else:
+            self.melody_flag = False
+
+        # set length of new list
+        self.len_current_level_list = len(new_level_list)
+
+        return new_level_list
+
     def reset(self, level=0):
         # first note of game
         self.first_note = False
@@ -131,16 +153,16 @@ class Game:
 
         # game params
         self.current_game_note = 0
-        self.current_level_list = self.learning_dict[self.level]
+        self.current_level_list = self.get_current_level_list(self.level)
 
         # check if level has a melody flag at [0]
-        if self.current_level_list[0] == "m":
-            print("MELODY", self.current_level_list)
-            self.current_level_list.pop(0)
-            self.melody_flag = True
-            print("Now", self.current_level_list)
-
-        self.len_current_level_list = len(self.current_level_list)
+        # if self.current_level_list[0] == "m":
+        #     print("MELODY", self.current_level_list)
+        #     self.current_level_list.pop(0)
+        #     self.melody_flag = True
+        #     print("Now", self.current_level_list)
+        #
+        # self.len_current_level_list = len(self.current_level_list)
         self.melody_position = 0
 
     def get_random_note(self):
@@ -280,20 +302,20 @@ class Game:
 
             # get the next level
             self.level += 1
-            self.current_level_list = self.learning_dict[self.level]
+            self.current_level_list = self.get_current_level_list(self.level)
 
-            # check if level has a melody flag at [0]
-            if self.current_level_list[0] == "m":
-                print("MELODY", self.current_level_list)
-                self.current_level_list.pop(0)
-                self.melody_flag = True
-                print("Now", self.current_level_list)
-            else:
-                self.melody_flag = False
-
+            # # check if level has a melody flag at [0]
+            # if self.current_level_list[0] == "m":
+            #     print("MELODY", self.current_level_list)
+            #     self.current_level_list.pop(0)
+            #     self.melody_flag = True
+            #     print("Now", self.current_level_list)
+            # else:
+            #     self.melody_flag = False
+            #
             # reset for walkthrogh note list
             self.sub_level = 0
-            self.len_current_level_list = len(self.current_level_list)
+            # self.len_current_level_list = len(self.current_level_list)
 
             # reset tries and rounds
             self.sub_level_rounds = 3
@@ -307,14 +329,14 @@ class Game:
             self.sub_level = 0
             self.level = 0
             # check if level has a melody flag at [0]
-            if self.current_level_list[0] == "m":
-                print("MELODY", self.current_level_list)
-                self.current_level_list.pop(0)
-                self.melody_flag = True
-                print("Now", self.current_level_list)
-            else:
-                self.melody_flag = False
-            self.len_current_level_list = len(self.current_level_list)
+            # if self.current_level_list[0] == "m":
+            #     print("MELODY", self.current_level_list)
+            #     self.current_level_list.pop(0)
+            #     self.melody_flag = True
+            #     print("Now", self.current_level_list)
+            # else:
+            #     self.melody_flag = False
+            # self.len_current_level_list = len(self.current_level_list)
 
 
     def check_helpers(self):
