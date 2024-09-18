@@ -154,15 +154,6 @@ class Game:
         # game params
         self.current_game_note = 0
         self.current_level_list = self.get_current_level_list(self.level)
-
-        # check if level has a melody flag at [0]
-        # if self.current_level_list[0] == "m":
-        #     print("MELODY", self.current_level_list)
-        #     self.current_level_list.pop(0)
-        #     self.melody_flag = True
-        #     print("Now", self.current_level_list)
-        #
-        # self.len_current_level_list = len(self.current_level_list)
         self.melody_position = 0
 
     def get_random_note(self):
@@ -228,7 +219,7 @@ class Game:
         #################
         #  level - MELODY line
         #################
-        print(f"melody flag {self.melody_flag}, level list {self.current_level_list}, len of lev list {self.len_current_level_list}")
+        print(f"melody flag {self.melody_flag}, level list {self.current_level_list}, len of lev list {self.len_current_level_list}, tries {self.tries}")
 
         if self.melody_flag:
             if result:
@@ -294,7 +285,7 @@ class Game:
             # check sub-level status - back to sub-level 1 NOT 0!!!
             if self.sub_level < 1:
                 self.sub_level = 1
-                # self.lives -= 1
+                self.lives -= 1
 
         # check if we are through sub-levels and move to next level
         if self.sub_level > 3:
@@ -304,15 +295,6 @@ class Game:
             self.level += 1
             self.current_level_list = self.get_current_level_list(self.level)
 
-            # # check if level has a melody flag at [0]
-            # if self.current_level_list[0] == "m":
-            #     print("MELODY", self.current_level_list)
-            #     self.current_level_list.pop(0)
-            #     self.melody_flag = True
-            #     print("Now", self.current_level_list)
-            # else:
-            #     self.melody_flag = False
-            #
             # reset for walkthrogh note list
             self.sub_level = 0
             # self.len_current_level_list = len(self.current_level_list)
@@ -324,20 +306,10 @@ class Game:
         if self.lives == 0:
             self.feedback = f"{choice(self.wrong_words)}, Game Over. Have another go.   Lives back up to 3"
             # reset every thing
-            self.lives = 3
-            self.tries = 3
-            self.sub_level = 0
-            self.level = 0
-            # check if level has a melody flag at [0]
-            # if self.current_level_list[0] == "m":
-            #     print("MELODY", self.current_level_list)
-            #     self.current_level_list.pop(0)
-            #     self.melody_flag = True
-            #     print("Now", self.current_level_list)
-            # else:
-            #     self.melody_flag = False
-            # self.len_current_level_list = len(self.current_level_list)
-
+            # self.lives = 3
+            # self.tries = 3
+            # self.sub_level = 0
+            # self.level = 0
 
     def check_helpers(self):
         """

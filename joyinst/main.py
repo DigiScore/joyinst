@@ -326,8 +326,8 @@ class UI(Joystick, Game):
                 if self.show_text:
                     text_print.print(self.screen, "Level    {}".format(self.level))
                     text_print.print(self.screen, "Sub-level    {}".format(self.sub_level))
-                    # text_print.print(self.screen, "Attempts    {}".format(self.sub_level_rounds))
                     text_print.print(self.screen, "Guesses    {}".format(self.tries))
+                    text_print.print(self.screen, "Lives    {}".format(self.lives))
                     text_print.print(self.screen, "Feedback    {}".format(self.feedback))
 
                 #############
@@ -389,7 +389,7 @@ class UI(Joystick, Game):
                     text_print.print(self.screen, "Sub-level    {}".format(self.sub_level))
                     # text_print.print(self.screen, "Goes at sub level    {}".format(self.sub_level_rounds))
                     text_print.print(self.screen, "Guesses    {}".format(self.tries))
-                    # add feedback from game
+                    text_print.print(self.screen, "Lives    {}".format(self.lives))
                     text_print.print(self.screen, "Feedback    {}".format(self.feedback))
 
                 #############
@@ -443,6 +443,11 @@ class UI(Joystick, Game):
         # update game status depending on result
         self.update_game_states(result)
         print("\t\tchecking game stats")
+        if self.lives == 0:
+            self.play_mode.reset()
+            self.show_text = False
+            self.reset(level=self.level)
+            self.playing_game = False
         sleep(0.2)
 
         # update visual helpers on the note
