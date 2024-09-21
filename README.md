@@ -63,10 +63,19 @@ To get a local copy up and running follow these simple example steps.
 
 ### Running the app
 
-1. Enter the main APP folder
+1. Navigate to the folder
+   ```sh
+   cd joyinst
+   
+2. Activate petry
+   ```sh
+   poetry shell
+     
+3.  Enter the main APP folder
    ```sh
    cd joyinst
    ```
+
 2. Execute the code
    ```sh
    poetry run python main.py

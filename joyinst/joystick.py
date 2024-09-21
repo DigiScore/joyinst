@@ -247,7 +247,16 @@ class Joystick:
         #######################
 
         # Calculate note joystick position for notes
-        if north_south < -self.joystick_active_range:
+        if north_south < -0.4 and east_west > 0.4:
+            self.compass = "NE"
+        elif north_south < -0.4 and east_west < -0.4:
+            self.compass = "NW"
+        elif north_south > 0.4 and east_west > 0.4:
+            self.compass = "SE"
+        elif north_south > 0.4 and east_west < -0.4:
+            self.compass = "SW"
+
+        elif north_south < -self.joystick_active_range:
             self.compass = "N"
         elif north_south >= self.joystick_active_range:
             self.compass = "S"
@@ -256,14 +265,7 @@ class Joystick:
         elif east_west >= self.joystick_active_range:
             self.compass = "E"
 
-        elif north_south < -0.4 and east_west > 0.4:
-            self.compass = "NE"
-        elif north_south < -0.4 and east_west < -0.4:
-            self.compass = "NW"
-        elif north_south > 0.4 and east_west > 0.4:
-            self.compass = "SE"
-        elif north_south > 0.4 and east_west < -0.4:
-            self.compass = "SW"
+
 
         #######################
         # Dynamics
