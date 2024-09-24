@@ -7,15 +7,21 @@ To get a local copy up and running follow these simple example steps.
 
 #### Windows install part A (checked on Windows 10 and 11)
 
-1. Install `scoop`, a command-line installer for Windows. Open a `PowerShell` terminal and execute the following commands (2 lines):
+1. Install `scoop`, (a command-line installer for Windows). Open a `PowerShell` terminal and execute the following commands (one at a time):
    ```shell
-   Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
    Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
    ```
 
-2. Open a regular `Command Prompt (cmd)` and execute:
+   ```shell
+   Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+   ```   
+
+2. Open a regular `Command Prompt (cmd)` and execute  (one at a time):
    ```shell
    scoop bucket add main
+   ```
+   
+   ```shell
    scoop install main/poetry
    ```
    
@@ -25,6 +31,9 @@ To get a local copy up and running follow these simple example steps.
 3. Install `Fluidsynth`, using the same `Command Prompt` from step 2:
    ```shell
    scoop bucket add extras
+   ```
+   
+   ```shell
    scoop install extras/fluidsynth
    ```
    
@@ -36,6 +45,10 @@ To get a local copy up and running follow these simple example steps.
 
 5. Install Git (64-bit Git for Windows Setup) accepting all the default options: https://github.com/git-for-windows/git/releases/download/v2.44.0.windows.1/Git-2.44.0-64-bit.exe
 
+
+–––––––––––––––––––––
+
+
 #### MacOS install part A
 
 1. Install HomeBrew. Follow instructions at: https://brew.sh/
@@ -43,8 +56,11 @@ To get a local copy up and running follow these simple example steps.
    ```sh
    brew install fluidsynth
    ```
-   
-#### Install part B (Windows 10 & 11, Linux and MacOS)
+ 
+–––––––––––––––––––––
+
+  
+#### Install part B (ALL PLATFORMS: Windows 10 & 11, Linux and MacOS)
 
 1. Open a Terminal window (Mac & Linux) or a Command Prompt (Windows: in the toolbar search type 'command prompt', and open as user).
 
@@ -64,6 +80,8 @@ To get a local copy up and running follow these simple example steps.
    poetry install
    ```
 
+–––––––––––––––––––––
+
 ### Running the app
 
 1. Navigate to the folder
@@ -81,7 +99,7 @@ To get a local copy up and running follow these simple example steps.
    cd joyinst
    ```
 
-2. Execute the code
+4. Execute the code
    ```sh
    poetry run python main.py
    ```
