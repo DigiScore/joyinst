@@ -82,7 +82,7 @@ To get a local copy up and running follow these simple example steps.
 
 –––––––––––––––––––––
 
-### Running the app
+### Running the app (ALL PLATFORMS)
 
 1. Navigate to the folder
    ```sh
