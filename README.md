@@ -74,9 +74,12 @@ To get a local copy up and running follow these simple example steps.
    cd joyinst
    ```
    
-4. Install the dependencies
+4. Install the dependencies (one at a time)
    ```sh
    poetry shell
+   ```
+   
+   ```shell
    poetry install
    ```
 
