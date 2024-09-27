@@ -234,7 +234,7 @@ class UI(Joystick, Game):
         )
 
         self.user_names = Dropdown(
-            self.screen, 204, 50, 385, 50, name='     SELECT YOUR USER',
+            self.screen, 294, 50, 385, 50, name='     SELECT YOUR USER',
             choices=[f'     {user[0]}' for user in self.users],
             colour=Colors.DROPDOWN.value,
             hoverColour=Colors.DROPDOWN_HOVER.value,
@@ -245,7 +245,7 @@ class UI(Joystick, Game):
             font=self.ibm_plex_condensed_font
         )
 
-        self.new_user = TextBox(self.screen, 610, 50, 385, 53,
+        self.new_user = TextBox(self.screen, 700, 50, 385, 53,
                                 colour=Colors.DROPDOWN.value,
                                 fontSize=40,
                                 textOffsetLeft=1000,
@@ -257,7 +257,7 @@ class UI(Joystick, Game):
                                 onTextChanged=self.reset_user_names_dropdown
                                 )
 
-        self.play_button = Button(self.screen, 1015, 50, 100, 53,
+        self.play_button = Button(self.screen, 1105, 50, 100, 53,
                                   text="PLAY!",
                                   font=self.ibm_plex_condensed_font,
                                   colour=Colors.DROPDOWN.value,
@@ -266,8 +266,6 @@ class UI(Joystick, Game):
                                   borderThickness=3,
                                   onClick=self.mainloop,
                                   )
-
-        self.user_selection_running = True
 
         # setup inst & notation vars
         self.inst = self.instrument
@@ -285,8 +283,14 @@ class UI(Joystick, Game):
         self.instrument_dropdown.hide()
         self.level_dropdown.hide()
 
-        while self.user_selection_running:
+        done = False
+
+        while not done:
             events = pg.event.get()
+            for event in events:
+                if event.type == pg.QUIT:
+                    done = True
+
             self.screen.fill(Colors.BACKGROUND.value)
             self.screen.blit(self.ui_background_dots, (0, 0))
             self.screen.blit(self.ui_background_mouth_character, (326, 359))
@@ -299,8 +303,6 @@ class UI(Joystick, Game):
             self.clock.tick(60)
 
     def mainloop(self):
-        self.user_selection_running = False
-
         # Get ready to print
         text_print = TextPrint()
 
