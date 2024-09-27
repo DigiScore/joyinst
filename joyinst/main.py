@@ -125,6 +125,14 @@ class UI(Joystick, Game):
         super().__init__()
         pg.init()
 
+        # Load users
+        try:
+            with open('settings/users.toml', 'rb') as users_file:
+                self.users = tomllib.load(users_file)
+                self.users = self.users["users"]
+        except FileNotFoundError:
+            self.users = []
+
         # Set the width and depth of the screen [width,depth]
         size = [WindowSize.WIDTH, WindowSize.HEIGHT]
 
@@ -223,6 +231,18 @@ class UI(Joystick, Game):
             font=self.ibm_plex_condensed_font
         )
 
+        self.user_names = Dropdown(
+            self.screen, 204, 50,385, 50, name='     SELECT YOUR USER',
+            choices=[f"     {user[0]}" for user in self.users],
+            colour=Colors.DROPDOWN.value,
+            hoverColour=Colors.DROPDOWN_HOVER.value,
+            pressedColour=Colors.DROPDOWN_HOVER.value,
+            values=[user[1] for user in self.users],
+            direction='down',
+            textHAlign='left',
+            font=self.ibm_plex_condensed_font
+        )
+
         # setup inst & notation vars
         self.inst = self.instrument
         self.path_to_generated_images = "assets/ui/images/generated_notes/"
@@ -232,14 +252,8 @@ class UI(Joystick, Game):
         self.smoothing = 300
 
     def user_selection(self):
-        try:
-            with open('settings/users.toml', 'rb') as users_file:
-                users = tomllib.load(users_file)
-                users = users["users"]
-        except FileNotFoundError:
-            users = []
-
-        print(users[1][1]['level'])
+        print(self.users)
+        print(type(self.users[0]))
 
         # init vars
         done = False
