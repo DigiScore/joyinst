@@ -254,6 +254,7 @@ class UI(Joystick, Game):
                                 borderThickness=3,
                                 font=self.ibm_plex_condensed_font,
                                 placeholderText="ENTER NEW USER NAME",
+                                onTextChanged=self.reset_user_names_dropdown
                                 )
 
         self.play_button = Button(self.screen, 1015, 50, 100, 53,
@@ -275,6 +276,9 @@ class UI(Joystick, Game):
         # event vars
         self.last_guess = pg.time.get_ticks()
         self.smoothing = 300
+
+    def reset_user_names_dropdown(self):
+        self.user_names.reset()
 
     def user_selection(self):
         self.play_mode.hide()
