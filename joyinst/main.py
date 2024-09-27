@@ -283,6 +283,9 @@ class UI(Joystick, Game):
         self.instrument_dropdown.hide()
         self.level_dropdown.hide()
 
+        if not self.users:
+            self.user_names.hide()
+
         done = False
 
         while not done:
