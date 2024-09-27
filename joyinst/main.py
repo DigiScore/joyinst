@@ -135,7 +135,7 @@ class UI(Joystick, Game):
         user_levels_str = []
         for l in range(self.num_of_levels_from_csv):
             user_levels_list.append(l+1)
-            user_levels_str.append(str(l))
+            user_levels_str.append(f"     {str(l)}")
 
         # ui images
         self.ui_background_dots = pg.image.load("assets/ui/images/mascot/bg_dots.svg")
