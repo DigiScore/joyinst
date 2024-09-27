@@ -6,6 +6,7 @@ import pygame.font
 import pygame_widgets
 from pygame_widgets.dropdown import Dropdown
 from pygame_widgets.textbox import TextBox
+from pygame_widgets.button import Button
 from threading import Thread
 from time import sleep
 
@@ -144,7 +145,7 @@ class UI(Joystick, Game):
         user_levels_list = []
         user_levels_str = []
         for l in range(self.num_of_levels_from_csv):
-            user_levels_list.append(l+1)
+            user_levels_list.append(l + 1)
             user_levels_str.append(str(l).rjust(6))
 
         # ui images
@@ -179,11 +180,11 @@ class UI(Joystick, Game):
 
         # Initialize the joysticks
         pg.joystick.init()
-    
+
         self.play_mode = Dropdown(
             self.screen, 204, 50, 385, 50, name='     PLAY MODE',
             choices=[
-                "     OPEN PLAY",
+                '     OPEN PLAY',
                 '     LEARN GAME',
 
             ],
@@ -233,7 +234,7 @@ class UI(Joystick, Game):
         )
 
         self.user_names = Dropdown(
-            self.screen, 204, 50,385, 50, name='     SELECT YOUR USER',
+            self.screen, 204, 50, 385, 50, name='     SELECT YOUR USER',
             choices=[f'     {user[0]}' for user in self.users],
             colour=Colors.DROPDOWN.value,
             hoverColour=Colors.DROPDOWN_HOVER.value,
@@ -255,6 +256,18 @@ class UI(Joystick, Game):
                                 placeholderText="ENTER NEW USER NAME",
                                 )
 
+        self.play_button = Button(self.screen, 1015, 50, 100, 53,
+                                  text="PLAY!",
+                                  font=self.ibm_plex_condensed_font,
+                                  colour=Colors.DROPDOWN.value,
+                                  hoverColour=Colors.DROPDOWN_HOVER.value,
+                                  pressedColour=Colors.DROPDOWN_HOVER.value,
+                                  borderThickness=3,
+                                  onClick=self.mainloop,
+                                  )
+
+        self.user_selection_running = True
+
         # setup inst & notation vars
         self.inst = self.instrument
         self.path_to_generated_images = "assets/ui/images/generated_notes/"
@@ -264,16 +277,11 @@ class UI(Joystick, Game):
         self.smoothing = 300
 
     def user_selection(self):
-        print(self.users)
-        print(type(self.users[0]))
+        self.play_mode._hidden = True
+        self.instrument_dropdown._hidden = True
+        self.level_dropdown._hidden = True
 
-        # init vars
-        done = False
-
-        while not done:
-            self.play_mode._hidden = True
-            self.instrument_dropdown._hidden = True
-            self.level_dropdown._hidden = True
+        while self.user_selection_running:
             events = pg.event.get()
             self.screen.fill(Colors.BACKGROUND.value)
             self.screen.blit(self.ui_background_dots, (0, 0))
@@ -286,11 +294,19 @@ class UI(Joystick, Game):
             # Limit to 60 frames per second
             self.clock.tick(60)
 
-        self.mainloop()
-
     def mainloop(self):
+        self.user_selection_running = False
+
         # Get ready to print
         text_print = TextPrint()
+
+        self.user_names._hidden = True
+        self.new_user._hidden = True
+        self.play_button._hidden = True
+
+        self.play_mode._hidden = False
+        self.instrument_dropdown._hidden = False
+        self.level_dropdown._hidden = False
 
         # init vars
         done = False
