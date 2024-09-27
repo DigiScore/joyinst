@@ -168,6 +168,11 @@ class DropdownChoice(WidgetBase):
         self.__direction = kwargs.get('direction', 'down')
         self.__last = last
 
+        if width > 200:
+            self.ui_arrow_offset = 326
+        else:
+            self.ui_arrow_offset = 135
+
         self.ui_arrow_down = pg.image.load("assets/ui/images/dropdown/dropdown_arrow_down.svg")
         self.ui_arrow_up = pg.image.load("assets/ui/images/dropdown/dropdown_arrow_up.svg")
 
@@ -215,9 +220,9 @@ class DropdownChoice(WidgetBase):
                              3)
 
             if not dropped and idx == -1:
-                self.win.blit(self.ui_arrow_down, (self.computedX + 326, self.computedY + 16))
+                self.win.blit(self.ui_arrow_down, (self.computedX + self.ui_arrow_offset, self.computedY + 16))
             elif dropped and idx == -1:
-                self.win.blit(self.ui_arrow_up, (self.computedX + 326, self.computedY + 16))
+                self.win.blit(self.ui_arrow_up, (self.computedX + self.ui_arrow_offset, self.computedY + 16))
 
             text_rendered = self.font.render(self.text, True, self.textColour)
 
