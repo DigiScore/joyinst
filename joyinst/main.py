@@ -171,7 +171,7 @@ class UI(Joystick, Game):
         pg.joystick.init()
     
         self.play_mode = Dropdown(
-            self.screen, 260, 50, 385, 50, name='     PLAY MODE',
+            self.screen, 204, 50, 385, 50, name='     PLAY MODE',
             choices=[
                 "     OPEN PLAY",
                 '     LEARN GAME',
@@ -187,7 +187,7 @@ class UI(Joystick, Game):
         )
 
         self.instrument_dropdown = Dropdown(
-            self.screen, 660, 50, 385, 50, name='     SELECT INSTRUMENT',
+            self.screen, 610, 50, 385, 50, name='     SELECT INSTRUMENT',
             choices=[
                 "     VOCALS/FX's",
                 '     HMMM',
@@ -211,7 +211,7 @@ class UI(Joystick, Game):
         )
 
         self.level_dropdown = Dropdown(
-            self.screen, 1060, 50, 192, 50, name='     LEVEL',
+            self.screen, 1015, 50, 192, 50, name='     LEVEL',
             choices=user_levels_str,
             colour=Colors.DROPDOWN.value,
             hoverColour=Colors.DROPDOWN_HOVER.value,
