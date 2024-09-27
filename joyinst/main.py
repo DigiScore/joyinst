@@ -5,6 +5,7 @@ import pygame as pg
 import pygame.font
 import pygame_widgets
 from pygame_widgets.dropdown import Dropdown
+from pygame_widgets.textbox import TextBox
 from threading import Thread
 from time import sleep
 
@@ -233,7 +234,7 @@ class UI(Joystick, Game):
 
         self.user_names = Dropdown(
             self.screen, 204, 50,385, 50, name='     SELECT YOUR USER',
-            choices=[f"     {user[0]}" for user in self.users],
+            choices=[f'     {user[0]}' for user in self.users],
             colour=Colors.DROPDOWN.value,
             hoverColour=Colors.DROPDOWN_HOVER.value,
             pressedColour=Colors.DROPDOWN_HOVER.value,
@@ -242,6 +243,17 @@ class UI(Joystick, Game):
             textHAlign='left',
             font=self.ibm_plex_condensed_font
         )
+
+        self.new_user = TextBox(self.screen, 610, 50, 385, 53,
+                                colour=Colors.DROPDOWN.value,
+                                fontSize=40,
+                                textOffsetLeft=1000,
+                                borderColour=(0, 0, 0),
+                                textColour=(0, 0, 0),
+                                borderThickness=3,
+                                font=self.ibm_plex_condensed_font,
+                                placeholderText="ENTER NEW USER NAME",
+                                )
 
         # setup inst & notation vars
         self.inst = self.instrument
