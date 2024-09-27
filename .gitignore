@@ -93,3 +93,5 @@ docs/_build/
 # venv
 venv/
 
+# users config file
+joyinst/settings/users.toml
