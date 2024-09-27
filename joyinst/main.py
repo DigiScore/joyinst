@@ -277,9 +277,9 @@ class UI(Joystick, Game):
         self.smoothing = 300
 
     def user_selection(self):
-        self.play_mode._hidden = True
-        self.instrument_dropdown._hidden = True
-        self.level_dropdown._hidden = True
+        self.play_mode.hide()
+        self.instrument_dropdown.hide()
+        self.level_dropdown.hide()
 
         while self.user_selection_running:
             events = pg.event.get()
@@ -300,13 +300,13 @@ class UI(Joystick, Game):
         # Get ready to print
         text_print = TextPrint()
 
-        self.user_names._hidden = True
-        self.new_user._hidden = True
-        self.play_button._hidden = True
+        self.new_user.hide()
+        self.play_button.hide()
+        self.user_names.hide()
 
-        self.play_mode._hidden = False
-        self.instrument_dropdown._hidden = False
-        self.level_dropdown._hidden = False
+        self.play_mode.show()
+        self.instrument_dropdown.show()
+        self.level_dropdown.show()
 
         # init vars
         done = False
