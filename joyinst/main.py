@@ -211,7 +211,7 @@ class UI(Joystick, Game):
         )
 
         self.level_dropdown = Dropdown(
-            self.screen, 1060, 50, 192, 50, name='LEVEL',
+            self.screen, 1060, 50, 192, 50, name='     LEVEL',
             choices=user_levels_str,
             colour=Colors.DROPDOWN.value,
             hoverColour=Colors.DROPDOWN_HOVER.value,
