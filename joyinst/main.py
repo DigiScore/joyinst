@@ -169,7 +169,7 @@ class UI(Joystick, Game):
 
         # Initialize the joysticks
         pg.joystick.init()
-
+    
         self.play_mode = Dropdown(
             self.screen, 260, 50, 385, 50, name='     PLAY MODE',
             choices=[

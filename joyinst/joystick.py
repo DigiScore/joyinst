@@ -4,7 +4,7 @@ import platform
 from mingus.containers import Note
 import fluidsynth as fs
 
-with open('config.toml', 'rb') as config_file:
+with open('settings/config.toml', 'rb') as config_file:
     config = tomllib.load(config_file)
 
 """
