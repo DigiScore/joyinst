@@ -1,4 +1,5 @@
 # import python libraries
+import tomllib
 from enum import Enum
 import pygame as pg
 import pygame.font
@@ -229,6 +230,37 @@ class UI(Joystick, Game):
         # event vars
         self.last_guess = pg.time.get_ticks()
         self.smoothing = 300
+
+    def user_selection(self):
+        try:
+            with open('settings/users.toml', 'rb') as users_file:
+                users = tomllib.load(users_file)
+                users = users["users"]
+        except FileNotFoundError:
+            users = []
+
+        print(users[1][1]['level'])
+
+        # init vars
+        done = False
+
+        while not done:
+            self.play_mode._hidden = True
+            self.instrument_dropdown._hidden = True
+            self.level_dropdown._hidden = True
+            events = pg.event.get()
+            self.screen.fill(Colors.BACKGROUND.value)
+            self.screen.blit(self.ui_background_dots, (0, 0))
+            self.screen.blit(self.ui_background_mouth_character, (326, 359))
+            self.screen.blit(self.ui_background_character, (0, 164))
+
+            # Go ahead and update the screen with what we've drawn.
+            pygame_widgets.update(events)
+            pg.display.flip()
+            # Limit to 60 frames per second
+            self.clock.tick(60)
+
+        self.mainloop()
 
     def mainloop(self):
         # Get ready to print
@@ -495,4 +527,4 @@ class UI(Joystick, Game):
 
 if __name__ == "__main__":
     ui = UI()
-    ui.mainloop()
+    ui.user_selection()
