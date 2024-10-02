@@ -135,6 +135,8 @@ class UI(Joystick, Game):
         except FileNotFoundError:
             self.users = []
 
+        self.user_selection_done = False
+
         # Set the width and depth of the screen [width,depth]
         size = [WindowSize.WIDTH, WindowSize.HEIGHT]
 
@@ -286,13 +288,11 @@ class UI(Joystick, Game):
         if not self.users:
             self.user_names.hide()
 
-        done = False
-
-        while not done:
+        while not self.user_selection_done:
             events = pg.event.get()
             for event in events:
                 if event.type == pg.QUIT:
-                    done = True
+                    self.user_selection_done = True
 
             self.screen.fill(Colors.BACKGROUND.value)
             self.screen.blit(self.ui_background_dots, (0, 0))
@@ -306,6 +306,8 @@ class UI(Joystick, Game):
             self.clock.tick(60)
 
     def mainloop(self):
+        self.user_selection_done = True
+
         # Get ready to print
         text_print = TextPrint()
 
