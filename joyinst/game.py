@@ -2,6 +2,9 @@
 import pandas as pd
 from secrets import choice
 
+import tomllib
+import toml
+
 # from notation import Notation
 # from threading import Thread
 
@@ -102,6 +105,27 @@ class Game:
 
         self.len_current_level_list = len(self.current_level_list)
         self.melody_position = 0
+
+        # Load users
+        try:
+            with open('settings/users.toml', 'rb') as users_file:
+                self.users_toml = tomllib.load(users_file)
+                self.users = self.users_toml["user"]
+                self.users = dict(sorted(self.users.items()))
+        except FileNotFoundError:
+            self.users_toml["users"] = {}
+            self.users = {}
+        except KeyError:
+            self.users_toml["users"] = {}
+            self.users = {}
+
+        self.actual_user = None
+
+    def update_user_level(self) -> None:
+        self.users[self.actual_user]['level'] += 1
+        self.users_toml["user"] = self.users
+        with open('settings/users.toml', 'w') as f:
+            toml.dump(self.users_toml, f)
 
     def get_current_level_list(self, next_level) -> list:
         """Gets current level list from level dict, using the level var.
@@ -292,6 +316,7 @@ class Game:
             self.feedback = f"{choice(self.correct_words)}, Whoop Whoop - LEVEL UP"
 
             # get the next level
+            self.update_user_level()
             self.level += 1
             self.current_level_list = self.get_current_level_list(self.level)
 

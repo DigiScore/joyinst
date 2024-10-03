@@ -1,5 +1,6 @@
 # import python libraries
 import tomllib
+import toml
 from enum import Enum
 import pygame as pg
 import pygame.font
@@ -127,14 +128,6 @@ class UI(Joystick, Game):
         super().__init__()
         pg.init()
 
-        # Load users
-        try:
-            with open('settings/users.toml', 'rb') as users_file:
-                self.users = tomllib.load(users_file)
-                self.users = self.users["users"]
-        except FileNotFoundError:
-            self.users = []
-
         self.user_selection_done = False
 
         # Set the width and depth of the screen [width,depth]
@@ -237,11 +230,11 @@ class UI(Joystick, Game):
 
         self.user_names = Dropdown(
             self.screen, 294, 50, 385, 50, name='     SELECT YOUR USER',
-            choices=[f'     {user[0]}' for user in self.users],
+            choices=[f'     {user}' for user in self.users],
             colour=Colors.DROPDOWN.value,
             hoverColour=Colors.DROPDOWN_HOVER.value,
             pressedColour=Colors.DROPDOWN_HOVER.value,
-            values=[user[1] for user in self.users],
+            values=[user for user in self.users],
             direction='down',
             textHAlign='left',
             font=self.ibm_plex_condensed_font
@@ -264,7 +257,7 @@ class UI(Joystick, Game):
                                   font=self.ibm_plex_condensed_font,
                                   colour=Colors.DROPDOWN.value,
                                   hoverColour=Colors.DROPDOWN_HOVER.value,
-                                  pressedColour=Colors.DROPDOWN_HOVER.value,
+                                      pressedColour=Colors.DROPDOWN_HOVER.value,
                                   borderThickness=3,
                                   onClick=self.mainloop,
                                   )
@@ -307,6 +300,18 @@ class UI(Joystick, Game):
 
     def mainloop(self):
         self.user_selection_done = True
+
+        self.actual_user = self.user_names.getSelected()
+        if not self.actual_user:
+            self.level = 0
+            if not self.new_user.getText():
+                self.actual_user = 'GUEST'
+            else:
+                self.actual_user = self.new_user.getText()
+            self.users.update({self.actual_user: {'level': -1}})
+            self.update_user_level()
+        else:
+            self.level = self.users[self.actual_user]['level']
 
         # Get ready to print
         text_print = TextPrint()
@@ -380,6 +385,7 @@ class UI(Joystick, Game):
                 self.level_dropdown.reset()
                 self.play_mode.reset()
                 self.show_text = False
+                print(self.level)
 
             # DRAWING STEP
             # First, clear the screen. Don't put other drawing commands
