@@ -13,7 +13,7 @@ To get a local copy up and running follow these simple example steps.
    ```
 
    ```shell
-   Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+   Invoke-RestMethod -Uri https://get.scoop.sh | Invoke-Expression
    ```   
 
 2. Open a regular `Command Prompt (cmd)` and execute  (one at a time):
