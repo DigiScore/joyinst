@@ -8,7 +8,7 @@ To get a local copy up and running follow these simple example steps.
 #### Windows install part A (checked on Windows 10 and 11)
 
 1. Install `scoop`, (a command-line installer for Windows). 
-Open a `PowerShell` terminal as administrator and execute the following commands (one at a time):
+Open a `PowerShell` terminal (as user not admin) and execute the following commands (one at a time):
 
    A) Install Scoop
       ```shell
@@ -50,10 +50,10 @@ Open a `PowerShell` terminal as administrator and execute the following commands
       ```shell
       scoop install extras/fluidsynth
       ```
-   G) Add Fluidsynth to PATH   
+   G) Add Fluidsynth to PATH  (NB It may have automatically done this.)
 
       Add the `C:\Users\me\scoop\apps\fluidsynth\current\bin` subdirectory to your PATH (change 'me' to your username) . 
-To do this, click in the search box on the task bar, run the command 'Edit the system environment variables', click 'Environment Variables…', select Path in the 'User variables' section, click 'Edit…', click New, then enter the path of the bin subdirectory, e.g. `C:\Users\me\scoop\apps\fluidsynth\current\bin`  (change 'me' to your username) . NB It may have automatically done this.)
+To do this, click in the search box on the task bar, run the command 'Edit the system environment variables', click 'Environment Variables…', select Path in the 'User variables' section, click 'Edit…', click New, then enter the path of the bin subdirectory, e.g. `C:\Users\me\scoop\apps\fluidsynth\current\bin`  (change 'me' to your username) . )
 
 [//]: # (5. Install Fluidsynth installer)
 
@@ -107,7 +107,7 @@ To do this, click in the search box on the task bar, run the command 'Edit the s
    poetry install
    ```
    
-6. Close the Terminal window 
+5. Close the Terminal window 
 
 –––––––––––––––––––––
 
