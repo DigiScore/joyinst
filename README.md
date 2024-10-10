@@ -8,14 +8,14 @@ To get a local copy up and running follow these simple example steps.
 #### Windows install part A (checked on Windows 10 and 11)
 
 1. Install `scoop`, (a command-line installer for Windows). 
-Open a `PowerShell` terminal (as user not admin) and execute the following commands (one at a time):
+Open a `PowerShell` terminal (as user - NOT admin. The prompt should be your username NOT Windows32) and execute the following commands (one at a time):
 
    A) Install Scoop
       ```shell
       Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
       ```
    
-      OPTIONAL - Type 'Y' to continue
+      WARNING - If it asks you to confirm Y/N at this point you need to restart PowerShell as user NOT administrator.
 
       ```shell
       Invoke-RestMethod -Uri https://get.scoop.sh | Invoke-Expression
