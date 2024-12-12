@@ -63,6 +63,8 @@ class Game:
                    "We believe in you"
                    ]
 
+
+
     def __init__(self):
         super().__init__()
 
@@ -203,21 +205,21 @@ class Game:
         # extract only the note name
         game_note = current_game_note
         match game_note:
-            case "c'":
+            case "c'" | "c#'" | "cb'" | "c''" | "c#''" | "cb''":
                 compass = 'N'
-            case 'e':
+            case 'e' | 'e#' | 'eb' | "e'" | "e#'" | "eb'":
                 compass = 'SE'
-            case 'g':
+            case 'g' | 'g#' | 'gb' | "g'" | "g#'" | "gb'":
                 compass = 'E'
-            case 'b':
+            case 'b' | 'b#' | 'bb' | "b'" | "b#'" | "bb'":
                 compass = 'NE'
-            case 'c':
+            case 'c' | 'c#' | 'cb':
                 compass = 'S'
-            case 'a':
+            case 'a' | 'a#' | 'ab'| "a'" | "a#'" | "ab'":
                 compass = 'NW'
-            case 'f':
+            case 'f' | "f#" | 'fb' | "f'" | "f#'" | "fb'":
                 compass = 'W'
-            case 'd':
+            case 'd' | 'd#' | 'db' | "d'" | "d#'" | "db'":
                 compass = 'SW'
 
         note_filename = game_note + compass
