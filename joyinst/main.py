@@ -436,7 +436,7 @@ class UI(Joystick, Game):
                 self.screen.blit(self.ui_background_mouth_character, (326, 359))
 
                 if self.show_text:
-                    text_print.print(self.screen, "Level    {}".format(self.level))
+                    text_print.print(self.screen, "Level    {}".format(self.level+1))
                     text_print.print(self.screen, "Sub-level    {}".format(self.sub_level))
                     text_print.print(self.screen, "Guesses    {}".format(self.tries))
                     text_print.print(self.screen, "Lives    {}".format(self.lives))
@@ -497,7 +497,7 @@ class UI(Joystick, Game):
                 # text_print.print(self.screen, "note   {}".format(self.neopitch))
                 # text_print.print(self.screen, "solfa  {}".format(solfa))
                 if self.show_text:
-                    text_print.print(self.screen, "Level    {}".format(self.level))
+                    text_print.print(self.screen, "Level    {}".format(self.level+1))
                     text_print.print(self.screen, "Sub-level    {}".format(self.sub_level))
                     # text_print.print(self.screen, "Goes at sub level    {}".format(self.sub_level_rounds))
                     text_print.print(self.screen, "Guesses    {}".format(self.tries))
