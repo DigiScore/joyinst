@@ -135,3 +135,23 @@ To do this, click in the search box on the task bar, run the command 'Edit the s
    ```sh
    poetry run python main.py
    ```
+
+
+
+–––––––––––––––––––––
+
+### Updating the software (ALL PLATFORMS)
+
+1. Open a new Terminal window (Mac & Linux) or a Command Prompt (Windows: in the toolbar search type 'command prompt', and open as user).
+
+
+2. Navigate to the folder
+   ```sh
+   cd joyinst
+   ```
+
+3. Update from the Git
+   ```sh
+   git pull
+   ```
+     
