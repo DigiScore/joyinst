@@ -214,6 +214,16 @@ class Joystick:
             volume = 0  # button_dict.get("1")
             reset_octave = button_dict.get("7")
 
+        elif "ps4" in name.lower():
+            sharp = button_dict.get("9")
+            flat = (axis_dict.get("4"))
+            octave_up = button_dict.get("10")
+            octave_down = (axis_dict.get("5"))
+            north_south = (axis_dict.get("3")) #  * -1
+            east_west = (axis_dict.get("2")) #  * -1
+            volume = 0  # button_dict.get("1")
+            reset_octave = button_dict.get("7")
+
         else: # dummy controller for testing
             sharp = button_dict.get("4")
             flat = button_dict.get("5")
