@@ -158,8 +158,8 @@ class Joystick:
         buttons = joystick.get_numbuttons()
         for i in range(buttons):
             button = joystick.get_button(i)
-            if button == 1:
-                button_dict.update({str(i): button})
+            # if button == 1:
+            button_dict.update({str(i): button})
 
         # Usually axis run in pairs, up/down for one, and left/right for
         # the other.
@@ -203,6 +203,16 @@ class Joystick:
             east_west = (axis_dict.get("0")) #  * -1
             volume = 0  # button_dict.get("1")
             reset_octave = button_dict.get("1")
+
+        elif "xbox" in name.lower():
+            sharp = button_dict.get("9")
+            flat = (axis_dict.get("4"))
+            octave_up = button_dict.get("10")
+            octave_down = (axis_dict.get("5"))
+            north_south = (axis_dict.get("3")) #  * -1
+            east_west = (axis_dict.get("2")) #  * -1
+            volume = 0  # button_dict.get("1")
+            reset_octave = button_dict.get("7")
 
         else: # dummy controller for testing
             sharp = button_dict.get("4")

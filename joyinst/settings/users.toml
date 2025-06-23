@@ -1,4 +1,13 @@
 [users]
 
 [user.craig]
-level = 16
+level = 18
+
+[user.duncan]
+level = 2
+
+[user.evelyn]
+level = 0
+
+[user.test]
+level = 0
